@@ -11,6 +11,7 @@
   import classes from './navigation.module.css';
   import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
   import { Logo } from '../Logo/logo';
+import { LoginModal } from '../LoginModal/Modal';
  
   
   export function Navbar() {
@@ -35,7 +36,7 @@
               </a>
 
               <Group>
-                <Button variant="default">Log in</Button>
+                <LoginModal/>
                 <Button>Sign up</Button>
               </Group>
             </Group>
