@@ -1,8 +1,9 @@
 import { BizCard } from '@/components/Cards/cards';
+import { FooterCentered } from '@/components/footer/footerComp';
 import { Hero } from '@/components/hero';
 import { Navbar } from '@/components/navigation/navigation';
 import { Tcards } from '@/components/Types';
-import { Flex } from '@mantine/core';
+import { Box, Flex, Pagination } from '@mantine/core';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -27,29 +28,42 @@ export function HomePage() {
       loadCards();
   }, []);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 12;
+  const paginatedCards = cards.slice(
+    (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
   
   return (
     <>
       <Navbar/>
+      <Box style={{flexGrow:1}}>
+        <Hero/>
 
-      <Hero/>
+        <Flex wrap="wrap" gap="md" align="center" justify="space-evenly" w="70%" mx="auto">
+          {paginatedCards.map((card, index) => (
+              <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, amount: 0.2 }}>
 
-      <Flex wrap="wrap" gap="md" align="center" justify="space-evenly" w="70%" mx="auto">
-        {cards.map((card, index) => (
-            <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, amount: 0.2 }}>
+              <BizCard key={index} card={card} />
 
-            <BizCard key={index} card={card} />
+              </motion.div>
+          ))}
+          
+          <Pagination
+            total={Math.ceil(cards.length / cardsPerPage)}
+            value={currentPage}
+            onChange={setCurrentPage}
+            mt="md"
+          />
 
-            </motion.div>
-        ))}
-      </Flex>
-
-
+        </Flex>
+      </Box>
+    
+      <FooterCentered/>
     </>
   );
 }

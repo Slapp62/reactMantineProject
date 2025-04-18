@@ -1,5 +1,7 @@
   import {
     Box,
+    Image,
+    Text,
     Burger,
     Button,
     Divider,
@@ -9,36 +11,38 @@
   } from '@mantine/core';
   import { useDisclosure } from '@mantine/hooks';
   import classes from './navigation.module.css';
-import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
-  
+  import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
+import { Logo } from '../logo';
+ 
   
   export function Navbar() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
 
   
     return (
-      <Box>
+      <Box pos="sticky" top={0} bg='white' style={{zIndex: 100}} opacity={0.9}>
         <header className={classes.header}>
-          <Group justify="space-between" h="100%">
+          <Group justify="space-between" h="100%" >
+            <Logo/>
             
-  
             <Group h="100%" gap={0} visibleFrom="sm">
               <a href="#" className={classes.link}>
                 Home
               </a>
-              <a href="#" className={classes.link}>
+              <a href="#" className={classes.link} >
                 Learn
               </a>
               <a href="#" className={classes.link}>
                 Academy
               </a>
+
+              <Group>
+                <Button variant="default">Log in</Button>
+                <Button>Sign up</Button>
+              </Group>
             </Group>
             
-            <Group visibleFrom="sm">
-              
-              <Button variant="default">Log in</Button>
-              <Button>Sign up</Button>
-            </Group>
+            
 
             <ColorSchemeToggle/>
 
