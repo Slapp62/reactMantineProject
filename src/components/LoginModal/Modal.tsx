@@ -7,7 +7,7 @@ export function LoginModal() {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Authentication" centered>
+      <Modal opened={opened} onClose={close} centered>
         <AuthenticationTitle/>
       </Modal>
 
