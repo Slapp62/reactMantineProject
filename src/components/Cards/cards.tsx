@@ -3,7 +3,7 @@ import { Tcards } from '../Types';
 
 export function BizCard({ card } : { card: Tcards }) {
   return (
-    <Card shadow="sm" padding="lg" radius="md" w={300} h={350} withBorder>
+    <Card shadow="sm" padding="lg" radius="md" w={300} h="fit-content" withBorder>
       <Card.Section>
         <Image
           src={card.image.url}
@@ -17,7 +17,13 @@ export function BizCard({ card } : { card: Tcards }) {
       </Group>
 
       <Text size="sm" c="dimmed">
-        {card.description}
+        <p>{card.description}</p>
+        <hr/>
+        <p>{card.subtitle}</p>
+        <ul>
+          <li>{card.phone}</li>
+          <li>{card.email}</li>
+        </ul>
       </Text>
 
     </Card>

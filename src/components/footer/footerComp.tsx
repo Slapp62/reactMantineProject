@@ -1,8 +1,7 @@
 import { IconBrandInstagram, IconBrandTwitter, IconBrandYoutube } from '@tabler/icons-react';
 import { ActionIcon, Anchor, Group } from '@mantine/core';
-import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from './FooterStyles.module.css';
-import { Logo } from '../logo';
+import { Logo } from '../Logo/logo';
 
 const links = [
   { link: '#', label: 'Contact' },
@@ -12,7 +11,7 @@ const links = [
   { link: '#', label: 'Careers' },
 ];
 
-export function FooterCentered() {
+export function Footer() {
   const items = links.map((link) => (
     <Anchor
       c="dimmed"
@@ -29,7 +28,7 @@ export function FooterCentered() {
   return (
     <div className={classes.footer}>
       <div className={classes.inner}>
-        <Logo/>
+        <Logo />
 
         <Group className={classes.links}>{items}</Group>
 

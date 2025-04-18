@@ -8,7 +8,7 @@ export function Logo() {
               alt="Logo"
               style={{ width: '30px', height: '30px'}}/>
             
-              <Text size="xl" c="white">Bizness Cardz</Text>
+              <Text size="xl" c='black'>Bizness Cardz</Text>
         </Group>
     )
 }

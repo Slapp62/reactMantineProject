@@ -1,7 +1,5 @@
 import { BizCard } from '@/components/Cards/cards';
-import { FooterCentered } from '@/components/footer/footerComp';
 import { Hero } from '@/components/hero';
-import { Navbar } from '@/components/navigation/navigation';
 import { Tcards } from '@/components/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
 import axios from 'axios';
@@ -35,10 +33,9 @@ export function HomePage() {
   
   return (
     <>
-      <Navbar/>
       <Box style={{flexGrow:1}}>
         <Hero/>
-
+      
         <Flex wrap="wrap" gap="md" align="center" justify="space-evenly" w="70%" mx="auto">
           {paginatedCards.map((card, index) => (
               <motion.div
@@ -62,8 +59,6 @@ export function HomePage() {
 
         </Flex>
       </Box>
-    
-      <FooterCentered/>
     </>
   );
 }

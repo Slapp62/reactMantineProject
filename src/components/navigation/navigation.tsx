@@ -1,7 +1,5 @@
   import {
     Box,
-    Image,
-    Text,
     Burger,
     Button,
     Divider,
@@ -12,7 +10,7 @@
   import { useDisclosure } from '@mantine/hooks';
   import classes from './navigation.module.css';
   import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
-import { Logo } from '../logo';
+  import { Logo } from '../Logo/logo';
  
   
   export function Navbar() {
@@ -20,7 +18,7 @@ import { Logo } from '../logo';
 
   
     return (
-      <Box pos="sticky" top={0} bg='white' style={{zIndex: 100}} opacity={0.9}>
+      <Box pos="sticky" top={0} style={{zIndex: 100}} opacity={0.9} bg='white'>
         <header className={classes.header}>
           <Group justify="space-between" h="100%" >
             <Logo/>
@@ -30,10 +28,10 @@ import { Logo } from '../logo';
                 Home
               </a>
               <a href="#" className={classes.link} >
-                Learn
+                About
               </a>
               <a href="#" className={classes.link}>
-                Academy
+                Admin
               </a>
 
               <Group>

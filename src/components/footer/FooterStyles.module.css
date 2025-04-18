@@ -2,7 +2,10 @@
     margin-top: 120px;
     border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
   }
-  
+
+  .logo{
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  }
   .inner {
     display: flex;
     justify-content: space-between;
