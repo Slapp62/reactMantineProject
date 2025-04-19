@@ -12,7 +12,7 @@ import {
   } from '@mantine/core';
   import classes from './Login.module.css';
   
-  export function AuthenticationTitle() {
+  export function LoginForm() {
     return (
       <Container size={420} my={40}>
         <Title ta="center" className={classes.title}>

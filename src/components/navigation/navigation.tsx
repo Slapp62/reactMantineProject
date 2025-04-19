@@ -1,25 +1,23 @@
   import {
-    Box,
-    Burger,
-    Button,
-    Divider,
-    Drawer,
-    Group,
-    ScrollArea,
+    Box, Burger, Button, Divider, Drawer, Group, ScrollArea,
+    useMantineColorScheme,
   } from '@mantine/core';
   import { useDisclosure } from '@mantine/hooks';
   import classes from './navigation.module.css';
-  import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
+  import { LightDarkToggle } from '../LightDarkToggle/LightDarkToggle'
   import { Logo } from '../Logo/logo';
-import { LoginModal } from '../LoginModal/Modal';
+  import clsx from 'clsx';
+  import { LoginModal } from '../LoginModal/Modal';
  
   
   export function Navbar() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+    const { colorScheme } = useMantineColorScheme();
 
+    const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
   
     return (
-      <Box pos="sticky" top={0} style={{zIndex: 100}} opacity={0.9} bg='white'>
+      <Box pos="sticky" top={0} style={{zIndex: 100}} opacity={0.9} className={clsx(colorScheme === 'light' ? classes.navbarLight : classes.navbarDark)}>
         <header className={classes.header}>
           <Group justify="space-between" h="100%" >
             <Logo/>
@@ -36,49 +34,53 @@ import { LoginModal } from '../LoginModal/Modal';
               </a>
 
               <Group>
-                <LoginModal/>
+                <Button variant="default" onClick={openModal}>Login</Button>
                 <Button>Sign up</Button>
               </Group>
             </Group>
             
+            <Group>
+              <LightDarkToggle />
+              <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+            </Group>
             
-
-            <ColorSchemeToggle/>
-
-            <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
           </Group>
         </header>
   
         <Drawer
           opened={drawerOpened}
           onClose={closeDrawer}
-          size="100%"
+          size="50%"
           padding="md"
-          title="Navigation"
+          title="Business Cards"
           hiddenFrom="sm"
           zIndex={1000000}
         >
-          <ScrollArea h="calc(100vh - 80px" mx="-md">
-            <Divider my="sm" />
+          <ScrollArea h="calc(100vh - 80px" mx="-sm">
+            <Divider />
   
             <a href="#" className={classes.link}>
               Home
             </a>
             <a href="#" className={classes.link}>
-              Learn
+              About
             </a>
             <a href="#" className={classes.link}>
-              Academy
+              Admin
             </a>
   
             <Divider my="sm" />
   
-            <Group justify="center" grow pb="xl" px="md">
-              <Button variant="default">Log in</Button>
+            <Group justify="center" grow pb="sm" px="lg">
+            <Button variant="default" onClick={() => {closeDrawer(); openModal();}}
+              >Login</Button>
+              
               <Button>Sign up</Button>
             </Group>
           </ScrollArea>
         </Drawer>
+        <LoginModal opened={modalOpened} onClose={closeModal} />
       </Box>
+    
     );
   }

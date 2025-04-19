@@ -1,19 +1,14 @@
-import { useDisclosure } from '@mantine/hooks';
-import { Modal, Button } from '@mantine/core';
-import { AuthenticationTitle } from './Login';
+import { Modal } from '@mantine/core';
+import { LoginForm } from './Login';
 
-export function LoginModal() {
-  const [opened, { open, close }] = useDisclosure(false);
+export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () => void }) {
+  
 
   return (
     <>
-      <Modal opened={opened} onClose={close} centered>
-        <AuthenticationTitle/>
+      <Modal opened={opened} onClose={onClose} centered>
+        <LoginForm/>
       </Modal>
-
-      <Button variant="default" onClick={open}>
-        Login
-      </Button>
     </>
   );
 }

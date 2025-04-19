@@ -1,3 +1,10 @@
+.navbarLight{
+  background-color: white;
+}
+
+.navbarDark{
+  background-color: #333;
+}
 
 .header {
     height: 60px;
