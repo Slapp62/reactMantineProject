@@ -8,6 +8,7 @@
   import { Logo } from '../Logo/logo';
   import clsx from 'clsx';
   import { LoginModal } from '../LoginModal/Modal';
+import { Link } from 'react-router-dom';
  
   
   export function Navbar() {
@@ -23,15 +24,15 @@
             <Logo/>
             
             <Group h="100%" gap={0} visibleFrom="sm">
-              <a href="#" className={classes.link}>
+              <Link to="/" className={classes.link}>
                 Home
-              </a>
-              <a href="#" className={classes.link} >
+              </Link>
+              <Link to="/about" className={classes.link} >
                 About
-              </a>
-              <a href="#" className={classes.link}>
+              </Link>
+              <Link to='/admin' className={classes.link}>
                 Admin
-              </a>
+              </Link>
 
               <Group>
                 <Button variant="default" onClick={openModal}>Login</Button>

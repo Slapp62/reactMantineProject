@@ -1,9 +1,17 @@
-import { Card, Image, Text, Group } from '@mantine/core';
+import { Card, Image, Text, Group, Button } from '@mantine/core';
 import { Tcards } from '../Types';
+import { IconHeart, IconHeartFilled } from '@tabler/icons-react';
+import { useState } from 'react';
 
 export function BizCard({ card } : { card: Tcards }) {
+  const heartOutline = <IconHeart/>;
+  const heartFilled = <IconHeartFilled/>;
+  const [isLiked, setLiked] = useState(false);
+
+  
+
   return (
-    <Card shadow="sm" padding="lg" radius="md" w={300} h="fit-content" withBorder>
+    <Card shadow="sm" padding="lg" radius="md" w={300} withBorder>
       <Card.Section>
         <Image
           src={card.image.url}
@@ -17,7 +25,7 @@ export function BizCard({ card } : { card: Tcards }) {
       </Group>
 
       <Text size="sm" c="dimmed">
-        <p>{card.description}</p>
+        <Text truncate w={250}>{card.description}</Text>
         <hr/>
         <p>{card.subtitle}</p>
         <ul>
@@ -26,6 +34,8 @@ export function BizCard({ card } : { card: Tcards }) {
         </ul>
       </Text>
 
+      <Button variant='filled' color='violet' ml='auto' mt={10} w={80} onClick={()=>setLiked(!isLiked)}>{isLiked === true ? heartFilled : heartOutline}</Button>
+      
     </Card>
   );
 }

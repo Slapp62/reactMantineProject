@@ -1,11 +1,10 @@
 import { BizCard } from '@/components/Cards/cards';
 import { Hero } from '@/components/hero';
-import { LoginModal } from '@/components/LoginModal/Modal';
 import { Tcards } from '@/components/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 
 export function HomePage() {
@@ -15,6 +14,7 @@ export function HomePage() {
   }
 
   const [cards, setCards] = useState<Tcards[]>([]);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
       const loadCards = async () => {
@@ -37,7 +37,7 @@ export function HomePage() {
       <Box style={{flexGrow:1}}>
         <Hero/>
         
-        <Flex wrap="wrap" gap="md" align="center" justify="space-evenly" w="70%" mx="auto">
+        <Flex ref={cardsRef} wrap="wrap" gap="md" align='stretch' justify="space-evenly" w="70%" mx="auto">
           {paginatedCards.map((card, index) => (
               <motion.div
               key={index}
@@ -54,7 +54,10 @@ export function HomePage() {
           <Pagination
             total={Math.ceil(cards.length / cardsPerPage)}
             value={currentPage}
-            onChange={setCurrentPage}
+            onChange={(page)=>{
+              setCurrentPage(page);
+              cardsRef.current?.scrollIntoView({behavior:'smooth'});
+            }}
             mt="md"
           />
 
