@@ -37,7 +37,7 @@ export function HomePage() {
       <Box style={{flexGrow:1}}>
         <Hero/>
         
-        <Flex ref={cardsRef} wrap="wrap" gap="md" align='stretch' justify="space-evenly" w="70%" mx="auto">
+        <Flex ref={cardsRef} wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
           {paginatedCards.map((card, index) => (
               <motion.div
               key={index}

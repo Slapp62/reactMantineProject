@@ -1,14 +1,21 @@
 /* eslint-disable no-console */
-  import {
-    Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
-  import classes from './Login.module.css';
-  import  { FieldValues, useForm } from 'react-hook-form';
+import {
+  Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
+import classes from './Login.module.css';
+import  { FieldValues, useForm } from 'react-hook-form';
 import axios from 'axios';
+import { loginSchema } from '@/validationRules/login.joi';
+import { joiResolver } from '@hookform/resolvers/joi';
   
   export function LoginForm() {
-    const {register, handleSubmit, formState: {errors} } = useForm({
+    const {register, handleSubmit, formState: {errors, isValid} } = useForm({
+      defaultValues: {
+        email: '',
+        password: ''
+      },
       mode: 'onChange',
-      criteriaMode: 'firstError',
+      // criteriaMode: 'firstError',
+      resolver: joiResolver(loginSchema)
     });
 
     const onSubmit = async (data: FieldValues) => {
@@ -24,7 +31,6 @@ import axios from 'axios';
           console.log("Login Success");
         } catch (error) {
           console.error("Wrong credentials", error)
-         
         };
       };
 
@@ -45,27 +51,15 @@ import axios from 'axios';
             <TextInput 
               label="Email" 
               placeholder="you@email.com" 
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^[^@]+@[^@]+\.[^@]+$/,
-                  message: 'Invalid email address'
-                },
-              })}
-              error={typeof errors.email?.message === 'string' ? errors.email.message : undefined}
+              {...register('email')}
+              error= {errors.email?.message}
               />
-
             <PasswordInput 
+              mt={10}
               label="Password" 
               placeholder="Your password" 
-              {...register('password', {
-                required: 'Password is required',
-                pattern: {
-                  value: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
-                  message: 'Password must a minimum 8 characters, one uppercase letter, one number, and one special character.'
-                },
-              })}
-              error={typeof errors.password?.message === 'string' ? errors.password.message : undefined}
+              {...register('password')}
+              error={errors.password?.message}
               />
 
             <Group justify="space-between" mt="lg">
@@ -75,7 +69,7 @@ import axios from 'axios';
               </Anchor>
             </Group>
 
-            <Button type='submit' fullWidth mt="xl">
+            <Button type='submit' fullWidth mt="xl" disabled={!isValid}>
               Sign in
             </Button>
           </form>

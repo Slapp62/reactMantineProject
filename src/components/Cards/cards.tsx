@@ -1,6 +1,6 @@
-import { Card, Image, Text, Group, Button } from '@mantine/core';
+import { Card, Image, Text, Group, Button, Flex } from '@mantine/core';
 import { Tcards } from '../Types';
-import { IconHeart, IconHeartFilled } from '@tabler/icons-react';
+import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
 import { useState } from 'react';
 
 export function BizCard({ card } : { card: Tcards }) {
@@ -11,12 +11,13 @@ export function BizCard({ card } : { card: Tcards }) {
   
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" w={300} withBorder>
+    <Card shadow="sm" padding="lg" mx={-15} radius="md" w={300} withBorder>
       <Card.Section>
         <Image
           src={card.image.url}
           height={160}
           alt="picture"
+          fit='cover'
         />
       </Card.Section>
 
@@ -34,7 +35,11 @@ export function BizCard({ card } : { card: Tcards }) {
         </ul>
       </Text>
 
-      <Button variant='filled' color='violet' ml='auto' mt={10} w={80} onClick={()=>setLiked(!isLiked)}>{isLiked === true ? heartFilled : heartOutline}</Button>
+      <Flex mt={10}>
+        <Button w={80}><IconPhone/></Button>
+        <Button variant='filled' ml='auto' w={80} onClick={()=>setLiked(!isLiked)}>{isLiked === true ? heartFilled : heartOutline}</Button>
+      </Flex>
+      
       
     </Card>
   );

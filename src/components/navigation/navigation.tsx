@@ -8,7 +8,7 @@
   import { Logo } from '../Logo/logo';
   import clsx from 'clsx';
   import { LoginModal } from '../LoginModal/Modal';
-import { Link } from 'react-router-dom';
+  import { Link } from 'react-router-dom';
  
   
   export function Navbar() {
@@ -30,13 +30,19 @@ import { Link } from 'react-router-dom';
               <Link to="/about" className={classes.link} >
                 About
               </Link>
+              <Link to="/" className={classes.link} >
+                Favorites
+              </Link>
+              <Link to="/" className={classes.link} >
+                My Cards
+              </Link>
               <Link to='/admin' className={classes.link}>
                 Admin
               </Link>
 
               <Group>
                 <Button variant="default" onClick={openModal}>Login</Button>
-                <Button>Sign up</Button>
+                <Link to='/register'><Button>Register</Button></Link>
               </Group>
             </Group>
             
@@ -76,7 +82,7 @@ import { Link } from 'react-router-dom';
             <Button variant="default" onClick={() => {closeDrawer(); openModal();}}
               >Login</Button>
               
-              <Button>Sign up</Button>
+              <Button>Register</Button>
             </Group>
           </ScrollArea>
         </Drawer>

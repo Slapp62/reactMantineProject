@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import AdminControls from './pages/Admin.pages';
 import Error404 from './pages/404.pages';
 import About from './pages/About.pages';
+import { RegisterForm } from './pages/register.pages';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
       {index: true, element: <HomePage />},
       {path: 'about', element: <About/>},
       {path: 'admin', element: <AdminControls/>},
+      {path: 'register', element: <RegisterForm/>},
       {path: '*', element: <Error404/>},
     ]
   },
