@@ -1,11 +1,10 @@
 import { BizCard } from '@/components/Cards/cards';
 import { Hero } from '@/components/hero';
-import { Tcards } from '@/components/Types';
+import { Tcards } from '@/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-
 
 export function HomePage() {
     // Get and set cards
@@ -31,11 +30,14 @@ export function HomePage() {
   const cardsPerPage = 12;
   const paginatedCards = cards.slice(
     (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
-  
+
   return (
     <>
       <Box style={{flexGrow:1}}>
-        <Hero/>
+        <Box pos='relative'>
+          <Hero />
+        </Box>
+        
         
         <Flex ref={cardsRef} wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
           {paginatedCards.map((card, index) => (

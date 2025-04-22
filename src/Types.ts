@@ -29,6 +29,7 @@ export type TUsers = {
   };
   phone: string;
   email: string;
+  password: string;
   image: {
     url: string;
     alt: string;

@@ -1,5 +1,5 @@
 import { Card, Image, Text, Group, Button, Flex } from '@mantine/core';
-import { Tcards } from '../Types';
+import { Tcards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
 import { useState } from 'react';
 

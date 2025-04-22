@@ -1,22 +1,32 @@
 import Joi from 'joi'
 
 const registrationSchema = Joi.object({
-    email:
-        Joi.string()
-        .email({tlds: {allow:false}})
-        .required()
-        .messages({
-            'string.min':'Email is too short',
-            'any.required': 'Email is required',
-        }),
+    name: {
+        first: Joi.string().min(2).max(256).required(),
+        middle: Joi.string().min(2).max(256),
+        last: Joi.string().min(2).max(256).required()
+    },
 
-    password:
-        Joi.string()
-        .pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/)
-        .messages({'string.pattern.base':
-            'Password must be a minimum 8 characters and contain at least one uppercase letter, number, and special character',
-            'any.required': 'Password is required',
-        }),
+    phone: Joi.string().min(9).max(11).required(),
+
+    email: Joi.string().min(5).required(),
+    password: Joi.string().min(7).max(20).required(),
+
+    image: {
+        url: Joi.string().min(14),
+        alt: Joi.string().min(2).max(256)
+    },
+
+    address: {
+        state: Joi.string().min(2).max(256),
+        country: Joi.string().min(2).max(256).required(),
+        city: Joi.string().min(2).max(256).required(),
+        street: Joi.string().min(2).max(256).required(),
+        houseNumber: Joi.string().pattern(/^\d+$/).min(2).max(256).required(),
+        zip: Joi.string().min(2).pattern(/^\d+$/).max(256).required(),
+    },
+    
+    isBusiness: Joi.boolean()
 })
 
 export {registrationSchema}
