@@ -6,16 +6,17 @@ import { Flex } from "@mantine/core";
 export function Layout() {
     return (
       <>
+      
       <Flex direction='column' mih='100vh'>
         <Navbar />
 
         <main style={{flex: 1}} >
           <Outlet />
+          
         </main>
         
         <Footer />
       </Flex>
-        
       </>
     );
   }

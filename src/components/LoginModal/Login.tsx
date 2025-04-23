@@ -6,6 +6,7 @@ import  { FieldValues, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { loginSchema } from '@/validationRules/login.joi';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { showNotification } from '@mantine/notifications';
   
   export function LoginForm() {
     const {register, handleSubmit, formState: {errors, isValid} } = useForm({
@@ -28,6 +29,11 @@ import { joiResolver } from '@hookform/resolvers/joi';
               password
             });
           localStorage.setItem("token", response.data);
+          showNotification({
+            title: 'Success!',
+            message: 'Login successfull!',
+            color: 'green',
+          });
           console.log("Login Success");
         } catch (error) {
           console.error("Wrong credentials", error)
