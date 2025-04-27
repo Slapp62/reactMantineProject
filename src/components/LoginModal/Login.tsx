@@ -6,16 +6,35 @@ import  { FieldValues, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { loginSchema } from '@/validationRules/login.joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { showNotification } from '@mantine/notifications';
-  
-  export function LoginForm() {
+import { toast } from 'react-toastify';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import AuthContextCore from '@/AuthContext';
+import { useContext } from 'react';
+
+interface LoginFormProps {
+  onClose?: () => void;
+}
+
+  export function LoginForm({onClose}: LoginFormProps) {
+
+    const {login} = useContext(AuthContextCore)
+
+    const tokenHandler = () => {
+      const token = localStorage.getItem('token');
+        if (token){
+          const decodedToken = jwtDecode<JwtPayload>(token);
+          login(decodedToken);
+          return decodedToken;
+        }
+    }
+
     const {register, handleSubmit, formState: {errors, isValid} } = useForm({
       defaultValues: {
         email: '',
         password: ''
       },
       mode: 'onChange',
-      // criteriaMode: 'firstError',
+      criteriaMode: 'firstError',
       resolver: joiResolver(loginSchema)
     });
 
@@ -29,15 +48,28 @@ import { showNotification } from '@mantine/notifications';
               password
             });
           localStorage.setItem("token", response.data);
-          showNotification({
-            title: 'Success!',
-            message: 'Login successfull!',
-            color: 'green',
+
+          toast.success('Logged In!', {
+            position: 'bottom-right'
           });
-          console.log("Login Success");
+          
+          if (onClose) {
+            onClose(); 
+          }
+
+          try {
+            tokenHandler();
+          } catch (error) {
+            console.error('Problem with token', error)
+          }
+          
+
         } catch (error) {
-          console.error("Wrong credentials", error)
+
+          toast.error('Login Failed!')
         };
+
+      
       };
 
     return (

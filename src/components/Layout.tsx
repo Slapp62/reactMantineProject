@@ -1,22 +1,24 @@
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./navigation/navigation";
-import { Footer } from "./footer/footerComp";
-import { Flex } from "@mantine/core";
+import { MyFooter } from "./footer/footerComp";
+import { Box } from "@mantine/core";
+import { ToastContainer } from "react-toastify";
 
 export function Layout() {
     return (
       <>
-      
-      <Flex direction='column' mih='100vh'>
-        <Navbar />
-
-        <main style={{flex: 1}} >
-          <Outlet />
-          
-        </main>
         
-        <Footer />
-      </Flex>
+        <Box>
+          <ToastContainer/>
+          
+          <Navbar />
+          
+          <main>
+            <Outlet />
+          </main>
+          
+          <MyFooter/>
+        </Box>
       </>
     );
   }

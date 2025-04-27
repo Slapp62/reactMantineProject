@@ -8,6 +8,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 
 export function RegisterForm()  {
@@ -19,13 +20,9 @@ export function RegisterForm()  {
     const onSubmit = async (data:FieldValues) => {
         console.log(data);
 
-        // Ensure that optional fields like image.url and image.alt are not included if empty
-        if (data.address.houseNumber) {
-            data.address.houseNumber = Number(data.address.houseNumber);
-        }
-        if (data.address.zip) {
-            data.address.zip = Number(data.address.zip);
-        }
+        data.address.houseNumber = Number(data.address.houseNumber);
+        data.address.zip = Number(data.address.zip);
+        
         
         try {
             const response = await axios.post(
@@ -36,14 +33,12 @@ export function RegisterForm()  {
                 console.log(response);
                 console.log('Registration successfull.');
 
-                showNotification({
-                    title: 'Success!',
-                    message: 'Login successfull!',
-                    color: 'green',
-                });
+                toast.success('Registered!')
             }
         } catch (error: any) {
             console.error('Error processing form.', error, error.response.data, error.request, error.message);
+
+            toast.error('Registration Failed!')
         }
     }
         

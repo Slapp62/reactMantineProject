@@ -7,7 +7,7 @@ export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () =
   return (
     <>
       <Modal opened={opened} onClose={onClose} centered>
-        <LoginForm/>
+        <LoginForm onClose={onClose}/>
       </Modal>
     </>
   );

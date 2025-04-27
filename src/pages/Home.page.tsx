@@ -2,11 +2,13 @@ import { BizCard } from '@/components/Cards/cards';
 import { Hero } from '@/components/hero';
 import { Tcards } from '@/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
-import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 
 export function HomePage() {
+  
+
     // Get and set cards
     const getCards = async () => {
       return await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
@@ -33,7 +35,7 @@ export function HomePage() {
 
   return (
     <>
-      <Box style={{flexGrow:1}}>
+      <Box>
         <Box pos='relative'>
           <Hero />
         </Box>
