@@ -11,6 +11,7 @@
   import { Link } from 'react-router-dom';
 import AuthContextCore from '@/AuthContext';
 import { useContext } from 'react';
+import { Search } from './Search';
  
   
   export function Navbar() {
@@ -24,32 +25,33 @@ import { useContext } from 'react';
     return (
       <Box pos="sticky" top={0} style={{zIndex: 100}} opacity={0.9} className={clsx(colorScheme === 'light' ? classes.navbarLight : classes.navbarDark)}>
         <header className={classes.header}>
-          <Flex justify="space-between" h="100%" >
-            
-            <Group h="100%" gap={10} visibleFrom="sm">
-              <Logo/>
+          <Flex justify="space-between" h='100%' >
+            <Logo/>
+
+            <Group visibleFrom="sm">
               <Link  to="/" className={classes.link}>
-                <Text c='blue' fw={700}>Home</Text>
+                <Text fw={700}>Home</Text>
               </Link>
               <Link to="/about" className={classes.link} >
-              <Text c='blue' fw={700}>About</Text>
+              <Text fw={700}>About</Text>
               </Link>
               {user && <Link to="/" className={classes.link} >
-              <Text c='blue' fw={700}>Favorites</Text>
+              <Text fw={700}>Favorites</Text>
               </Link>}
               {user && <Link to="/" className={classes.link} >
-              <Text c='blue' fw={700}>My Cards</Text>
+              <Text fw={700}>My Cards</Text>
               </Link>}
               {user && <Link to='/admin' className={classes.link}>
-              <Text c='blue' fw={700}>Admin Controls</Text>
+              <Text fw={700}>Admin Controls</Text>
               </Link>}
+
+              <Search/>
             </Group>
 
             <Group>
               {!user && <Button variant="default" onClick={openModal}>Login</Button>}
               {user && <Button variant="outline" onClick={openModal}>Logout</Button>}
               {!user && <Link to='/register'><Button>Register</Button></Link>}
-            
               <LightDarkToggle />
               <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
             </Group>

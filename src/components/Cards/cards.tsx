@@ -25,7 +25,7 @@ export function BizCard({ card } : { card: Tcards }) {
     }
   }
   return (
-    <Card shadow="sm" padding="lg" mx={-15} radius="md" w={300} withBorder>
+    <Card h='100%' shadow="sm" padding="lg" mx={-15} radius="md" w={300} withBorder>
       <Card.Section>
         <Image
           src={card.image.url}
