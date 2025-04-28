@@ -1,10 +1,13 @@
 import { Card, Image, Text, Button, Flex} from '@mantine/core';
 import { Tcards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import AuthContextCore from '@/AuthContext';
 
 export function BizCard({ card } : { card: Tcards }) {
+  const {user} = useContext(AuthContextCore)  
+
   const heartOutline = <IconHeart />;
   const heartFilled = <IconHeartFilled/>;
   const [isLiked, setLiked] = useState(false);
@@ -47,11 +50,11 @@ export function BizCard({ card } : { card: Tcards }) {
           </ul>
         </Text>
 
-        <Flex py={20} px='xl'>
-          <Button w={80}><IconPhone/></Button>
-          <Button variant='filled' ml='auto' w={80} onClick={likedHandler}>
+        <Flex p={10} justify='space-around'>
+          <Button bg='blue' w={80}><IconPhone/></Button>
+          {user && <Button variant='filled' bg='red' ml='auto' w={80} onClick={likedHandler}>
               {isLiked === true ? heartFilled : heartOutline}
-          </Button>
+          </Button>}
         </Flex>
 
       </Card.Section>

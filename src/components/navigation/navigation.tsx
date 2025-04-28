@@ -1,5 +1,5 @@
   import {
-    Box, Burger, Button, Divider, Drawer, Flex, Group, ScrollArea,
+    Box, Burger, Button, Divider, Drawer, Flex, Text, Group, ScrollArea,
     useMantineColorScheme,
   } from '@mantine/core';
   import { useDisclosure } from '@mantine/hooks';
@@ -28,20 +28,20 @@ import { useContext } from 'react';
             
             <Group h="100%" gap={10} visibleFrom="sm">
               <Logo/>
-              <Link to="/" className={classes.link}>
-                Home
+              <Link  to="/" className={classes.link}>
+                <Text c='blue' fw={700}>Home</Text>
               </Link>
               <Link to="/about" className={classes.link} >
-                About
+              <Text c='blue' fw={700}>About</Text>
               </Link>
               {user && <Link to="/" className={classes.link} >
-                Favorites
+              <Text c='blue' fw={700}>Favorites</Text>
               </Link>}
               {user && <Link to="/" className={classes.link} >
-                My Cards
+              <Text c='blue' fw={700}>My Cards</Text>
               </Link>}
               {user && <Link to='/admin' className={classes.link}>
-                Admin
+              <Text c='blue' fw={700}>Admin Controls</Text>
               </Link>}
             </Group>
 
