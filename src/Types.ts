@@ -30,10 +30,10 @@ export type TUsers = {
   phone: string;
   email: string;
   password: string;
-  image: {
-    url: string;
-    alt: string;
-    _id: string;
+  image?: {
+    url?: string;
+    alt?: string;
+    _id?: string;
   };
   address: {
     state?: string;
@@ -48,6 +48,13 @@ export type TUsers = {
   isBusiness: boolean;
   createdAt: string;
 };
+
+export interface TdecodedToken{
+  iat: number;
+  isAdmin: boolean;
+  isBusiness: boolean;
+  _id: string;
+}
 
 // export const cardData: Tcards[] = 
 //     const [cards, setCards] = useState<Tcards[]>([]);

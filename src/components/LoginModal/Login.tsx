@@ -3,115 +3,116 @@ import {
   Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
 import classes from './Login.module.css';
 import  { FieldValues, useForm } from 'react-hook-form';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { loginSchema } from '@/validationRules/login.joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { toast } from 'react-toastify';
-import { jwtDecode, JwtPayload } from 'jwt-decode';
-import AuthContextCore from '@/AuthContext';
-import { useContext } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { TdecodedToken } from '@/Types';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { setUser } from '@/store/userSlice';
 
-interface LoginFormProps {
+
+type LoginFormProps = {
   onClose?: () => void;
 }
 
-  export function LoginForm({onClose}: LoginFormProps) {
 
-    const {login} = useContext(AuthContextCore)
+export function LoginForm({onClose}: LoginFormProps) {
+  const dispatch = useDispatch<AppDispatch>();
 
-    const tokenHandler = () => {
-      const token = localStorage.getItem('token');
-        if (token){
-          const decodedToken = jwtDecode<JwtPayload>(token);
-          login(decodedToken);
-          return decodedToken;
-        }
-    }
+  const tokenHandler = async (response: AxiosResponse<any, any> ) => {
+      const token = response.data;
+      axios.defaults.headers.common['x-auth-token'] = token;
 
-    const {register, handleSubmit, formState: {errors, isValid} } = useForm({
-      defaultValues: {
-        email: '',
-        password: ''
-      },
-      mode: 'onChange',
-      criteriaMode: 'firstError',
-      resolver: joiResolver(loginSchema)
-    });
+      const decodedToken = jwtDecode<TdecodedToken>(token);
+      const id = decodedToken._id;
+      
+      const userData = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`)
+      dispatch(setUser(userData.data))
+  }
 
-    const onSubmit = async (data: FieldValues) => {
-      const email = data.email;
-      const password = data.password;
-        try {
-          const response = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
-            {
-              email, 
-              password
-            });
-          localStorage.setItem("token", response.data);
+  const {register, handleSubmit, formState: {errors, isValid} } = useForm({
+    defaultValues: {
+      email: '',
+      password: ''
+    },
+    mode: 'onChange',
+    criteriaMode: 'firstError',
+    resolver: joiResolver(loginSchema)
+  });
 
-          toast.success('Logged In!', {
-            position: 'bottom-right'
+  const onSubmit = async (data: FieldValues) => {
+    
+      try {
+        const response = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
+          {
+            email: data.email, 
+            password: data.password,
           });
-          
-          if (onClose) {
-            onClose(); 
-          }
+
+        if (response.status === 200){
 
           try {
-            tokenHandler();
+            tokenHandler(response);
           } catch (error) {
-            console.error('Problem with token', error)
+            console.error(`Problem with token! ${error}`)
           }
-          
+        
+          toast.success('Logged In!', {position: 'bottom-right'});
+        
+          if (onClose) {onClose()}
+          }
+        
+      } catch (error) {
 
-        } catch (error) {
-
-          toast.error('Login Failed!')
-        };
-
-      
+        toast.error(`Login Failed! ${error}`, {position: 'bottom-right'})
       };
 
-    return (
-      <Container size={420}>
-        <Title ta="center" className={classes.title}>
-          Welcome back!
-        </Title>
-        <Text c="dimmed" size="sm" ta="center" mt={5}>
-          Don't have an account yet?{' '}
-          <Anchor size="sm" component="button">
-            Create account
-          </Anchor>
-        </Text>
-  
-        <Paper withBorder p={30} mt={30} radius="md">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <TextInput 
-              label="Email" 
-              placeholder="you@email.com" 
-              {...register('email')}
-              error= {errors.email?.message}
-              />
-            <PasswordInput 
-              mt={10}
-              label="Password" 
-              placeholder="Your password" 
-              {...register('password')}
-              error={errors.password?.message}
-              />
+    
+    };
 
-            <Group justify="space-between" mt="lg">
-              <Checkbox label="Remember me" />
-              <Anchor component="button" size="sm">
-                Forgot password?
-              </Anchor>
-            </Group>
+  return (
+    <Container size={420}>
+      <Title ta="center" className={classes.title}>
+        Welcome back!
+      </Title>
+      <Text c="dimmed" size="sm" ta="center" mt={5}>
+        Don't have an account yet?{' '}
+        <Anchor size="sm" component="button">
+          Create account
+        </Anchor>
+      </Text>
 
-            <Button type='submit' fullWidth mt="xl" disabled={!isValid}>
-              Sign in
-            </Button>
-          </form>
-        </Paper>
-      </Container>
-    );
-  }
+      <Paper withBorder p={30} mt={30} radius="md">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextInput 
+            label="Email" 
+            placeholder="you@email.com" 
+            {...register('email')}
+            error= {errors.email?.message}
+            />
+          <PasswordInput 
+            mt={10}
+            label="Password" 
+            placeholder="Your password" 
+            {...register('password')}
+            error={errors.password?.message}
+            />
+
+          <Group justify="space-between" mt="lg">
+            <Checkbox label="Remember me" />
+            <Anchor component="button" size="sm">
+              Forgot password?
+            </Anchor>
+          </Group>
+
+          <Button type='submit' fullWidth mt="xl" disabled={!isValid}>
+            Sign in
+          </Button>
+        </form>
+      </Paper>
+    </Container>
+  );
+}

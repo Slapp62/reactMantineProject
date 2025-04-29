@@ -3,15 +3,16 @@ import { MantineProvider } from '@mantine/core';
 import { Router } from './Router';
 import { theme } from './theme';
 import './App.css'; // or './styles/global.css'
-import {AuthCoreProvider} from './AuthContext';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <AuthCoreProvider>
+      <Provider store={store}>
         <Router />
-      </AuthCoreProvider>
+      </Provider>
     </MantineProvider>
   );
 }

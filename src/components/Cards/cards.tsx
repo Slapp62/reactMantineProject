@@ -1,12 +1,13 @@
 import { Card, Image, Text, Button, Flex} from '@mantine/core';
 import { Tcards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import AuthContextCore from '@/AuthContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export function BizCard({ card } : { card: Tcards }) {
-  const {user} = useContext(AuthContextCore)  
+  const loggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
 
   const heartOutline = <IconHeart />;
   const heartFilled = <IconHeartFilled/>;
@@ -52,7 +53,7 @@ export function BizCard({ card } : { card: Tcards }) {
 
         <Flex p={10} justify='space-around'>
           <Button bg='blue' w={80}><IconPhone/></Button>
-          {user && <Button variant='filled' bg='red' ml='auto' w={80} onClick={likedHandler}>
+          {loggedIn && <Button variant='filled' bg='purple' ml='auto' w={80} onClick={likedHandler}>
               {isLiked === true ? heartFilled : heartOutline}
           </Button>}
         </Flex>

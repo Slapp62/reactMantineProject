@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "./navigation/navigation";
-import { MyFooter } from "./footer/footerComp";
+import { Navbar } from "./Navbar/navigation";
+import { MyFooter } from "./Footer/footerComp";
 import { Box } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
 

@@ -1,5 +1,5 @@
 import { BizCard } from '@/components/Cards/cards';
-import { Hero } from '@/components/hero';
+import { Hero } from '@/components/Hero';
 import { Tcards } from '@/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
 import { motion } from 'framer-motion';
@@ -39,7 +39,6 @@ export function HomePage() {
         <Box pos='relative'>
           <Hero />
         </Box>
-        
         
         <Flex ref={cardsRef} wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
           {paginatedCards.map((card, index) => (
