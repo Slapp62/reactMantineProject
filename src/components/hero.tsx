@@ -22,11 +22,11 @@ export function Hero() {
             ta='center' 
             p={35}
             style={{zIndex: 2}}>
-              {!user && <Text c='white' fw='bold' fz={30}>Make a card for your business!</Text>}
+              {!user && <Text c='white' fw='bold' fz={30}>Find your next career!</Text>}
 
               <Flex align='center' direction='column' gap={10}>
                 {user && <Text c='blue' fw='bold' fz={30}>Welcome back, {user.name.first}</Text>}
-                {user && <Button onClick={openModal} variant='filled' color='blue' size='xl' fz={30}> Create a Card</Button>}
+                {user && <Button onClick={openModal} variant='filled' color='blue' size='xl' fz={30}> Create a listing</Button>}
               </Flex>
               
           </Box>

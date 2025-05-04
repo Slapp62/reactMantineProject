@@ -46,11 +46,11 @@ import { toast } from 'react-toastify';
                 <Text fw={700}>About</Text>
               </Link>
 
-              {loggedIn &&  <Link to="/" className={classes.link} >
+              {loggedIn &&  <Link to="/favorites" className={classes.link} >
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {loggedIn &&  <Link to="/" className={classes.link} >
+              {loggedIn &&  <Link to="/myCards" className={classes.link} >
                 <Text fw={700}>My Cards</Text>
               </Link>}
               

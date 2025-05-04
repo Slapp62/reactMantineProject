@@ -1,15 +1,24 @@
 
-export type Tcards = {
-    _id: number;
+export type TCards = {
     title: string;
     subtitle: string;
     description: string;
-    phone: number;
+    phone: string;
     email: string;
     web: string;
+
     image: {
-      url:string;
-      _id: number;
+      url: string;
+      alt: string;
+    };
+
+    address: {
+      state: string;
+      country: string;
+      city: string;
+      street: string;
+      houseNumber: number;
+      zip: number;
     }
 };
 

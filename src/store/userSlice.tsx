@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TUsers } from "@/Types";
+import { TCards, TUsers } from "@/Types";
 
 interface UserState {
     user : TUsers | null;
     isLoggedIn: boolean;
+    likedCards: Array<TCards>;
 }
 
 const initialState: UserState = {
     user: null,
-    isLoggedIn: false
+    isLoggedIn: false,
+    likedCards: []
 }
 
 const userSlice = createSlice({
@@ -22,9 +24,12 @@ const userSlice = createSlice({
         clearUser(state){
             state.isLoggedIn = false;
             state.user = null;
+        },
+        addCard(state, action:PayloadAction<TCards>){
+            state.likedCards.push(action.payload);
         }
     }
 });
 
-export const {setUser, clearUser} = userSlice.actions;
+export const {setUser, clearUser, addCard} = userSlice.actions;
 export default userSlice.reducer;

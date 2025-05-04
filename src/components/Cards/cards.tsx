@@ -1,30 +1,35 @@
 import { Card, Image, Text, Button, Flex} from '@mantine/core';
-import { Tcards } from '@/Types';
+import { TCards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { addCard } from '@/store/userSlice';
 
-export function BizCard({ card } : { card: Tcards }) {
+export function BizCard({ card } : { card: TCards }) {
   const loggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
+  const dispatch = useDispatch<AppDispatch>();
 
   const heartOutline = <IconHeart />;
   const heartFilled = <IconHeartFilled/>;
   const [isLiked, setLiked] = useState(false);
 
-  const likedHandler = () => {
+  const likedHandler = (card: TCards) => {
       setLiked(!isLiked)
-      {isLiked !== true ? 
+
+      if (isLiked !== true) {
         toast.success('Card Liked!', {
           position: 'top-right'
-        })
-        :
+        });
+        dispatch(addCard(card));
+      } else {
         toast.warning('Card Unliked!', {
           position: 'top-right'
         })
-    }
+      }    
   }
+
   return (
     <Card h='100%' shadow="sm" padding="lg" mx={-15} radius="md" w={300} withBorder>
       <Card.Section>
@@ -53,7 +58,7 @@ export function BizCard({ card } : { card: Tcards }) {
 
         <Flex p={10} justify='space-around'>
           <Button bg='blue' w={80}><IconPhone/></Button>
-          {loggedIn && <Button variant='filled' bg='purple' ml='auto' w={80} onClick={likedHandler}>
+          {loggedIn && <Button variant='filled' bg='purple' ml='auto' w={80} onClick={() => likedHandler(card)}>
               {isLiked === true ? heartFilled : heartOutline}
           </Button>}
         </Flex>

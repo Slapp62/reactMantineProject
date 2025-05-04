@@ -1,6 +1,6 @@
 import { BizCard } from '@/components/Cards/cards';
 import { Hero } from '@/components/Hero';
-import { Tcards } from '@/Types';
+import { TCards } from '@/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
@@ -14,7 +14,7 @@ export function HomePage() {
       return await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
   }
 
-  const [cards, setCards] = useState<Tcards[]>([]);
+  const [cards, setCards] = useState<TCards[]>([]);
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

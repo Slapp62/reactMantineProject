@@ -5,6 +5,8 @@ import AdminControls from './pages/Admin.pages';
 import Error404 from './pages/404.pages';
 import About from './pages/About.pages';
 import { RegisterForm } from './pages/register.pages';
+import { FavoriteCards } from './pages/Favorites.pages';
+import { MyCards } from './pages/MyCards.pages';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
       {path: 'about', element: <About/>},
       {path: 'admin', element: <AdminControls/>},
       {path: 'register', element: <RegisterForm/>},
+      {path: 'favorites', element: <FavoriteCards/>},
+      {path: 'myCards', element: <MyCards/>},
       {path: '*', element: <Error404/>},
     ]
   },

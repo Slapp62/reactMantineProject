@@ -5,7 +5,7 @@ export function Search() {
     <Autocomplete
         variant='default'
     
-        placeholder="Search for a card"
+        placeholder="Search for a listing"
         data={[]}
         w={250}
     />

@@ -4,7 +4,6 @@ import { TUsers } from "@/Types";
 import { registrationSchema } from "@/validationRules/register.joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Box, Button, Checkbox, Fieldset, Flex, Group, PasswordInput, TextInput } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { FieldValues, useForm } from "react-hook-form";

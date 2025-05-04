@@ -20,6 +20,7 @@ export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () =
   
   const tokenHandler = async (response: AxiosResponse<any, any> ) => {
     const token = response.data;
+    sessionStorage.setItem('token', token);
     axios.defaults.headers.common['x-auth-token'] = token;
 
     const decodedToken = jwtDecode<TdecodedToken>(token);
