@@ -1,4 +1,4 @@
-import { BizCard } from '@/components/Cards/cards';
+import { BizCard } from '@/components/Cards/MiniCard';
 import { Hero } from '@/components/Hero';
 import { TCards } from '@/Types';
 import { Box, Flex, Pagination } from '@mantine/core';

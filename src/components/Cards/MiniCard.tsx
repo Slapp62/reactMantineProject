@@ -6,8 +6,9 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { addCard } from '@/store/userSlice';
+import { Link } from 'react-router-dom';
 
-export function BizCard({ card } : { card: TCards }) {
+export function MiniCard({ card } : { card: TCards }) {
   const loggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
   const dispatch = useDispatch<AppDispatch>();
 
@@ -16,6 +17,7 @@ export function BizCard({ card } : { card: TCards }) {
   const [isLiked, setLiked] = useState(false);
 
   const likedHandler = (card: TCards) => {
+      
       setLiked(!isLiked)
 
       if (isLiked !== true) {
@@ -23,6 +25,8 @@ export function BizCard({ card } : { card: TCards }) {
           position: 'top-right'
         });
         dispatch(addCard(card));
+        console.log(card);
+        
       } else {
         toast.warning('Card Unliked!', {
           position: 'top-right'
@@ -56,9 +60,12 @@ export function BizCard({ card } : { card: TCards }) {
           </ul>
         </Text>
 
-        <Flex p={10} justify='space-around'>
-          <Button bg='blue' w={80}><IconPhone/></Button>
-          {loggedIn && <Button variant='filled' bg='purple' ml='auto' w={80} onClick={() => likedHandler(card)}>
+        <Flex p={10} justify='space-between'>
+          <Link to="card-details" target='_blank'><Button fz={12}>Details</Button></Link>
+
+          <Button bg='blue'><IconPhone/></Button>
+
+          {loggedIn && <Button variant='filled' bg='purple' onClick={() => likedHandler(card)}>
               {isLiked === true ? heartFilled : heartOutline}
           </Button>}
         </Flex>

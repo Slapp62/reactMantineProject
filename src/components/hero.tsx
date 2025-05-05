@@ -1,7 +1,7 @@
 import { RootState } from '@/store/store';
 import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex } from '@mantine/core';
 import { useSelector } from 'react-redux';
-import { CardModal } from './CardModal/CardModal';
+import { CardModal } from './CreateCardModal/CardModal';
 import { useDisclosure } from '@mantine/hooks';
 
 export function Hero() {

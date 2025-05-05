@@ -7,6 +7,8 @@ import About from './pages/About.pages';
 import { RegisterForm } from './pages/register.pages';
 import { FavoriteCards } from './pages/Favorites.pages';
 import { MyCards } from './pages/MyCards.pages';
+import { FullCard } from './components/Cards/FullCard';
+//import RouteGuard from './RouteGuard';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,13 @@ const router = createBrowserRouter([
       {path: 'register', element: <RegisterForm/>},
       {path: 'favorites', element: <FavoriteCards/>},
       {path: 'myCards', element: <MyCards/>},
+      {path: 'card-details', element: <FullCard/>},
+      // {path:'/profile', element: {
+      //     <RouteGuard>
+      //       <Profile/>
+      //     </RouteGuard>
+      //   }
+      // },
       {path: '*', element: <Error404/>},
     ]
   },

@@ -1,4 +1,4 @@
-import { BizCard } from "@/components/Cards/cards"
+import { BizCard } from "@/components/Cards/MiniCard"
 import { RootState } from "@/store/store"
 import { useSelector } from "react-redux"
 

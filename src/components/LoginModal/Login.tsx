@@ -22,17 +22,6 @@ type LoginFormProps = {
 export function LoginForm({onClose}: LoginFormProps) {
   const dispatch = useDispatch<AppDispatch>();
 
-  const tokenHandler = async (response: AxiosResponse<any, any> ) => {
-      const token = response.data;
-      axios.defaults.headers.common['x-auth-token'] = token;
-
-      const decodedToken = jwtDecode<TdecodedToken>(token);
-      const id = decodedToken._id;
-      
-      const userData = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`)
-      dispatch(setUser(userData.data))
-  }
-
   const {register, handleSubmit, formState: {errors, isValid} } = useForm({
     defaultValues: {
       email: '',
@@ -43,34 +32,40 @@ export function LoginForm({onClose}: LoginFormProps) {
     resolver: joiResolver(loginSchema)
   });
 
-  const onSubmit = async (data: FieldValues) => {
+  const tokenHandler = async (response: AxiosResponse<any, any> ) => {
+    const token = response.data;
+    localStorage.setItem('token', token)
     
+    axios.defaults.headers.common['x-auth-token'] = token;
+
+    const decodedToken = jwtDecode<TdecodedToken>(token);
+    const id = decodedToken._id;
+    
+    try {const userData = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`)
+    dispatch(setUser(userData.data))
+    } catch (error) {
+        toast.error(`Error retrieving user data! ${error}`, {position: 'bottom-right'});
+    }
+  }
+
+  const onSubmit = async (data: FieldValues) => {
       try {
-        const response = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
-          {
-            email: data.email, 
-            password: data.password,
-          });
+        const response = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login", {
+          email: data.email, 
+          password: data.password,
+        });
 
-        if (response.status === 200){
+        if (response.status === 200) {
+          tokenHandler(response);
 
-          try {
-            tokenHandler(response);
-          } catch (error) {
-            console.error(`Problem with token! ${error}`)
-          }
-        
           toast.success('Logged In!', {position: 'bottom-right'});
-        
-          if (onClose) {onClose()}
-          }
+      
+          if (onClose) {onClose()};
+        }
         
       } catch (error) {
-
-        toast.error(`Login Failed! ${error}`, {position: 'bottom-right'})
-      };
-
-    
+          toast.error(`Login Failed! ${error}`, {position: 'bottom-right'})
+      };    
     };
 
   return (

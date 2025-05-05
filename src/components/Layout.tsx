@@ -8,7 +8,7 @@ export function Layout() {
     return (
       <>
         
-        <Box>
+        <Box >
           <ToastContainer/>
           
           <Navbar />

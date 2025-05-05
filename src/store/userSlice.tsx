@@ -8,7 +8,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    user: null,
+    user: null as TUsers | null,
     isLoggedIn: false,
     likedCards: []
 }
@@ -17,19 +17,22 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers:{
-        setUser(state, action:PayloadAction<TUsers>){
+        setUser(state, data:PayloadAction<TUsers>){
             state.isLoggedIn = true;
-            state.user = action.payload;
+            state.user = data.payload;
         },
         clearUser(state){
             state.isLoggedIn = false;
             state.user = null;
         },
-        addCard(state, action:PayloadAction<TCards>){
-            state.likedCards.push(action.payload);
+        addCard(state, data:PayloadAction<TCards>){
+            state.likedCards.push(data.payload);
+        },
+        removeFavorite: (state, data: PayloadAction<TCards>) => {
+            state.likedCards = state.likedCards.filter(card => card._id !== data.payload._id)
         }
     }
 });
 
-export const {setUser, clearUser, addCard} = userSlice.actions;
+export const {setUser, clearUser, addCard, removeFavorite} = userSlice.actions;
 export default userSlice.reducer;
