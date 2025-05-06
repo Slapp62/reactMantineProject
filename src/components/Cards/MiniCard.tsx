@@ -6,12 +6,13 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { addCard } from '@/store/userSlice';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function MiniCard({ card } : { card: TCards }) {
   const loggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
   const dispatch = useDispatch<AppDispatch>();
-
+  const jumpTo = useNavigate();
+  
   const heartOutline = <IconHeart />;
   const heartFilled = <IconHeartFilled/>;
   const [isLiked, setLiked] = useState(false);
@@ -61,7 +62,7 @@ export function MiniCard({ card } : { card: TCards }) {
         </Text>
 
         <Flex p={10} justify='space-between'>
-          <Link to="card-details" target='_blank'><Button fz={12}>Details</Button></Link>
+          <Button fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>Details</Button>
 
           <Button bg='blue'><IconPhone/></Button>
 

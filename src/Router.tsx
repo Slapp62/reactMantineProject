@@ -22,7 +22,7 @@ const router = createBrowserRouter([
       {path: 'register', element: <RegisterForm/>},
       {path: 'favorites', element: <FavoriteCards/>},
       {path: 'myCards', element: <MyCards/>},
-      {path: 'card-details', element: <FullCard/>},
+      {path: 'card-details/:id', element: <FullCard/>},
       // {path:'/profile', element: {
       //     <RouteGuard>
       //       <Profile/>

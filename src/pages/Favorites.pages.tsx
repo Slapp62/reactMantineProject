@@ -1,4 +1,4 @@
-import { BizCard } from "@/components/Cards/MiniCard"
+import { MiniCard } from "@/components/Cards/MiniCard"
 import { RootState } from "@/store/store"
 import { useSelector } from "react-redux"
 
@@ -7,7 +7,7 @@ export function FavoriteCards()  {
 
     return (
         likedCards.map((card, index) => {
-            return <BizCard key={index} card={card}/>
+            return <MiniCard key={index} card={card}/>
         }) 
     )
 }

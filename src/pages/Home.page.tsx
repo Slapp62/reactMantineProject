@@ -1,4 +1,4 @@
-import { BizCard } from '@/components/Cards/MiniCard';
+import { MiniCard } from '@/components/Cards/MiniCard';
 import { Hero } from '@/components/Hero';
 import { TCards } from '@/Types';
 import { Box, Flex, Pagination } from '@mantine/core';
@@ -7,15 +7,12 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 export function HomePage() {
-  
-
-    // Get and set cards
-    const getCards = async () => {
-      return await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
-  }
-
   const [cards, setCards] = useState<TCards[]>([]);
   const cardsRef = useRef<HTMLDivElement>(null);
+
+  const getCards = async () => {
+    return await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
+  }
 
   useEffect(() => {
       const loadCards = async () => {
@@ -49,7 +46,7 @@ export function HomePage() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true, amount: 0.2 }}>
 
-              <BizCard key={index} card={card} />
+              <MiniCard key={index} card={card} />
 
               </motion.div>
           ))}

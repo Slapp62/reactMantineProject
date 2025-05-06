@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import { IconCopyright } from '@tabler/icons-react';
 
 
-export function MyFooter() {
+export function Footer() {
   
   return (
-    <Box mt={40} h={50} px={20} style={{zIndex: 20}}>
+    <Box h={60} px={20} style={{zIndex: 20}}>
       <hr/>
       <Flex justify='space-between'>
         <Logo />
