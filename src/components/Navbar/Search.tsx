@@ -1,13 +1,19 @@
-import { Autocomplete } from '@mantine/core';
+import { setSearchWord } from '@/store/searchSlice';
+import { TextInput } from '@mantine/core';
+import { IconSearch } from '@tabler/icons-react';
+import { useDispatch} from 'react-redux';
+
 
 export function Search() {
+  const dispatch = useDispatch();
+      
   return (
-    <Autocomplete
+    <TextInput
         variant='default'
-    
+        rightSection=<IconSearch/>
         placeholder="Search for a listing"
-        data={[]}
-        w={250}
+        w='100%'
+        onChange={(e)=> {dispatch(setSearchWord(e.target.value))}}
     />
   );
 }

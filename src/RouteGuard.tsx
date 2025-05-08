@@ -12,7 +12,7 @@ const RouteGuard = (props: RouteGuardProps) => {
     const {children,  isBusiness, adminOnly} = props;
 
     const UserState = useSelector(
-        (state:RootState) => state.user, 
+        (state:RootState) => state.userSlice, 
     )
 
     const user = UserState.user!;

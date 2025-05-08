@@ -9,7 +9,6 @@
   import clsx from 'clsx';
   import { LoginModal } from '../LoginModal/LoginModal';
   import { Link } from 'react-router-dom';
-  import { Search } from './Search';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { clearUser } from '@/store/userSlice';
@@ -17,8 +16,8 @@ import { toast } from 'react-toastify';
  
   
   export function Navbar() {
-    const user = useSelector((state: RootState) => state.user.user);
-    const loggedIn = useSelector((state: RootState) => state.user.isLoggedIn)
+    const user = useSelector((state: RootState) => state.userSlice.user);
+    const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
     const dispatch = useDispatch<AppDispatch>();
 
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
@@ -58,16 +57,22 @@ import { toast } from 'react-toastify';
                 <Text fw={700}>Admin Controls</Text>
               </Link>}
 
-              <Search/>
+              
             </Group>
 
             <Group>
-              {!loggedIn && <Button variant="outline" onClick={openModal}>Login</Button>}
-              {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
+              <Group visibleFrom="sm">
+                {!loggedIn && <Button variant="outline" onClick={openModal}>Login</Button>}
+                {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
 
-              {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
-              <LightDarkToggle />
-              <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+                {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
+              </Group>
+
+              <Group >
+                <LightDarkToggle />
+                <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+              </Group>
+              
             </Group>
             
           </Flex>
@@ -79,7 +84,7 @@ import { toast } from 'react-toastify';
           size="50%"
           padding="md"
           title="Business Cards"
-          hiddenFrom="sm"
+          hiddenFrom="md"
           zIndex={1000000}
         >
           <ScrollArea h="calc(100vh - 80px" mx="-sm">
@@ -107,7 +112,7 @@ import { toast } from 'react-toastify';
   
             <Divider my="sm" />
   
-            <Group justify="center" grow pb="sm" px="lg">
+            <Group justify="center" grow pb="sm">
               {!loggedIn && <Button variant="outline" onClick={() => {closeDrawer(); openModal();}}>Login</Button>}
               {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
 

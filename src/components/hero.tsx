@@ -1,11 +1,15 @@
-import { RootState } from '@/store/store';
-import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex } from '@mantine/core';
-import { useSelector } from 'react-redux';
+import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid } from '@mantine/core';
 import { CardModal } from './CreateCardModal/CardModal';
+import { Search } from './Navbar/Search';
 import { useDisclosure } from '@mantine/hooks';
+import { RootState } from '@/store/store';
+import { useSelector } from 'react-redux';
+
 
 export function Hero() {
-    const user = useSelector((state: RootState) => state.user.user);
+
+    const user = useSelector((state: RootState) => state.userSlice.user);
+  
     const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
     
     return (
@@ -16,21 +20,32 @@ export function Hero() {
         style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}
       >
       
-      <Center maw={600} pos='relative'  style={{borderRadius: "20px"}}>
-          <Overlay pos='absolute'  color="#000" backgroundOpacity={0.80} blur={2} zIndex={1} radius="lg"/>
-          <Box
-            ta='center' 
-            p={35}
-            style={{zIndex: 2}}>
-              {!user && <Text c='white' fw='bold' fz={30}>Find your next career!</Text>}
-
-              <Flex align='center' direction='column' gap={10}>
-                {user && <Text c='blue' fw='bold' fz={30}>Welcome back, {user.name.first}</Text>}
-                {user && <Button onClick={openModal} variant='filled' color='blue' size='xl' fz={30}> Create a listing</Button>}
-              </Flex>
+      <Grid>
+        <Grid.Col span={{base: 8, xs: 12}} m='auto'>
+          <Center pos='relative'  style={{borderRadius: "20px"}}>
+            <Overlay pos='absolute'  color="#000" backgroundOpacity={0.80} blur={2} zIndex={1} radius="lg"/>
+            <Box
+              ta='center' 
+              p={35}
+              style={{zIndex: 2}}
+              w={500}
+              >
               
-          </Box>
-      </Center>
+                {!user && <Text c='white' fw='bold' fz={30} mb={10}>Find your next career!</Text>}
+
+                <Center><Search/></Center>
+
+                <Flex align='center' direction='column' gap={10}>
+                  {user && <Text c='blue' fw='bold' fz={30}>Welcome back, {user.name.first}</Text>}
+                  {user && <Button onClick={openModal} variant='filled' color='blue' size='xl' fz={30}> Create a listing</Button>}
+                </Flex>
+                
+            </Box>
+          </Center>
+        </Grid.Col>
+        
+      </Grid>
+      
 
       </BackgroundImage>
       <CardModal opened={modalOpened} onClose={closeModal} />

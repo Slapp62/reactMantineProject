@@ -1,9 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice";
+import searchSlice from "./searchSlice";
+import userSlice from "./userSlice";
+import cardSlice from "./cardSlice";
+
 
 export const store = configureStore({
     reducer: {
-        user: userReducer,
+        userSlice,
+        searchSlice,
+        cardSlice,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,
