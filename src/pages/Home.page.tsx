@@ -9,6 +9,7 @@ import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export function HomePage() {
+  
   useGetCards();
 
   const cardsRef = useRef<HTMLDivElement>(null);

@@ -17,6 +17,8 @@ const loginSchema = Joi.object({
             'string.pattern.base':'Password must be a minimum 8 characters and contain at least one uppercase letter, number, and special character',
             'any.required': 'Password is required',
         }),
+
+    rememberMe: Joi.boolean(),
 })
 
 export {loginSchema}

@@ -2,8 +2,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TUsers } from '../Types'
-import { ActionIcon, Anchor, Group, Table, Text } from "@mantine/core";
+import { ActionIcon, Anchor, Center, Flex, Group, Loader, Pagination, Table, Text } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { set } from "react-hook-form";
 
 const AdminControls = () => {
 
@@ -19,88 +20,105 @@ const AdminControls = () => {
     }
    
     const [users, setUsers] = useState<TUsers[]>([]);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => { 
         const loadUsers = async () => {
             try {
+                setLoading(true);
                 const response: { data: TUsers[] } = await getAllUsers();
                 setUsers(response.data);
                 console.log(response.data);
             } catch (error) {
                 console.error(error);
+            } finally {
+              setLoading(false)
             }
         };
 
         loadUsers();
     }, []);
 
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const usersPerPage = 30;
-    // const paginatedUsers = users.slice(
-    // (currentPage - 1) * usersPerPage, currentPage * usersPerPage);
     
-    const rows = users.map((user) => (
-        <Table.Tr key={user._id}>
-          <Table.Td>
-            <Group gap="sm">
-              {/* <Avatar size={30} src={user.image!} radius={30} /> */}
-              <Text fz="sm" fw={500}>
-                {user.name.first}
-              </Text>
-            </Group>
-          </Table.Td>
-    
-          <Table.Td>
-            {/* <Badge color={jobColors[user.job.toLowerCase()]} variant="light">
-              {user.job}
-            </Badge> */}
-          </Table.Td>
-          <Table.Td>
-            <Anchor component="button" size="sm">
-              {user.email}
-            </Anchor>
-          </Table.Td>
-          <Table.Td>
-            <Text fz="sm">{user.phone}</Text>
-          </Table.Td>
-          <Table.Td>
-            <Group gap={0} justify="flex-end">
-              <ActionIcon variant="subtle" color="gray">
-                <IconPencil size={16} stroke={1.5} />
-              </ActionIcon>
-              <ActionIcon variant="subtle" color="red">
-                <IconTrash size={16} stroke={1.5} />
-              </ActionIcon>
-            </Group>
-          </Table.Td>
-        </Table.Tr>
-      ));
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 30;
+    const paginatedUsers = users.slice(
+    (currentPage - 1) * usersPerPage, currentPage * usersPerPage);
+  
+    if (loading) {
+        return  <>
+          <Flex align="center" direction="column" mt={100}>
+            <Text size="xl" fw={600}>Users Are Loading</Text>
+            <Loader color="cyan" size="xl" mt={30}/>
+          </Flex>;
+        </>
+    }
 
     return (
-       
+       <Flex direction="column" w="100%">
         <Table.ScrollContainer minWidth={800}>
         <Table verticalSpacing="sm" maw='75%' mx='auto'>
-            <Table.Thead>
+          <Table.Thead>
             <Table.Tr>
-                <Table.Th>Employee</Table.Th>
-                <Table.Th>Job title</Table.Th>
+                <Table.Th>First Name</Table.Th>
+                <Table.Th>Last Name</Table.Th>
                 <Table.Th>Email</Table.Th>
                 <Table.Th>Phone</Table.Th>
-                <Table.Th />
             </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
+          </Table.Thead>
+
+          <Table.Tbody>{paginatedUsers.map((user) => (
+            <Table.Tr key={user._id}>
+              <Table.Td>
+                <Text fz="sm" fw={500}>
+                  {user.name.first}
+                </Text>
+              </Table.Td>
+        
+              <Table.Td>
+                <Text fz="sm" fw={500}>
+                    {user.name.last}
+                </Text>
+              </Table.Td>
+
+              <Table.Td>
+                <Anchor component="button" size="sm">
+                  {user.email}
+                </Anchor>
+              </Table.Td>
+
+              <Table.Td>
+                <Text fz="sm">{user.phone}</Text>
+              </Table.Td>
+
+              <Table.Td>
+                <Group gap={0} justify="flex-end">
+                  <ActionIcon variant="subtle" color="gray">
+                    <IconPencil size={16} stroke={1.5} />
+                  </ActionIcon>
+                  <ActionIcon variant="subtle" color="red">
+                    <IconTrash size={16} stroke={1.5} />
+                  </ActionIcon>
+                </Group>
+              </Table.Td>
+
+            </Table.Tr>))}
+          </Table.Tbody>
         </Table>
         </Table.ScrollContainer>
               
-        // <Pagination
-        //     total={Math.ceil(users.length / usersPerPage)}
-        //     value={currentPage}
-        //     onChange={(page)=>{
-        //         setCurrentPage(page);
-        //         window.scrollTo({top:0, behavior:'smooth'});
-        //     }}
-        //     mt="md"/>
+        <Pagination
+            total={Math.ceil(users.length / usersPerPage)}
+            value={currentPage}
+            onChange={(page)=>{
+                setCurrentPage(page);
+                window.scrollTo({top:0, behavior:'smooth'});
+            }}
+            mt="md"
+            m="auto"
+            />
+            
+            </Flex>
     )
 }
 

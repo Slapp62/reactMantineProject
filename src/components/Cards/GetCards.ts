@@ -11,7 +11,6 @@ export function useGetCards() {
             try {
                const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
                 dispatch(setCardsSlice(response.data));  // eslint-disable-next-line no-console        
-                console.log(response.data); 
             } catch (error) { // eslint-disable-next-line no-console
                 console.error("Failed to fetch cards: ", error); 
             }

@@ -81,7 +81,7 @@ import { toast } from 'react-toastify';
         <Drawer
           opened={drawerOpened}
           onClose={closeDrawer}
-          size="50%"
+          size="75%"
           padding="md"
           title="Business Cards"
           hiddenFrom="md"

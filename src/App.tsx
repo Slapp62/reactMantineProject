@@ -5,14 +5,22 @@ import { theme } from './theme';
 import './App.css'; // or './styles/global.css'
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import { useAuthInit } from './pages/hooks/UseAuthInit';
 
 
 export default function App() {
+  
+
   return (
     <MantineProvider theme={theme}>
       <Provider store={store}>
-        <Router />
+        <InnerApp/>
       </Provider>
     </MantineProvider>
   );
+}
+
+function InnerApp() {
+  useAuthInit();
+  return <Router />
 }

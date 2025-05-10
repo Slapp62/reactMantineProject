@@ -3,14 +3,14 @@ import { TCards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-//import { addCard } from '@/store/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { addFavorite } from '@/store/cardSlice';
 
 export function MiniCard({ card } : { card: TCards }) {
   const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
-  //const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const jumpTo = useNavigate();
   
   const heartOutline = <IconHeart />;
@@ -18,20 +18,18 @@ export function MiniCard({ card } : { card: TCards }) {
   const [isLiked, setLiked] = useState(false);
 
   const likedHandler = (card: TCards) => {
-      
-      setLiked(!isLiked)
+      const likedState = !isLiked;
+      setLiked(likedState)
 
-      if (isLiked !== true) {
+      if (likedState === true) {
         toast.success('Card Liked!', {
-          position: 'top-right'
+          position: 'bottom-right'
         });
-        //dispatch(addCard(card));
-        // eslint-disable-next-line no-console
-        console.log(card);
+        dispatch(addFavorite(card));
         
       } else {
         toast.warning('Card Unliked!', {
-          position: 'top-right'
+          position: 'bottom-right'
         })
       }    
   }

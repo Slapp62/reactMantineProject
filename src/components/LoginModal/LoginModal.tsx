@@ -12,15 +12,17 @@ import { TdecodedToken } from '@/Types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/userSlice';
+import { useState } from 'react';
 
 
 export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () => void }) {
 
   const dispatch = useDispatch<AppDispatch>();
+  const [rememberMe, setRemember] = useState(false);
   
   const tokenHandler = async (response: AxiosResponse<any, any> ) => {
     const token = response.data;
-    sessionStorage.setItem('token', token);
+    {rememberMe ? localStorage.setItem('token', token) : sessionStorage.setItem('token', token)};
     axios.defaults.headers.common['x-auth-token'] = token;
 
     const decodedToken = jwtDecode<TdecodedToken>(token);
@@ -33,7 +35,7 @@ export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () =
   const {register, handleSubmit, formState: {errors, isValid} } = useForm({
     defaultValues: {
       email: '',
-      password: ''
+      password: '',
     },
     mode: 'onChange',
     criteriaMode: 'firstError',
@@ -97,7 +99,10 @@ export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () =
                 />
 
               <Group justify="space-between" mt="lg">
-                <Checkbox label="Remember me" />
+                <Checkbox 
+                  label="Remember me" 
+                  checked={rememberMe}
+                  onChange={(event) => setRemember(event.currentTarget.checked)}/>
                 <Anchor component="button" size="sm">
                   Forgot password?
                 </Anchor>
