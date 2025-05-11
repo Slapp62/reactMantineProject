@@ -8,7 +8,8 @@ import { RegisterForm } from './pages/register.pages';
 import { FavoriteCards } from './pages/Favorites.pages';
 import { MyCards } from './pages/MyCards.pages';
 import { FullCard } from './components/Cards/FullCard';
-//import RouteGuard from './RouteGuard';
+import { LoginPage } from './pages/Login.pages';
+import RouteGuard from './RouteGuard';
 
 const router = createBrowserRouter([
   {
@@ -17,11 +18,12 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {index: true, element: <HomePage />},
+      {path: 'login', element: <LoginPage/>},
       {path: 'about', element: <About/>},
-      {path: 'admin', element: <AdminControls/>},
+      {path: 'admin', element: <RouteGuard isAdmin><AdminControls/></RouteGuard> },
       {path: 'register', element: <RegisterForm/>},
-      {path: 'favorites', element: <FavoriteCards/>},
-      {path: 'myCards', element: <MyCards/>},
+      {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
+      {path: 'myCards', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
       {path: 'card-details/:id', element: <FullCard/>},
       {path: '*', element: <Error404/>},
     ]

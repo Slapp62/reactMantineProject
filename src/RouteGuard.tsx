@@ -5,28 +5,26 @@ import { Navigate } from "react-router-dom";
 type RouteGuardProps = {
     children: React.ReactNode;
     isBusiness?: boolean;
-    adminOnly?: boolean;
+    isAdmin?: boolean;
 }
 
 const RouteGuard = (props: RouteGuardProps) => {
-    const {children,  isBusiness, adminOnly} = props;
+    const {children,  isBusiness, isAdmin} = props;
 
-    const UserState = useSelector(
-        (state:RootState) => state.userSlice, 
-    )
-
-    const user = UserState.user!;
-
-    if (!UserState.isLoggedIn) {
-        return <Navigate to="/" />
+    const user = useSelector((state:RootState) => {
+        return state.userSlice.user;
+    });
+        
+    if (!user) {
+        return <Navigate to="/login" replace state={{message: 'You must login to access this page.'}}/>
     }
 
     if (isBusiness && !user.isBusiness) {
-        return <Navigate to='/' />
+        return <Navigate to='/' replace state={{message: 'You must login to access this page.'}}/>
     }
 
-    if (adminOnly && !user.isAdmin) {
-        return <Navigate to='/' />
+    if (isAdmin && !user.isAdmin) {
+        return <Navigate to='/' replace state={{message: 'You must login to access this page.'}}/>
     }
 
     return <>{children}</>

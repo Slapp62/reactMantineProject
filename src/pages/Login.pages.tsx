@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import {
- Modal, Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
+ Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
 import classes from './Login.module.css';
 import  { FieldValues, useForm } from 'react-hook-form';
 import axios, { AxiosResponse } from 'axios';
@@ -13,9 +13,13 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/userSlice';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
-export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () => void }) {
+export function LoginPage() {
+  const jumpTo = useNavigate();
+  const location = useLocation();
+  const message = location.state?.message;
 
   const dispatch = useDispatch<AppDispatch>();
   const [rememberMe, setRemember] = useState(false);
@@ -59,8 +63,8 @@ export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () =
         }
       
         toast.success('Logged In!', {position: 'bottom-right'});
-      
-        if (onClose) {onClose()}
+        jumpTo('/');
+        
         }
       
     } catch (error) {
@@ -70,50 +74,49 @@ export function LoginModal({ opened, onClose }: { opened: boolean, onClose: () =
   };
 
   return (
-      <Modal opened={opened} onClose={onClose} centered>
-        <Container size={420}>
-          <Title ta="center" className={classes.title}>
-            Welcome back!
-          </Title>
-          <Text c="dimmed" size="sm" ta="center" mt={5}>
-            Don't have an account yet?{' '}
-            <Anchor size="sm" component="button">
-              Create account
+    <Container size={420} mt={100}>
+      {message && <Title order={3} ta="center" c="red" mb={10}>{message}</Title>}
+      {!message && <Title ta="center" className={classes.title}>
+        Welcome back!
+      </Title>}
+      <Text c="dimmed" size="sm" ta="center" mt={5}>
+        Don't have an account yet?{' '}
+        <Anchor size="sm" component="button">
+          Create account
+        </Anchor>
+      </Text>
+
+      <Paper withBorder p={30} mt={30} radius="md">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextInput 
+            label="Email" 
+            placeholder="you@email.com" 
+            {...register('email')}
+            error= {errors.email?.message}
+            />
+          <PasswordInput 
+            mt={10}
+            label="Password" 
+            placeholder="Your password" 
+            {...register('password')}
+            error={errors.password?.message}
+            />
+
+          <Group justify="space-between" mt="lg">
+            <Checkbox 
+              label="Remember me" 
+              checked={rememberMe}
+              onChange={(event) => setRemember(event.currentTarget.checked)}/>
+            <Anchor component="button" size="sm">
+              Forgot password?
             </Anchor>
-          </Text>
+          </Group>
 
-          <Paper withBorder p={30} mt={30} radius="md">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <TextInput 
-                label="Email" 
-                placeholder="you@email.com" 
-                {...register('email')}
-                error= {errors.email?.message}
-                />
-              <PasswordInput 
-                mt={10}
-                label="Password" 
-                placeholder="Your password" 
-                {...register('password')}
-                error={errors.password?.message}
-                />
-
-              <Group justify="space-between" mt="lg">
-                <Checkbox 
-                  label="Remember me" 
-                  checked={rememberMe}
-                  onChange={(event) => setRemember(event.currentTarget.checked)}/>
-                <Anchor component="button" size="sm">
-                  Forgot password?
-                </Anchor>
-              </Group>
-
-              <Button type='submit' fullWidth mt="xl" disabled={!isValid}>
-                Sign in
-              </Button>
-            </form>
-          </Paper>
-        </Container>
-      </Modal>
+          <Button type='submit' fullWidth mt="xl" disabled={!isValid}>
+            Sign in
+          </Button>
+        </form>
+      </Paper>
+    </Container>
   );
 }

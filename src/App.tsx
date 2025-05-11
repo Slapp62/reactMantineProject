@@ -5,7 +5,7 @@ import { theme } from './theme';
 import './App.css'; // or './styles/global.css'
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-import { useAuthInit } from './pages/hooks/UseAuthInit';
+import { useAuthInit } from './hooks/UseAuthInit';
 
 
 export default function App() {

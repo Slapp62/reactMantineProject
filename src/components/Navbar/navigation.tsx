@@ -1,14 +1,13 @@
-  import {
-    Box, Burger, Button, Divider, Drawer, Flex, Text, Group, ScrollArea,
-    useMantineColorScheme,
-  } from '@mantine/core';
-  import { useDisclosure } from '@mantine/hooks';
-  import classes from './navigation.module.css';
-  import { LightDarkToggle } from '../LightDarkToggle/LightDarkToggle'
-  import { Logo } from '../Logo/logo';
-  import clsx from 'clsx';
-  import { LoginModal } from '../LoginModal/LoginModal';
-  import { Link } from 'react-router-dom';
+import {
+  Box, Burger, Button, Divider, Drawer, Flex, Text, Group, ScrollArea,
+  useMantineColorScheme,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import classes from './navigation.module.css';
+import { LightDarkToggle } from '../LightDarkToggle/LightDarkToggle'
+import { Logo } from '../Logo/logo';
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { clearUser } from '@/store/userSlice';
@@ -22,8 +21,6 @@ import { toast } from 'react-toastify';
 
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const { colorScheme } = useMantineColorScheme();
-
-    const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
   
     const logoutHandler = () => {
       dispatch(clearUser());
@@ -62,7 +59,7 @@ import { toast } from 'react-toastify';
 
             <Group>
               <Group visibleFrom="sm">
-                {!loggedIn && <Button variant="outline" onClick={openModal}>Login</Button>}
+                {!loggedIn && <Link to='/login'><Button variant="outline">Login</Button></Link>}
                 {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
 
                 {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
@@ -113,14 +110,13 @@ import { toast } from 'react-toastify';
             <Divider my="sm" />
   
             <Group justify="center" grow pb="sm">
-              {!loggedIn && <Button variant="outline" onClick={() => {closeDrawer(); openModal();}}>Login</Button>}
+              {!loggedIn && <Link to='/login'><Button variant="outline">Login</Button></Link>}
               {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
 
               {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
             </Group>
           </ScrollArea>
         </Drawer>
-        <LoginModal opened={modalOpened} onClose={closeModal} />
       </Box>
     
     );

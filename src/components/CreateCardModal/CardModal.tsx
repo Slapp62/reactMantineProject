@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { TCards } from '@/Types';
-import { cardSchema } from '@/validationRules/card.joi';
+import { cardSchema } from '@/validationRules/createCard.joi';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { Button, Fieldset, Flex, Modal, NumberInput, Paper, Textarea, TextInput,  } from '@mantine/core';
+import { Button, Fieldset, Flex, Modal, Paper, Textarea, TextInput,  } from '@mantine/core';
 import axios from 'axios';
 import { FieldValues, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -14,46 +14,104 @@ export function CardModal({ opened, onClose }: { opened: boolean, onClose: () =>
     });
 
     const onSubmit = async (data:FieldValues) => {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         axios.defaults.headers.common['x-auth-token'] = token;
 
+        data.address.houseNumber = Number(data.address.houseNumber);
+        data.address.zip = Number(data.address.zip);
+        
         try {
             const response = await axios.post('https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards', data)
 
             if (response.status === 201) {
-                toast.success('Card Submitted!')
+                toast.success('Card Submitted!', {position: "bottom-right"})
             }
         } catch (error:any) {
             console.error('Error processing form.', error, error.response.data, error.request, error.message);
 
-            toast.error('Card creation failed!')
+            toast.error('Card creation failed!', {position: "bottom-right"})
         }
     }
 
   return (
     <>
-        <Modal   opened={opened} onClose={onClose} title='Create A Card'>
+        <Modal opened={opened} onClose={onClose} title='Create A Card'>
             <Paper>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Flex direction='column' gap={10} py={10}>
                         <Fieldset legend='Job Info'>
-                            <TextInput label='Title'/>
-                            <TextInput label='Subtitle'/>
-                            <Textarea label='Description'/>
-                            <TextInput label='Phone' />
-                            <TextInput label='Email'/>
-                            <TextInput label='Website' />
-                            <TextInput label='URL' />
-                            <TextInput label='Alt Text' />
+                            <TextInput label='Title'
+                                {...register('title')}
+                                error= {errors.title?.message}
+                            />
+                            <TextInput label='Subtitle'
+                                {...register('subtitle')}
+                                error= {errors.subtitle?.message}
+                            />
+                            <Textarea label='Description'
+                                {...register('description')}
+                                error= {errors.description?.message}
+                            />
+
+                            <TextInput label='Phone' 
+                                {...register('phone', {
+                                    onChange: (e) => {
+                                        e.target.value = e.target.value.replace(/[^\d-]/g, '');
+                                    },
+                                })}
+                                error= {errors.phone?.message}
+                            />
+                            <TextInput label='Email'
+                                {...register('email')}
+                                error= {errors.email?.message}
+                            />
+                            <TextInput label='Website' 
+                                {...register('web')}
+                                error= {errors.web?.message}
+                            />
+                            <TextInput label='URL' 
+                                {...register('image.url')}
+                                error= {errors.image?.url?.message}
+                            />
+                            <TextInput label='Alt Text' 
+                                {...register('image.alt')}
+                                error= {errors.image?.alt?.message}
+                            />
                         </Fieldset>
                         
                         <Fieldset legend='Address'>
-                            <TextInput label='State' />
-                            <TextInput label='Country' />
-                            <TextInput label='City' />
-                            <TextInput label='Street' />
-                            <TextInput label='House Number' />
-                            <TextInput label='Zipcode' />
+                            <TextInput label='State' 
+                                {...register('address.state')}
+                                error= {errors.address?.state?.message}
+                            />
+                            <TextInput label='Country' 
+                                {...register('address.country')}
+                                error= {errors.address?.country?.message}
+                            />
+                            <TextInput label='City' 
+                                {...register('address.city')}
+                                error= {errors.address?.city?.message}
+                            />
+                            <TextInput label='Street' 
+                                {...register('address.street')}
+                                error= {errors.address?.street?.message}
+                            />
+                            <TextInput label='House Number' 
+                                {...register('address.houseNumber', {
+                                    onChange: (e) => {
+                                    e.target.value = e.target.value.replace(/\D/g, '');
+                                    },
+                                })}
+                                error= {errors.address?.houseNumber?.message}
+                            />
+                            <TextInput label='Zipcode' 
+                                {...register('address.zip', {
+                                    onChange: (e) => {
+                                    e.target.value = e.target.value.replace(/\D/g, '');
+                                    },
+                                })}
+                                error= {errors.address?.zip?.message}
+                            />
                         </Fieldset>
                                                 
                     </Flex>
