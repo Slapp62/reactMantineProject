@@ -1,9 +1,17 @@
 .navbarLight{
-  background-color: white;
+  background-color: #ffffff;
 }
 
 .navbarDark{
-  background-color: #333;
+  background-color: slategrey;
+}
+
+.navbarScrolled{  
+  width: 95%;      
+  margin-inline: auto;        
+  border-radius: 15px;  
+  transition: all 0.5s ease;  
+  overflow: hidden;
 }
 
 .header {

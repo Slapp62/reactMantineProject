@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage } from './pages/Home.page';
+import { HomePage } from './pages/Home.pages';
 import { Layout } from './components/Layout';
 import AdminControls from './pages/Admin.pages';
 import Error404 from './pages/404.pages';

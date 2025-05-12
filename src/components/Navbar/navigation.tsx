@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { clearUser } from '@/store/userSlice';
 import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
  
   
   export function Navbar() {
@@ -27,8 +28,19 @@ import { toast } from 'react-toastify';
       toast.success('Logged out succesfully!', {position: 'bottom-right'});
     }
 
+    const [scrolled, setScrolled] = useState(false);
+    
+    useEffect(() => {
+      const handleScroll = () => {
+        setScrolled(window.scrollY > 10);
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [])
+
     return (
-      <Box pos="sticky" top={0} style={{zIndex: 100}} opacity={0.9} className={clsx(colorScheme === 'light' ? classes.navbarLight : classes.navbarDark)}>
+      <Box pos="sticky" style={{zIndex: 100, top: scrolled ? 10 : 0, transition: 'top 0.5s ease'}} opacity={0.9} className={clsx(colorScheme === 'light' ? classes.navbarLight : classes.navbarDark, {[classes.navbarScrolled]: scrolled})}>
         <header className={classes.header}>
           <Flex justify="space-between" h='100%' >
             <Logo/>
@@ -109,9 +121,9 @@ import { toast } from 'react-toastify';
   
             <Divider my="sm" />
   
-            <Group justify="center" grow pb="sm">
-              {!loggedIn && <Link to='/login'><Button variant="outline">Login</Button></Link>}
-              {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
+            <Group justify="space-evenly" pb="sm">
+              {!loggedIn && <Link  to='/login'><Button w={100} variant="outline">Login</Button></Link>}
+              {!loggedIn && <Link to='/register'><Button w={100}>Register</Button></Link>}
 
               {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
             </Group>

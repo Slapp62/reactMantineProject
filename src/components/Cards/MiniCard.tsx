@@ -1,4 +1,4 @@
-import { Card, Image, Text, Button, Flex} from '@mantine/core';
+import { Card, Image, Text, Button, Flex, ListItem, List, Box} from '@mantine/core';
 import { TCards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -50,15 +50,15 @@ export function MiniCard({ card } : { card: TCards }) {
       <Card.Section p={15}>
         <Text mb="xs" fw={500}>{card.title}</Text>
       
-        <Text size="sm" c="dimmed">
+        <Box>
           <Text truncate w={250}>{card.description}</Text>
           <hr/>
-          <p>{card.subtitle}</p>
-          <ul>
-            <li>{card.phone}</li>
-            <li>{card.email}</li>
-          </ul>
-        </Text>
+          <Text>{card.subtitle}</Text>
+          <List>
+            <ListItem>{card.phone}</ListItem>
+            <ListItem>{card.email}</ListItem>
+          </List>
+        </Box>
 
         <Flex p={10} justify='space-between'>
           <Button fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>Details</Button>

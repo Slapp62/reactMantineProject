@@ -1,6 +1,6 @@
-import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid } from '@mantine/core';
-import { CardModal } from './CreateCardModal/CardModal';
-import { Search } from './Navbar/Search';
+import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid, Title } from '@mantine/core';
+import { CardModal } from '../CreateCardModal/CardModal';
+import { Search } from '../Navbar/Search';
 import { useDisclosure } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
@@ -31,7 +31,7 @@ export function Hero() {
               w={500}
               >
               
-                {!user && <Text c='white' fw='bold' fz={30} mb={10}>Find your next career!</Text>}
+                {!user && <Title c='white' mb={10}>Find your next career!</Title>}
 
                 <Center><Search/></Center>
 

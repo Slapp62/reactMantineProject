@@ -1,6 +1,6 @@
 import { useGetCards } from '@/components/Cards/GetCards';
 import { MiniCard } from '@/components/Cards/MiniCard';
-import { Hero } from '@/components/Hero';
+import { Hero } from '@/components/Hero/Hero';
 import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
 import { Box, Center, Flex, Loader, Pagination } from '@mantine/core';

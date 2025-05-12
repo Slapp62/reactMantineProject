@@ -13,7 +13,7 @@ export function Logo() {
               style={{ width: '30px', height: '30px'}}/>
             
             <Link to="/" style={{textDecoration: 'none'}}>
-                <Text fw='bold' size="xl" className={classes.textColor}>Isra-Jobs</Text>
+                <Text fw='bold' size="xl" className={classes.textColor}>isrAvoda</Text>
             </Link>
               
         </Group>
