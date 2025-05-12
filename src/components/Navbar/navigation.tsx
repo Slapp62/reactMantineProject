@@ -40,7 +40,7 @@ import { useEffect, useState } from 'react';
     }, [])
 
     return (
-      <Box pos="sticky" style={{zIndex: 100, top: scrolled ? 10 : 0, transition: 'top 0.5s ease'}} opacity={0.9} className={clsx(colorScheme === 'light' ? classes.navbarLight : classes.navbarDark, {[classes.navbarScrolled]: scrolled})}>
+      <Box pos="sticky" className={clsx(colorScheme === 'light' ? classes.navbarLight : classes.navbarDark,classes.navbarTop, {[classes.navbarScrolled]: scrolled} )}>
         <header className={classes.header}>
           <Flex justify="space-between" h='100%' >
             <Logo/>
