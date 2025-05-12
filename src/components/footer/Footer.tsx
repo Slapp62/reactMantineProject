@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { IconCopyright } from '@tabler/icons-react';
 
 
-export function Footer() {
+const Footer = () => {
   
   return (
     <Box h={60} px={20} style={{zIndex: 20}}>
@@ -28,3 +28,5 @@ export function Footer() {
     </Box>
   );
 }
+
+export default Footer
