@@ -78,6 +78,5 @@
     "vite-plugin-gh-pages": "^1.0.1",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.9"
-  },
-  "packageManager": "yarn@4.8.1"
+  }
 }
