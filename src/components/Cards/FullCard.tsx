@@ -1,5 +1,5 @@
 import { TCards } from "@/Types";
-import { Card, Text, Image, List, ListItem, Flex, Grid, GridCol, Title } from "@mantine/core";
+import { Card, Text, Image, List, ListItem, Flex, Grid, Title } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
