@@ -1,4 +1,4 @@
-import { useGetCards } from '@/components/Cards/GetCards';
+import { useGetCards } from '@/hooks/UseGetCards';
 import { MiniCard } from '@/components/Cards/MiniCard';
 import { Hero } from '@/components/Hero/Hero';
 import { RootState } from '@/store/store';
@@ -10,14 +10,12 @@ import { useSelector } from 'react-redux';
 
 export function HomePage() {
   
-  useGetCards();
+  const {cards, isLoading} = useGetCards();
 
   const cardsRef = useRef<HTMLDivElement>(null);
 
-  const cards = useSelector((state:RootState) => state.cardSlice.cards)
   const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
   
-
   const filterSearch = () => {
     return cards ? 
       cards.filter((card:TCards) => {
@@ -36,7 +34,7 @@ export function HomePage() {
   const paginatedCards = filteredCards ? filteredCards.slice(
     (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage) : [];
 
-  if (!cards) {
+  if (isLoading) {
     return  <>
       <Box pos='relative'>
         <Hero/>

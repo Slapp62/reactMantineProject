@@ -1,0 +1,233 @@
+<mxfile host="65bd71144e">
+    <diagram id="Mnykxa02wZtQ0sy6qzQC" name="Page-1">
+        <mxGraphModel dx="858" dy="607" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="cards API" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="175" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3" target="6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Redux cards" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="4" target="7" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="200" y="150" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="homepage" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="40" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="favorites page" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="370" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="6" target="12" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="minicards" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;html=1;" parent="1" source="7" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7" target="2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="get cards hook" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="170" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=none;html=1;" parent="1" source="12" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="like button" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="370" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="99" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="22" target="28" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="pagination and search hook" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="750" y="280" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="25" target="96" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="810" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="25" value="homepage" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;strokeColor=light-dark(#000000,#FF9999);" parent="1" vertex="1">
+                    <mxGeometry x="750" y="70" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="100" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="28" target="33" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="cards section&lt;div&gt;(render with liked &lt;span&gt;status&lt;/span&gt;)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="750" y="380" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="96" target="22" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="810" y="240" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="33" target="36" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="like button" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="380" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="36" target="42" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1090" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="36" value="like hook" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FFFF);" parent="1" vertex="1">
+                    <mxGeometry x="900" y="480" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="update Redux &amp;amp; API (debounce) with liked card" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#FFFF99);" parent="1" vertex="1">
+                    <mxGeometry x="1050" y="480" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="" style="edgeStyle=none;html=1;" parent="1" source="55" target="89" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="favorites page" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;strokeColor=light-dark(#000000,#FF9999);" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="60" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="68" value="like hook" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FFFF);" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="370" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="73" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="71" target="68" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="71" value="like button" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="75" value="check Redux (fast)&lt;br&gt;else, call from API then add to Redux" style="whiteSpace=wrap;html=1;rounded=1;strokeColor=light-dark(#000000,#FFFF99);" parent="1" vertex="1">
+                    <mxGeometry x="900" y="180" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="89" target="71" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="Redux/API Check Hook - extract favorite cards" style="whiteSpace=wrap;html=1;rounded=0;strokeColor=light-dark(#000000,#99FFFF);" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="170" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="98" value="" style="edgeStyle=none;html=1;" parent="1" source="96" target="75" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="Redux/API Check Hook - extract all cards" style="whiteSpace=wrap;html=1;rounded=0;strokeColor=light-dark(#000000,#99FFFF);" parent="1" vertex="1">
+                    <mxGeometry x="750" y="180" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="105" value="" style="edgeStyle=none;html=1;" parent="1" source="102" target="104" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="102" value="check if there are cards in redux" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="110" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="141" value="" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="104" target="106" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1500" y="290" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="104" value="if yes, return cards" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="200" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="109" value="" style="edgeStyle=none;html=1;" parent="1" source="106" target="108" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="106" value="if not (new session), call from API" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="112" value="" style="edgeStyle=none;html=1;" parent="1" source="108" target="111" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="108" value="add to redux" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="377.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="111" value="return cards from redux" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="462.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="117" value="" style="edgeStyle=none;html=1;" parent="1" source="114" target="116" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="114" value="get card and user data" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="100" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="126" value="" style="edgeStyle=none;html=1;" parent="1" source="116" target="125" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="116" value="get liked state" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="190" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="123" value="" style="edgeStyle=none;html=1;" parent="1" source="120" target="122" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="120" value="debounce timer" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="470" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="122" value="update API with like" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="560" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="133" value="" style="edgeStyle=none;html=1;" parent="1" source="125" target="132" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="125" value="find card in redux and update like." style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="280" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="134" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="132" target="120" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="132" value="return liked boolean" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="370" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="138" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="135" target="102" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="135" value="Redux/API Hook" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="20" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="139" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="136" target="114" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="136" value="Like Hook" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1730" y="20" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="137" value="Pagination and Search Hook" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1900" y="20" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="143" value="" style="edgeStyle=none;html=1;" edge="1" source="144" target="145" parent="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="144" value="take card._id prop" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="110" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="154" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="145" target="153">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="145" value="check if user is logged in" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="200" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="146" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="147" target="144" parent="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="147" value="Render Like Icon Hook" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="20" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="152" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="149" target="151">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="149" value="if yes, check if card is liked by the user" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="380" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="151" value="if yes, render filled heart icon, else, return false." style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="470" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="155" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="153" target="149">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="153" value="if not, return false" style="whiteSpace=wrap;html=1;strokeColor=light-dark(#000000,#99FF99);rounded=1;" vertex="1" parent="1">
+                    <mxGeometry x="1590" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

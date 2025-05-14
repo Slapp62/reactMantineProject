@@ -1,38 +1,25 @@
 import { Card, Image, Text, Button, Flex, ListItem, List, Box} from '@mantine/core';
 import { TCards } from '@/Types';
 import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useNavigate } from 'react-router-dom';
-import { addFavorite } from '@/store/cardSlice';
+import { useLikeUnlike } from '@/hooks/UseLikeUnlike';
 
 export function MiniCard({ card } : { card: TCards }) {
-  const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
-  const dispatch = useDispatch();
-  const jumpTo = useNavigate();
+  const toggleLike = useLikeUnlike(); 
+
+  const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
+  const user = useSelector((state: RootState) => state.userSlice.user);
   
+  const globalCards = useSelector((state: RootState) => state.cardSlice.cards);
+  const thisGlobalCard = globalCards?.find((globalCard) => globalCard._id === card._id);
+  const isLiked = thisGlobalCard?.likes.includes(`${user?._id}`)
+
+   const jumpTo = useNavigate();
+
   const heartOutline = <IconHeart />;
   const heartFilled = <IconHeartFilled/>;
-  const [isLiked, setLiked] = useState(false);
-
-  const likedHandler = (card: TCards) => {
-      const likedState = !isLiked;
-      setLiked(likedState)
-
-      if (likedState === true) {
-        toast.success('Card Liked!', {
-          position: 'bottom-right'
-        });
-        dispatch(addFavorite(card));
-        
-      } else {
-        toast.warning('Card Unliked!', {
-          position: 'bottom-right'
-        })
-      }    
-  }
 
   return (
     <Card h='100%' shadow="sm" padding="lg" mx={-15} radius="md" w={300} withBorder>
@@ -65,8 +52,8 @@ export function MiniCard({ card } : { card: TCards }) {
 
           <Button bg='blue'><IconPhone/></Button>
 
-          {loggedIn && <Button variant='filled' bg='purple' onClick={() => likedHandler(card)}>
-              {isLiked === true ? heartFilled : heartOutline}
+          {loggedIn && <Button variant='filled' bg='purple' onClick={() => toggleLike(card)}>
+              {isLiked ? heartFilled : heartOutline}
           </Button>}
         </Flex>
 

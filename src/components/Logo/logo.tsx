@@ -1,5 +1,5 @@
 import { Group,Image,Text } from "@mantine/core";
-import flavicon from '../../../public/briefcase-2.ico'
+import flavicon from '/briefcase-nobkg.png'
 import classes from './Logo.module.css'
 import { Link } from "react-router-dom";
 
