@@ -14,7 +14,6 @@ import { clearUser } from '@/store/userSlice';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { AvatarIcon } from './Avatar';
- 
   
   export function Navbar() {
     const user = useSelector((state: RootState) => state.userSlice.user);
