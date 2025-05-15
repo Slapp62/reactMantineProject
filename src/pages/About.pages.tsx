@@ -8,17 +8,36 @@ import {
   Paper,
   Group,
   ThemeIcon,
+  Button,
+  SimpleGrid,
+  Textarea,
+  TextInput,
 } from '@mantine/core';
 import {
   IconBriefcase,
   IconUsers,
   IconWorld,
 } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
 
 const AboutPage: FC = () => {
+  const form = useForm({
+    initialValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+    validate: {
+      name: (value) => value.trim().length < 2,
+      email: (value) => !/^\S+@\S+$/.test(value),
+      subject: (value) => value.trim().length === 0,
+    },
+  });
+
   return (
     <Container size="md" py="xl">
-      <Title order={2} mb="md">
+      <Title order={1} mb="md" ta='center'>
         About Us
       </Title>
 
@@ -31,7 +50,7 @@ const AboutPage: FC = () => {
         <Grid.Col span={{ base: 12, md: 6 }}>
           <Image
             radius="md"
-            src="https://images.unsplash.com/photo-1607746882042-944635dfe10e"
+            src="https://images.unsplash.com/photo-1537511446984-935f663eb1f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="People collaborating"
           />
         </Grid.Col>
@@ -51,7 +70,65 @@ const AboutPage: FC = () => {
         <Stat icon={<IconUsers size={24} />} label="Employers" value="3.2b+" />
         <Stat icon={<IconWorld size={24} />} label="Countries Served" value="All" />
       </Group>
+
+
+      <form onSubmit={form.onSubmit(() => {})}>
+        `<Title
+          order={2}
+          size="h1"
+          style={{ fontFamily: 'Outfit, var(--mantine-font-family)' }}
+          fw={700}
+          ta="center"
+        >
+          Get in touch
+        </Title>
+
+        <SimpleGrid cols={{ base: 1, sm: 2 }} mt="xl">
+          <TextInput
+            label="Name"
+            placeholder="Your name"
+            name="name"
+            variant="filled"
+            {...form.getInputProps('name')}
+          />
+          <TextInput
+            label="Email"
+            placeholder="Your email"
+            name="email"
+            variant="filled"
+            {...form.getInputProps('email')}
+          />
+        </SimpleGrid>
+
+        <TextInput
+          label="Subject"
+          placeholder="Subject"
+          mt="md"
+          name="subject"
+          variant="filled"
+          {...form.getInputProps('subject')}
+        />
+        <Textarea
+          mt="md"
+          label="Message"
+          placeholder="Your message"
+          maxRows={10}
+          minRows={5}
+          autosize
+          name="message"
+          variant="filled"
+          {...form.getInputProps('message')}
+        />
+
+        <Group justify="center" mt="xl">
+          <Button type="submit" size="md">
+            Send message
+          </Button>
+        </Group>
+      </form>`
     </Container>
+
+    
   );
 };
 

@@ -3,7 +3,7 @@
 import { TUsers } from "@/Types";
 import { registrationSchema } from "@/validationRules/register.joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Box, Button, Checkbox, Fieldset, Flex, Group, PasswordInput, TextInput } from "@mantine/core";
+import { Box, Button, Fieldset, Flex, Group, PasswordInput, Switch, TextInput } from "@mantine/core";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { FieldValues, useForm } from "react-hook-form";
@@ -151,7 +151,7 @@ export function RegisterForm()  {
                         </Fieldset>
 
                         
-                        <Checkbox label='Do you have a business?' {...register('isBusiness')}/>
+                        <Switch label='Do you have a business?' {...register('isBusiness')}/>
                     </Flex>
                 </Flex>
 

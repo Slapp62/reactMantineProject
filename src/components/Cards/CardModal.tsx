@@ -25,12 +25,15 @@ export function CardModal({ opened, onClose }: { opened: boolean, onClose: () =>
 
             if (response.status === 201) {
                 toast.success('Card Submitted!', {position: "bottom-right"})
+                onClose();
             }
         } catch (error:any) {
             console.error('Error processing form.', error, error.response.data, error.request, error.message);
 
             toast.error('Card creation failed!', {position: "bottom-right"})
         }
+
+       
     }
 
   return (

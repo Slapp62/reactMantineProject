@@ -5,14 +5,15 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import classes from './navigation.module.css';
 import { LightDarkToggle } from '../LightDarkToggle/LightDarkToggle'
-import { Logo } from '../Logo/logo';
+import { Logo } from '../Logo/Logo';
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { clearUser } from '@/store/userSlice';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import { AvatarIcon } from './Avatar';
  
   
   export function Navbar() {
@@ -21,11 +22,13 @@ import { useEffect, useState } from 'react';
     const isBusinessUser = user?.isBusiness;
     const dispatch = useDispatch<AppDispatch>();
 
+    const jumpTo = useNavigate();
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const { colorScheme } = useMantineColorScheme();
   
     const logoutHandler = () => {
       dispatch(clearUser());
+      jumpTo('/');
       toast.success('Logged out succesfully!', {position: 'bottom-right'});
     }
 
@@ -59,7 +62,7 @@ import { useEffect, useState } from 'react';
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {loggedIn && isBusinessUser && <Link to="/myCards" className={classes.link} >
+              {loggedIn && isBusinessUser && <Link to="/my-cards" className={classes.link} >
                 <Text fw={700}>My Listings</Text>
               </Link>}
               
@@ -71,7 +74,7 @@ import { useEffect, useState } from 'react';
             </Group>
 
             <Group>
-              <Group visibleFrom="sm">
+              <Group visibleFrom="xs">
                 {!loggedIn && <Link to='/login'><Button variant="outline">Login</Button></Link>}
                 {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
 
@@ -79,6 +82,7 @@ import { useEffect, useState } from 'react';
               </Group>
 
               <Group >
+                {loggedIn && <Link to='/user-profile'><AvatarIcon/></Link>}
                 <LightDarkToggle />
                 <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
               </Group>
@@ -91,7 +95,7 @@ import { useEffect, useState } from 'react';
         <Drawer
           opened={drawerOpened}
           onClose={closeDrawer}
-          size="75%"
+          size="60%"
           padding="md"
           title="Business Cards"
           hiddenFrom="md"
@@ -100,29 +104,30 @@ import { useEffect, useState } from 'react';
           <ScrollArea h="calc(100vh - 80px" mx="-sm">
             <Divider />
   
-              <Link  to="/" className={classes.link}>
+              <Link  to="/" className={classes.link} onClick={closeDrawer}>
                 <Text fw={700}>Home</Text>
               </Link>
 
-              <Link to="/about" className={classes.link} >
+              <Link to="/about" className={classes.link} onClick={closeDrawer}>
                 <Text fw={700}>About</Text>
               </Link>
 
-              {loggedIn &&  <Link to="/" className={classes.link} >
+              {loggedIn &&  <Link to="/favorites" className={classes.link} onClick={closeDrawer}>
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {loggedIn &&  <Link to="/" className={classes.link} >
+              {loggedIn &&  <Link to="/mycards" className={classes.link} onClick={closeDrawer} >
                 <Text fw={700}>My Cards</Text>
               </Link>}
               
-              {user?.isAdmin && <Link to='/admin' className={classes.link}>
+              {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
                 <Text fw={700}>Admin Controls</Text>
               </Link>}
   
             <Divider my="sm" />
   
             <Group justify="space-evenly" pb="sm">
+              <AvatarIcon/>
               {!loggedIn && <Link  to='/login'><Button w={100} variant="outline">Login</Button></Link>}
               {!loggedIn && <Link to='/register'><Button w={100}>Register</Button></Link>}
 

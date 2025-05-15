@@ -11,7 +11,7 @@ export function Search() {
     <TextInput
         variant='default'
         rightSection=<IconSearch/>
-        placeholder="Search for a listing"
+        placeholder="Fullstack developer..."
         w='100%'
         onChange={(e)=> {dispatch(setSearchWord(e.target.value))}}
     />

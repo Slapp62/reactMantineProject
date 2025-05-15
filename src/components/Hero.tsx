@@ -1,6 +1,6 @@
 import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid, Title } from '@mantine/core';
-import { CardModal } from '../CreateCardModal/CardModal';
-import { Search } from '../Navbar/Search';
+import { CardModal } from './Cards/CardModal';
+import { Search } from './Navbar/Search';
 import { useDisclosure } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
@@ -24,23 +24,26 @@ export function Hero() {
         <Grid.Col span={{base: 8, xs: 12}} m='auto'>
           <Center pos='relative'  style={{borderRadius: "20px"}}>
             <Overlay pos='absolute'  color="#000" backgroundOpacity={0.80} blur={2} zIndex={1} radius="lg"/>
-            <Box
-              ta='center' 
+            <Flex
+              direction='column'
+              gap={20}
               p={35}
               style={{zIndex: 2}}
               w={500}
               >
               
-                {!user && <Title c='white' mb={10}>Find your next career!</Title>}
+                {!user && <Title ta='center' c='white'>Find your next career!</Title>}
 
-                <Center><Search/></Center>
-
-                <Flex align='center' direction='column' gap={10}>
-                  {user && <Text c='blue' fw='bold' fz={30}>Welcome back, {user.name.first}</Text>}
-                  {user && <Button onClick={openModal} variant='filled' color='blue' size='xl' fz={30}> Create a listing</Button>}
+                {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back, {user.name.first}</Text>}
+                <Flex w='100%' gap={10} align='center'>
+                  <Text fz={20} c='white'>Search for a listing:</Text>
+                  <Center flex={1}><Search/></Center>
                 </Flex>
                 
-            </Box>
+                
+                {user && <Button onClick={openModal}variant='filled' color='blue' size='lg' fz={25}>     
+                  Create a listing</Button>}
+            </Flex>
           </Center>
         </Grid.Col>
         

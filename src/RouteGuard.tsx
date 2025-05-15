@@ -6,18 +6,17 @@ type RouteGuardProps = {
     children: React.ReactNode;
     isBusiness?: boolean;
     isAdmin?: boolean;
-    isLoggedIn?: boolean;
 }
 
 const RouteGuard = (props: RouteGuardProps) => {
-    const {children,  isBusiness, isAdmin, isLoggedIn} = props;
+    const {children,  isBusiness, isAdmin} = props;
     
     const user = useSelector((state:RootState) => state.userSlice.user);
     const userLoggedIn = useSelector((state:RootState) => state.userSlice.isLoggedIn);
     const accessMessage = 'You do not have access to this page.'
 
-    if (isLoggedIn && !userLoggedIn ) {
-        return <Navigate to="/login" replace state={{message: accessMessage}}/>
+    if (!userLoggedIn ) {
+        return <Navigate to="/" replace state={{message: accessMessage}}/>
     }
 
     if (isBusiness && !user?.isBusiness) {

@@ -2,9 +2,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TUsers } from '../Types'
-import { ActionIcon, Anchor, Center, Flex, Group, Loader, Pagination, Table, Text } from "@mantine/core";
+import { ActionIcon, Anchor, Flex, Group, Loader, Pagination, Table, Text } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
-import { set } from "react-hook-form";
 
 const AdminControls = () => {
 

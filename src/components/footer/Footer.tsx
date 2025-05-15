@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@mantine/core';
-import { Logo } from './Logo/logo';
+import { Logo } from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 import { IconCopyright } from '@tabler/icons-react';
 

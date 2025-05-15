@@ -24,6 +24,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@mantine/core": "^7.17.4",
+    "@mantine/form": "^8.0.1",
     "@mantine/hooks": "^7.17.4",
     "@mantine/notifications": "^7.17.4",
     "@mantinex/mantine-logo": "^1.1.0",
