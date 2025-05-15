@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "./Navbar/navigation";
+import { Navbar } from "./Navbar/Navigation.tsx";
 import { Flex } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
-import Footer from "./Footer/Footer.tsx";
+import Footer from "./Footer.tsx";
 
 export function Layout() {
     return (

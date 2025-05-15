@@ -4,7 +4,7 @@ import { Search } from './Navbar/Search';
 import { useDisclosure } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
-
+import heroImage from '/office-hero.jpg'
 
 export function Hero() {
 
@@ -15,7 +15,7 @@ export function Hero() {
     return (
     <Box mb={20}>
       <BackgroundImage
-        src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        src={heroImage}
         mih={500}
         style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}
       >

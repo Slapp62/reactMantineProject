@@ -1,7 +1,7 @@
 import { ActionIcon, useMantineColorScheme, useComputedColorScheme } from '@mantine/core';
 import { IconSun, IconMoon } from '@tabler/icons-react';
 import cx from 'clsx';
-import classes from './LightDarkToggle.module.css';
+import classes from './ComponentStyles/LightDarkToggle.module.css';
 
 export function LightDarkToggle() {
   const { setColorScheme } = useMantineColorScheme();
