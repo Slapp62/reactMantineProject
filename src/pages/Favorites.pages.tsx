@@ -13,10 +13,10 @@ export function FavoriteCards()  {
     const likedCards = cards?.filter((card) => card.likes.includes(`${user?._id}`))
 
     return (
-        <Flex direction='column' align='center' gap={20}>
+        <Flex m={20} direction='column' align='center' gap={20}>
             <Title>Favorites</Title>
 
-            <Flex wrap="wrap" m={10} gap={20} align='stretch' justify="space-evenly" w="80%" mx='auto'>
+            <Flex wrap="wrap"  gap={20} align='stretch' justify="space-evenly" w="80%" mx='auto'>
                 {likedCards?.map((card:TCards) => (
                 <motion.div
                 key={card._id}

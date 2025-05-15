@@ -60,7 +60,7 @@ import { useEffect, useState } from 'react';
               </Link>}
 
               {loggedIn && isBusinessUser && <Link to="/myCards" className={classes.link} >
-                <Text fw={700}>My Cards</Text>
+                <Text fw={700}>My Listings</Text>
               </Link>}
               
               {user?.isAdmin && <Link to='/admin' className={classes.link}>
