@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
   export function Navbar() {
     const user = useSelector((state: RootState) => state.userSlice.user);
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
+    const isBusinessUser = user?.isBusiness;
     const dispatch = useDispatch<AppDispatch>();
 
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
@@ -58,7 +59,7 @@ import { useEffect, useState } from 'react';
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {loggedIn &&  <Link to="/myCards" className={classes.link} >
+              {loggedIn && isBusinessUser && <Link to="/myCards" className={classes.link} >
                 <Text fw={700}>My Cards</Text>
               </Link>}
               

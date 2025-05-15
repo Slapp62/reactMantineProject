@@ -6,31 +6,30 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux"
 
 export function FavoriteCards()  {
+
     const cards = useSelector((state:RootState) => state.cardSlice.cards);
     const user = useSelector((state:RootState) => state.userSlice.user);
 
     const likedCards = cards?.filter((card) => card.likes.includes(`${user?._id}`))
 
     return (
-        <Flex>
-            <Flex direction='column' align='center' gap={20}>
-                <Title>Favorites</Title>
-                <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
-                    {likedCards?.map((card:TCards) => (
-                    <motion.div
-                    key={card._id}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true, amount: 0.2 }}>
+        <Flex direction='column' align='center' gap={20}>
+            <Title>Favorites</Title>
 
-                    <MiniCard key={card._id} card={card} />
+            <Flex wrap="wrap" m={10} gap={20} align='stretch' justify="space-evenly" w="80%" mx='auto'>
+                {likedCards?.map((card:TCards) => (
+                <motion.div
+                key={card._id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true, amount: 0.2 }}>
 
-                    </motion.div>
-                    ))}
-                </Flex>
+                <MiniCard key={card._id} card={card} />
+
+                </motion.div>
+                ))}
             </Flex>
         </Flex>
-        
     )
 }

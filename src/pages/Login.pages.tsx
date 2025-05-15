@@ -34,6 +34,8 @@ export function LoginPage() {
     
     const userData = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`)
     dispatch(setUser(userData.data))
+    console.log(userData);
+    
   }
   
   const {register, handleSubmit, formState: {errors, isValid} } = useForm({

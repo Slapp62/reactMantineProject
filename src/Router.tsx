@@ -22,8 +22,8 @@ const router = createBrowserRouter([
       {path: 'about', element: <About/>},
       {path: 'admin', element: <RouteGuard isAdmin><AdminControls/></RouteGuard> },
       {path: 'register', element: <RegisterForm/>},
-      {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
-      {path: 'myCards', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
+      {path: 'favorites', element: <RouteGuard isLoggedIn ><FavoriteCards/></RouteGuard>},
+      {path: 'mycards', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
       {path: 'card-details/:id', element: <FullCard/>},
       {path: '*', element: <Error404/>},
     ]
