@@ -4,7 +4,7 @@ import { Layout } from './components/Layout';
 import AdminControls from './pages/Admin.pages';
 import Error404 from './pages/404.pages';
 import About from './pages/About.pages';
-import { RegisterForm } from './pages/Register.pages';
+import { RegisterForm } from './pages/asdf.pages';
 import { FavoriteCards } from './pages/Favorites.pages';
 import { MyCards } from './pages/MyCards.pages';
 import { FullCard } from './components/Cards/FullCard';

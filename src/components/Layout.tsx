@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "./Navbar/Navigation.tsx";
+import { Navbar } from "./Navbar/asdf.tsx";
 import { Flex } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
 import Footer from "./Footer.tsx";
