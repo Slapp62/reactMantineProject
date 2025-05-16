@@ -1,8 +1,9 @@
 import {
   Box, Burger, Button, Divider, Drawer, Flex, Text, Group, ScrollArea,
   useMantineColorScheme,
+  Center,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import classes from '../ComponentStyles/Navigation.module.css';
 import { LightDarkToggle } from '../LightDarkToggle'
 import { Logo } from '../Logo';
@@ -16,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { AvatarIcon } from './Avatar';
   
   export function Navbar() {
+    const drawerQuery = useMediaQuery("(max-width: 450px)")
     const user = useSelector((state: RootState) => state.userSlice.user);
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
     const isBusinessUser = user?.isBusiness;
@@ -100,10 +102,9 @@ import { AvatarIcon } from './Avatar';
           hiddenFrom="md"
           zIndex={1000000}
         >
-          <ScrollArea h="calc(100vh - 80px" mx="-sm">
-            <Divider />
-  
-              <Link  to="/" className={classes.link} onClick={closeDrawer}>
+          <ScrollArea h="calc(100vh - 80px" mx="-sm" >
+            <Divider/>
+              <Link to="/" className={classes.link} onClick={closeDrawer}>
                 <Text fw={700}>Home</Text>
               </Link>
 
@@ -115,8 +116,8 @@ import { AvatarIcon } from './Avatar';
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {loggedIn &&  <Link to="/mycards" className={classes.link} onClick={closeDrawer} >
-                <Text fw={700}>My Cards</Text>
+              {user?.isBusiness && <Link to="/mycards" className={classes.link} onClick={closeDrawer} >
+                <Text fw={700}>My Listings</Text>
               </Link>}
               
               {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
@@ -124,14 +125,25 @@ import { AvatarIcon } from './Avatar';
               </Link>}
   
             <Divider my="sm" />
-  
-            <Group justify="space-evenly" pb="sm">
-              <AvatarIcon/>
-              {!loggedIn && <Link  to='/login'><Button w={100} variant="outline">Login</Button></Link>}
-              {!loggedIn && <Link to='/register'><Button w={100}>Register</Button></Link>}
 
-              {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
-            </Group>
+            <Center my="md">
+              <Link to='/user-profile' onClick={closeDrawer}><AvatarIcon/></Link>
+            </Center>
+
+            <Flex justify="space-evenly" pb="sm" gap={5} style={{flexDirection: drawerQuery ? 'column' : 'row'}}>
+              {!loggedIn && 
+                <Link  to='/login' onClick={closeDrawer}>
+                  <Button w={100} variant="outline">Login</Button>
+                </Link>}
+
+              {!loggedIn && 
+                <Link to='/register' onClick={closeDrawer}>
+                  <Button w={100}>Register</Button>
+                </Link>}
+
+              {loggedIn && 
+                <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
+            </Flex>
           </ScrollArea>
         </Drawer>
       </Box>

@@ -1,15 +1,18 @@
 import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid, Title } from '@mantine/core';
 import { CardModal } from './Cards/CardModal';
 import { Search } from './Navbar/Search';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import heroImage from '/office-hero.jpg'
 
 export function Hero() {
+    const isMobile = useMediaQuery('(max-width: 700px)');
 
     const user = useSelector((state: RootState) => state.userSlice.user);
-  
+    const isBusiness = user?.isBusiness;
+    const isAdmin = user?.isAdmin;
+
     const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
     
     return (
@@ -35,14 +38,16 @@ export function Hero() {
                 {!user && <Title ta='center' c='white'>Find your next career!</Title>}
 
                 {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back, {user.name.first}</Text>}
-                <Flex w='100%' gap={10} align='center'>
+                <Flex w='100%' gap={10} align='center' style={{flexDirection: isMobile ? 'column' : 'row'}}>
                   <Text fz={20} c='white'>Search for a listing:</Text>
-                  <Center flex={1}><Search/></Center>
+                  <Flex flex={1}><Search/></Flex>
                 </Flex>
                 
                 
-                {user && <Button onClick={openModal}variant='filled' color='blue' size='lg' fz={25}>     
-                  Create a listing</Button>}
+                {isBusiness || isAdmin && 
+                  <Button onClick={openModal}variant='filled' color='blue' size='lg' fz={25}>     
+                  Create a listing
+                  </Button>}
             </Flex>
           </Center>
         </Grid.Col>

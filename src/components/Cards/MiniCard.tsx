@@ -1,12 +1,14 @@
 import { Card, Image, Text, Button, Flex, ListItem, List, Box} from '@mantine/core';
 import { TCards } from '@/Types';
-import { IconHeart, IconHeartFilled, IconPhone } from '@tabler/icons-react';
+import { IconHeart, IconHeartFilled } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useNavigate } from 'react-router-dom';
 import { useLikeUnlike } from '@/hooks/UseLikeUnlike';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function MiniCard({ card } : { card: TCards }) {
+  const isMobile = useMediaQuery('(max-width: 700px)')
   const toggleLike = useLikeUnlike(); 
 
   const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
@@ -22,7 +24,7 @@ export function MiniCard({ card } : { card: TCards }) {
   const heartFilled = <IconHeartFilled/>;
 
   return (
-    <Card h='100%' shadow="sm" padding="lg" mx={-15} radius="md" w={300} withBorder>
+    <Card h='100%' shadow="sm" mx={-15} radius="md" w={300} withBorder>
       <Card.Section>
         <Image
           src={card.image.url}
@@ -32,10 +34,11 @@ export function MiniCard({ card } : { card: TCards }) {
           loading='lazy'
           fallbackSrc='https://www.irisoele.com/img/noimage.png'
         />
+      
       </Card.Section> 
 
-      <Card.Section p={15}>
-        <Text mb="xs" fw={500}>{card.title}</Text>
+      <Card.Section px={15}>
+        <Text my="xs" fw={500}>{card.title}</Text>
       
         <Box>
           <Text truncate w={250}>{card.description}</Text>
@@ -47,12 +50,16 @@ export function MiniCard({ card } : { card: TCards }) {
           </List>
         </Box>
 
-        <Flex p={10} justify='space-between'>
-          <Button fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>Details</Button>
+        <Flex mx="auto" my={20} gap={10} direction='column' w='60%'>
+          <Button fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
+            <Text fw='bold'>More Info</Text>
+          </Button>
 
-          <Button bg='blue'><IconPhone/></Button>
+          <Button bg='green'>
+            <Text fw='bold'>Apply</Text>
+          </Button>
 
-          {loggedIn && <Button variant='filled' bg='purple' onClick={() => toggleLike(card)}>
+          {loggedIn && <Button variant='filled' bg='red' onClick={() => toggleLike(card)}>
               {isLiked ? heartFilled : heartOutline}
           </Button>}
         </Flex>
