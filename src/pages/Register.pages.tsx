@@ -3,7 +3,8 @@
 import { TUsers } from "@/Types";
 import { registrationSchema } from "@/validationRules/register.joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Box, Button, Fieldset, Flex, Group, PasswordInput, Switch, TextInput } from "@mantine/core";
+import { Box, Button, Checkbox, Fieldset, Flex, Group, PasswordInput, Switch, TextInput } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { FieldValues, useForm } from "react-hook-form";
@@ -11,6 +12,8 @@ import { toast } from "react-toastify";
 
 
 export function RegisterForm()  {
+    const isMobile = useMediaQuery('(max-width: 700px)');
+
     const { reset, register, handleSubmit, formState: {errors, isValid} } = useForm<TUsers>({
         mode: 'all',
         resolver: joiResolver(registrationSchema)
@@ -43,12 +46,12 @@ export function RegisterForm()  {
         
 
     return (
-        <Flex maw='60%' mx='auto' direction='column'>
+        <Flex style={{width: isMobile ? '95%' : "70%"}} mx='auto' direction='column'>
             <Box ta='center'><h1>Registration Form</h1></Box>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Flex direction='row' gap={5}>
-                    <Flex mx='auto' direction='column' w='50%' justify='space-between' gap={5}>
+                <Flex style={{flexDirection: isMobile ? 'column' : "row"}} gap={5}>
+                    <Flex mx='auto' direction='column' style={{width: isMobile ? '95%' : "60%"}} justify='space-between' gap={5}>
                         <Fieldset legend="Full Name">
                             <TextInput 
                                 label="First"
@@ -106,7 +109,7 @@ export function RegisterForm()  {
                         </Fieldset>
                     </Flex>
 
-                    <Flex direction='column' w='50%' justify='space-between'>
+                    <Flex direction='column' style={{width: isMobile ? '95%' : "60%"}} mx="auto" justify='space-between'>
                         <Fieldset legend="Address">
                             <TextInput 
                                 label="State"
@@ -151,14 +154,14 @@ export function RegisterForm()  {
                         </Fieldset>
 
                         
-                        <Switch label='Do you have a business?' {...register('isBusiness')}/>
+                        <Checkbox mt={20} label='Are you an employer?' {...register('isBusiness')}/>
                     </Flex>
                 </Flex>
 
-                <Group w='50%' mx='auto'>
-                    <Button type='reset' mt={20} w={200} onClick={() => reset()}>Clear Form</Button>
-                    <Button type="submit" mx='auto' mt={20} w={200} disabled={!isValid}>Submit</Button>
-                </Group>
+                <Flex gap={10} align="center" w="95%" mx='auto' my={20} style={{flexDirection: isMobile ? 'row' : "column"}}>
+                    <Button variant="outline" type='reset' w={200} onClick={() => reset()}>Reset Form</Button>
+                    <Button type="submit" mx='auto' w={200} disabled={!isValid}>Submit</Button>
+                </Flex>
             </form> 
      </Flex>
     )

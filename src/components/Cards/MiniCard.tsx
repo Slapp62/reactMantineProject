@@ -50,8 +50,8 @@ export function MiniCard({ card } : { card: TCards }) {
           </List>
         </Box>
 
-        <Flex mx="auto" my={20} gap={10} direction='column' w='60%'>
-          <Button fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
+        <Flex mx="auto" my={20} gap={10} direction='column'>
+          <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
             <Text fw='bold'>More Info</Text>
           </Button>
 

@@ -126,19 +126,19 @@ import { AvatarIcon } from './Avatar';
   
             <Divider my="sm" />
 
-            <Center my="md">
+            {loggedIn && <Center my="md">
               <Link to='/user-profile' onClick={closeDrawer}><AvatarIcon/></Link>
-            </Center>
+            </Center>}
 
-            <Flex justify="space-evenly" pb="sm" gap={5} style={{flexDirection: drawerQuery ? 'column' : 'row'}}>
+            <Flex justify="space-evenly" ta="center" pb="sm" gap={5} direction="column">
               {!loggedIn && 
                 <Link  to='/login' onClick={closeDrawer}>
-                  <Button w={100} variant="outline">Login</Button>
+                  <Button w="95%" variant="outline">Login</Button>
                 </Link>}
 
               {!loggedIn && 
                 <Link to='/register' onClick={closeDrawer}>
-                  <Button w={100}>Register</Button>
+                  <Button w="95%">Register</Button>
                 </Link>}
 
               {loggedIn && 
