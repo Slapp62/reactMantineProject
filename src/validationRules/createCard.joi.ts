@@ -14,20 +14,20 @@ const cardSchema = Joi.object({
         'any.required': 'Email is required',
     }),
 
-    web: Joi.string().min(14).uri().optional(),
+    web: Joi.string().min(14).uri().allow('').optional(),
 
     image: Joi.object({
-        url: Joi.string().uri().allow(''),
-        alt: Joi.string().min(2).max(256).allow(''),
+        url: Joi.string().uri().allow('').optional(),
+        alt: Joi.string().min(2).max(256).allow('').optional(),
     }).optional(),
 
     address: Joi.object({
-        state: Joi.string().min(2).max(256).optional(),
+        state: Joi.string().min(2).max(256).allow('').optional(),
         country: Joi.string().required(),
         city: Joi.string().required(),
         street: Joi.string().required(),
         houseNumber: Joi.string().pattern(/^\d+$/).min(1).required(),
-        zip: Joi.string().pattern(/^\d+$/).optional(),
+        zip: Joi.string().pattern(/^\d+$/).allow('').optional(),
     }),
     
 })

@@ -3,7 +3,7 @@ import Joi from 'joi'
 const registrationSchema = Joi.object({
     name: {
         first: Joi.string().min(2).max(256).required(),
-        middle: Joi.string().min(2).max(256),
+        middle: Joi.string().min(2).max(256).allow('').optional(),
         last: Joi.string().min(2).max(256).required()
     },
 
@@ -26,7 +26,7 @@ const registrationSchema = Joi.object({
     }).optional(),
 
     address: Joi.object({
-        state: Joi.string().min(2).max(256),
+        state: Joi.string().min(2).max(256).allow('').optional(),
         country: Joi.string().min(2).max(256).required(),
         city: Joi.string().min(2).max(256).required(),
         street: Joi.string().min(2).max(256).required(),

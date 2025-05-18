@@ -3,15 +3,17 @@
 import { TUsers } from "@/Types";
 import { registrationSchema } from "@/validationRules/register.joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Box, Button, Checkbox, Fieldset, Flex, Group, PasswordInput, Switch, TextInput } from "@mantine/core";
+import { Box, Button, Checkbox, Fieldset, Flex, PasswordInput,TextInput } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
+import { useRef } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 
 export function RegisterForm()  {
+    const registerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 700px)');
 
     const { reset, register, handleSubmit, formState: {errors, isValid} } = useForm<TUsers>({
@@ -20,34 +22,28 @@ export function RegisterForm()  {
     });
 
     const onSubmit = async (data:FieldValues) => {
-        console.log(data);
-
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
-        
         
         try {
             const response = await axios.post(
                 'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users', 
                 data)
-
             if (response.status === 201) {
-                console.log(response);
-                console.log('Registration successfull.');
-
                 toast.success('Registered!')
             }
+
         } catch (error: any) {
             console.error('Error processing form.', error, error.response.data, error.request, error.message);
 
-            toast.error('Registration Failed!')
+            toast.error(`Registration Failed! ${error.message}`, {position: `bottom-right`});
         }
     }
         
 
     return (
         <Flex style={{width: isMobile ? '95%' : "70%"}} mx='auto' direction='column'>
-            <Box ta='center'><h1>Registration Form</h1></Box>
+            <Box ref={registerRef} ta='center'><h1>Registration Form</h1></Box>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Flex style={{flexDirection: isMobile ? 'column' : "row"}} gap={5}>
@@ -56,7 +52,10 @@ export function RegisterForm()  {
                             <TextInput 
                                 label="First"
                                 {...register('name.first')}
-                                error= {errors.name?.first?.message}/>
+                                required
+                                error= {errors.name?.first?.message}
+                                />
+
                             <TextInput 
                                 label="Middle"
                                 {...register('name.middle')}
@@ -65,6 +64,7 @@ export function RegisterForm()  {
                             <TextInput 
                                 label="Last"
                                 {...register('name.last')}
+                                required
                                 error={errors.name?.last?.message}
                                 />
                         </Fieldset>
@@ -73,6 +73,7 @@ export function RegisterForm()  {
                             <TextInput  
                                 rightSection={<IconPhone/>} 
                                 label="Phone"
+                                required
                                 {...register('phone', {
                                     onChange: (e) => {
                                         e.target.value = e.target.value.replace(/[^\d-]/g, '');
@@ -86,11 +87,13 @@ export function RegisterForm()  {
                             <TextInput 
                                 label="Email"
                                 {...register('email')}
+                                required
                                 error={errors.email?.message}
                                 />
                             <PasswordInput 
                                 label="Password"
                                 {...register('password')}
+                                required
                                 error={errors.password?.message}
                                 />
                         </Fieldset>
@@ -119,16 +122,19 @@ export function RegisterForm()  {
                             <TextInput 
                                 label="Country"
                                 {...register('address.country')}
+                                required
                                 error={errors.address?.country?.message}
                                 />
                             <TextInput 
                                 label="City"
                                 {...register('address.city')}
+                                required
                                 error={errors.address?.city?.message}
                                 />
                             <TextInput 
                                 label="Street"
                                 {...register('address.street')}
+                                required
                                 error={errors.address?.street?.message}
                                 />
                             
@@ -139,6 +145,7 @@ export function RegisterForm()  {
                                     e.target.value = e.target.value.replace(/\D/g, '');
                                     },
                                 })}
+                                required
                                 error={errors.address?.houseNumber?.message}
                             />
 
@@ -149,6 +156,7 @@ export function RegisterForm()  {
                                     e.target.value = e.target.value.replace(/\D/g, '');
                                     },
                                 })}
+                                required
                                 error={errors.address?.zip?.message}
                             />
                         </Fieldset>
@@ -159,7 +167,13 @@ export function RegisterForm()  {
                 </Flex>
 
                 <Flex gap={10} align="center" w="95%" mx='auto' my={20} style={{flexDirection: isMobile ? 'row' : "column"}}>
-                    <Button variant="outline" type='reset' w={200} onClick={() => reset()}>Reset Form</Button>
+                    <Button variant="outline" type='reset' w={200} 
+                        onClick={() => {
+                            reset(); 
+                            registerRef.current?.scrollIntoView({behavior:'smooth'});
+                        }}>
+                    Reset Form
+                    </Button>
                     <Button type="submit" mx='auto' w={200} disabled={!isValid}>Submit</Button>
                 </Flex>
             </form> 
