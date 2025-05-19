@@ -6,6 +6,9 @@ export default tseslint.config(
   { ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}', './.storybook/main.ts'] },
   {
     files: ['**/*.story.tsx'],
-    rules: { 'no-console': 'off' },
+    rules: { 
+      'no-console': 'off',
+      'max-lines': 200,
+     },
   }
 );

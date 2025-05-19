@@ -9,7 +9,9 @@ const cardSchema = Joi.object({
         'string.pattern.base':'Please enter a valid Israeli phone number.'
     }),
 
-    email: Joi.string().min(5).email({tlds: {allow:false}}).required().messages({
+    email: Joi.string().min(5).email({tlds: {allow:false}}).
+    
+    required().messages({
         'string.min':'Email is too short',
         'any.required': 'Email is required',
     }),
@@ -22,10 +24,10 @@ const cardSchema = Joi.object({
     }).optional(),
 
     address: Joi.object({
-        state: Joi.string().min(2).max(256).allow('').optional(),
-        country: Joi.string().required(),
-        city: Joi.string().required(),
-        street: Joi.string().required(),
+        state: Joi.string().allow('').optional(),
+        country: Joi.string().min(2).required(),
+        city: Joi.string().min(2).required(),
+        street: Joi.string().min(2).required(),
         houseNumber: Joi.string().pattern(/^\d+$/).min(1).required(),
         zip: Joi.string().pattern(/^\d+$/).allow('').optional(),
     }),

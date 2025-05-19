@@ -3,7 +3,7 @@ import {
   useMantineColorScheme,
   Center,
 } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import classes from '../ComponentStyles/Navigation.module.css';
 import { LightDarkToggle } from '../LightDarkToggle'
 import { Logo } from '../Logo';
@@ -17,7 +17,6 @@ import { useEffect, useState } from 'react';
 import { AvatarIcon } from './Avatar';
   
   export function Navbar() {
-    const drawerQuery = useMediaQuery("(max-width: 450px)")
     const user = useSelector((state: RootState) => state.userSlice.user);
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
     const isBusinessUser = user?.isBusiness;
@@ -63,7 +62,7 @@ import { AvatarIcon } from './Avatar';
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {loggedIn && isBusinessUser && <Link to="/my-cards" className={classes.link} >
+              {loggedIn && isBusinessUser && <Link to="/my-listings" className={classes.link} >
                 <Text fw={700}>My Listings</Text>
               </Link>}
               
@@ -83,7 +82,7 @@ import { AvatarIcon } from './Avatar';
               </Group>
 
               <Group >
-                {loggedIn && <Link to='/user-profile'><AvatarIcon/></Link>}
+                {loggedIn && <Link to='/edit-profile'><AvatarIcon/></Link>}
                 <LightDarkToggle />
                 <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
               </Group>
@@ -116,7 +115,7 @@ import { AvatarIcon } from './Avatar';
                 <Text fw={700}>Favorites</Text>
               </Link>}
 
-              {user?.isBusiness && <Link to="/mycards" className={classes.link} onClick={closeDrawer} >
+              {user?.isBusiness && <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
                 <Text fw={700}>My Listings</Text>
               </Link>}
               
@@ -130,7 +129,7 @@ import { AvatarIcon } from './Avatar';
               <Link to='/user-profile' onClick={closeDrawer}><AvatarIcon/></Link>
             </Center>}
 
-            <Flex justify="space-evenly" ta="center" pb="sm" gap={5} direction="column">
+            <Flex justify="space-evenly" ta="center" p="sm" gap={5} direction="column">
               {!loggedIn && 
                 <Link  to='/login' onClick={closeDrawer}>
                   <Button w="95%" variant="outline">Login</Button>

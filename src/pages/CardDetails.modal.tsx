@@ -1,27 +1,10 @@
 import { TCards } from "@/Types";
 import { Card, Text, Image, List, ListItem, Flex, Grid, Title } from "@mantine/core";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
-export  function  FullCard() {
-    
-    const [card, setCard] = useState<TCards>();
-    const {id} = useParams();
-
-    const getCard = async () => {
-        return await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`);
-    }
-
-    useEffect(() => {
-        const loadCard = async () => {
-            const response = await getCard();
-            setCard(response.data);
-            
-            
-        }  
-    loadCard();
-    }, [])
+export function  FullCard() {
+    const location = useLocation();
+    const card = location.state as TCards;
     
     
     return (
@@ -74,8 +57,5 @@ export  function  FullCard() {
                 </Card>}
             </Grid.Col>
         </Grid>
-            
-          
-       
     )
 }

@@ -9,7 +9,6 @@ export function MyCards()  {
     const cards = useSelector((state:RootState) => state.cardSlice.cards);
     const user = useSelector((state:RootState) => state.userSlice.user);
 
-
     const userCards = cards?.filter((card) => card.user_id === user?._id);
     
     return (

@@ -6,11 +6,13 @@ import Error404 from './pages/404.pages';
 import About from './pages/About.pages';
 import { RegisterForm } from './pages/Register.pages';
 import { FavoriteCards } from './pages/Favorites.pages';
-import { MyCards } from './pages/MyCards.pages';
+import { MyCards } from './pages/MyListings.pages';
 import { FullCard } from './components/Cards/FullCard';
 import { LoginPage } from './pages/LoginPage/Login.pages';
 import RouteGuard from './RouteGuard';
-import { UserProfile } from './pages/UserProfile.pages';
+import { EditProfile } from './pages/EditProfile.pages';
+import { CreateCard } from './pages/CreateCard.pages';
+import { EditCard } from './pages/EditCard.pages';
 
 const router = createBrowserRouter([
   {
@@ -24,9 +26,11 @@ const router = createBrowserRouter([
       {path: 'admin', element: <RouteGuard isAdmin><AdminControls/></RouteGuard> },
       {path: 'register', element: <RegisterForm/>},
       {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
-      {path: 'my-cards', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
+      {path: 'create-card', element: <RouteGuard><CreateCard/></RouteGuard>},
+      {path: 'my-listings', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
       {path: 'card-details/:id', element: <FullCard/>},
-      {path: 'user-profile', element: <RouteGuard><UserProfile/></RouteGuard>},
+      {path: 'edit-card/:id', element: <EditCard/>},
+      {path: 'edit-profile', element: <RouteGuard><EditProfile/></RouteGuard>},
       {path: '*', element: <Error404/>},
     ]
   },

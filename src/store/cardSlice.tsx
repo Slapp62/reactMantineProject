@@ -3,11 +3,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type CardState = {
     cards: TCardsArray | null;
-    favoriteCards: TCardsArray | null;
 }
 const initialState:CardState = {
     cards: null as TCardsArray | null,
-    favoriteCards: [],
 }
 
 const cardSlice = createSlice({
@@ -17,6 +15,17 @@ const cardSlice = createSlice({
         setCardsSlice: (state, action:PayloadAction<TCardsArray>) => {
             state.cards = action.payload;
         },
+        addCard: (state, action:PayloadAction<TCards>) => {
+            if (state.cards){
+                state.cards.push(action.payload);
+            }
+        },
+        removeCard: (state, action:PayloadAction<TCards>) => {
+            if (state.cards){
+                state.cards = state.cards?.filter((card) => 
+                    card._id !== action.payload._id)
+            }
+        },
         addLike: (state, action:PayloadAction<{card:TCards; userID:string}>) => {
             const {card, userID} = action.payload;
 
@@ -24,9 +33,7 @@ const cardSlice = createSlice({
             const alreadyLiked = thisGlobalCard?.likes.includes(userID);
             if (!alreadyLiked) {
                 thisGlobalCard?.likes.push(userID);
-            }
-            console.log('liked pushed to redux');
-            
+            }            
 
         },
         removeLike: (state, action:PayloadAction<{card:TCards; userID:string}>) => {
@@ -42,5 +49,5 @@ const cardSlice = createSlice({
     },
 });
 
-export const {setCardsSlice, addLike, removeLike} = cardSlice.actions;
+export const {setCardsSlice, addCard, removeCard, addLike, removeLike} = cardSlice.actions;
 export default cardSlice.reducer;

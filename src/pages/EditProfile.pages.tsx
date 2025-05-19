@@ -9,8 +9,10 @@ import { useRef, useState } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useMediaQuery } from "@mantine/hooks";
 
-export function UserProfile() {
+export function EditProfile() {
+    const isMobile = useMediaQuery('(max-width: 700px)');
     const user = useSelector((state:RootState) => state.userSlice.user);
     const [disabled, setDisabled] = useState(true);
     const editRef = useRef<HTMLDivElement>(null);
@@ -45,15 +47,15 @@ export function UserProfile() {
     }
     
     return(
-        <Flex ref={editRef} mt={20} direction='column' align='center' gap={20}>
+        <Flex ref={editRef} mt={20} direction='column' align='center' gap={20} >
 
-            <Title>User Profile</Title>
+            <Title>Edit Profile</Title>
 
-            <Flex justify='center' direction="column" w="40%">
+            <Flex justify='center' direction="column" style={{width: isMobile ? '90%' : '50%'}}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
 
-                    <Flex gap={10} direction='column' w='70%' m='auto'>
+                    <Flex gap={10} direction='column' m='auto'>
 
                         <Fieldset legend='Name'>
                             <TextInput

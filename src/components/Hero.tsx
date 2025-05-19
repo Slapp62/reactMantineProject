@@ -1,19 +1,17 @@
 import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid, Title } from '@mantine/core';
-import { CardModal } from './Cards/CardModal';
 import { Search } from './Navbar/Search';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import heroImage from '/office-hero.jpg'
+import { useNavigate } from 'react-router-dom';
 
 export function Hero() {
+    const jumpTo = useNavigate();
     const isMobile = useMediaQuery('(max-width: 700px)');
 
     const user = useSelector((state: RootState) => state.userSlice.user);
     const isBusiness = user?.isBusiness;
-    const isAdmin = user?.isAdmin;
-
-    const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
     
     return (
     <Box mb={20}>
@@ -44,8 +42,8 @@ export function Hero() {
                 </Flex>
                 
                 
-                {isBusiness || isAdmin && 
-                  <Button onClick={openModal}variant='filled' color='blue' size='lg' fz={25}>     
+                {isBusiness && 
+                  <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='lg' fz={25}>     
                   Create a listing
                   </Button>}
             </Flex>
@@ -56,7 +54,6 @@ export function Hero() {
       
 
       </BackgroundImage>
-      <CardModal opened={modalOpened} onClose={closeModal} />
     </Box>
   );
 }
