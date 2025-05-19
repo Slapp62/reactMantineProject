@@ -2,7 +2,7 @@ import { TCards } from "@/Types";
 import { Card, Text, Image, List, ListItem, Flex, Grid, Title } from "@mantine/core";
 import { useLocation } from "react-router-dom"
 
-export function  FullCard() {
+export function CardDetails() {
     const location = useLocation();
     const card = location.state as TCards;
     

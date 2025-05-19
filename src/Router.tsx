@@ -7,7 +7,7 @@ import About from './pages/About.pages';
 import { RegisterForm } from './pages/Register.pages';
 import { FavoriteCards } from './pages/Favorites.pages';
 import { MyCards } from './pages/MyListings.pages';
-import { FullCard } from './components/Cards/FullCard';
+import { CardDetails } from './pages/CardDetails.modal';
 import { LoginPage } from './pages/LoginPage/Login.pages';
 import RouteGuard from './RouteGuard';
 import { EditProfile } from './pages/EditProfile.pages';
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
       {path: 'create-card', element: <RouteGuard><CreateCard/></RouteGuard>},
       {path: 'my-listings', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
-      {path: 'card-details/:id', element: <FullCard/>},
+      {path: 'card-details/:id', element: <CardDetails/>},
       {path: 'edit-card/:id', element: <EditCard/>},
       {path: 'edit-profile', element: <RouteGuard><EditProfile/></RouteGuard>},
       {path: '*', element: <Error404/>},
