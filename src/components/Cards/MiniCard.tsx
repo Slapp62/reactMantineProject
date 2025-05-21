@@ -1,31 +1,22 @@
-import { Card, Image, Text, Button, Flex, ListItem, List, Box} from '@mantine/core';
+import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group} from '@mantine/core';
 import { TCards } from '@/Types';
-import { IconEdit, IconHeart, IconHeartFilled, IconTrash } from '@tabler/icons-react';
+import { IconBrandLinkedin, IconBrandWhatsapp, IconEdit, IconShare, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useLikeUnlike } from '@/hooks/UseLikeUnlike';
+
 import { useDeleteCard } from '@/hooks/UseDeleteCard';
+import { FavoritesButton } from '../Buttons/AddToFavorites';
 
 export function MiniCard({ card } : { card: TCards }) {
   
-  const toggleLike = useLikeUnlike(); 
+  
   const deleteCard = useDeleteCard();
   const jumpTo = useNavigate();
   const location = useLocation();
   const myListingsPage = location.pathname === '/my-listings';
 
   const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
-  const user = useSelector((state: RootState) => state.userSlice.user);
-  
-  const globalCards = useSelector((state: RootState) => state.cardSlice.cards);
-  const thisGlobalCard = globalCards?.find((globalCard) => globalCard._id === card._id);
-  const isLiked = thisGlobalCard?.likes.includes(`${user?._id}`)
-
-  const heartOutline = <IconHeart />;
-  const heartFilled = <IconHeartFilled/>;
-
-  
 
   return (
     <Card h='100%' shadow="sm" mx={-15} radius="md" w={300} withBorder>
@@ -54,31 +45,37 @@ export function MiniCard({ card } : { card: TCards }) {
           </List>
         </Box>
 
-        <Flex mx="auto" my={20} gap={10} direction='column'>
-          <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`, {state: {card} })}>
+        <Flex mx="auto" mt={10} gap={10} direction='column'>
+          <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
             <Text fw='bold'>More Info</Text>
           </Button>
 
           {!myListingsPage && 
-            <Button bg='green'>
+            <Button bg='darkgreen'>
               <Text fw='bold'>Apply</Text>
             </Button>}
 
-          {loggedIn && !myListingsPage && 
-            <Button variant='filled' bg='red' onClick={() => toggleLike(card)}>
-                {isLiked ? heartFilled : heartOutline}
-            </Button>}
-          
           {loggedIn && myListingsPage && 
-            <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>
-              <IconEdit/>
-            </Button>}
+          <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>
+            <IconEdit/>
+          </Button>}
 
           {myListingsPage && 
             <Button bg='red' onClick={() => deleteCard(card)}>
               <IconTrash />
             </Button>}
         </Flex>
+
+        <Group my={10} justify='space-between' >
+          <FavoritesButton card={card}/>
+          
+          
+
+          <Button variant='outline'><IconShare/></Button>
+          <Button variant='outline' c="green"><IconBrandWhatsapp/></Button>
+        </Group>
+          
+        
 
       </Card.Section>
     </Card>

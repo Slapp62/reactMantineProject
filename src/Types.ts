@@ -1,6 +1,6 @@
 
 export type TCards = {
-  _id: string;
+  _id?: string;
   title: string;
   subtitle: string;
   description: string;
@@ -21,11 +21,11 @@ export type TCards = {
     zip: number;
     _id: string;
   };
-  bizNumber: number;
-  likes: string[];
-  user_id: string;
-  createdAt: string; 
-  __v: number;
+  bizNumber?: number;
+  likes?: string[];
+  user_id?: string;
+  createdAt?: string; 
+  __v?: number;
 };
 
 export type TCardsArray = TCards[];
@@ -58,7 +58,7 @@ export type TUsers = {
     city: string;
     street: string;
     houseNumber: number;
-    zip?: number;
+    zip: number;
     _id: string;
   };
   isAdmin: boolean;
@@ -72,15 +72,3 @@ export interface TdecodedToken{
   isBusiness: boolean;
   _id: string;
 }
-
-// export const cardData: Tcards[] = 
-//     const [cards, setCards] = useState<Tcards[]>([]);
-
-//   const getCards = async () => {
-//     const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
-//     setCards(response.data);
-//   }
-
-//   useEffect(() => {
-//     getCards();
-//   }, [cards])

@@ -5,7 +5,7 @@ import { Button, Fieldset, Flex, Image, PasswordInput, TextInput, Title } from "
 import { joiResolver } from "@hookform/resolvers/joi";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -14,22 +14,48 @@ import { useMediaQuery } from "@mantine/hooks";
 export function EditProfile() {
     const isMobile = useMediaQuery('(max-width: 700px)');
     const user = useSelector((state:RootState) => state.userSlice.user);
-    const [disabled, setDisabled] = useState(true);
-    const editRef = useRef<HTMLDivElement>(null);
+    const [isDisabled, setDisabled] = useState(true);
+    const scrollToTop = () => window.scrollTo({top: 0, behavior: 'smooth'});
 
-    //const isMobile = useMediaQuery('(max-width: 700px)');
+    if (!user) {return <h1>Loading...</h1>};
 
-    const {
-        register, 
-        handleSubmit, 
-        formState: {errors, isValid}, 
-    }
-         = useForm<TUsers>({
+    const cleanedUserData = (user: TUsers) => ({
+        name: {
+            first: user.name.first,
+            middle: user.name?.middle || '',
+            last: user.name.last,
+        },
+        phone: user.phone,
+        email: user.email,
+        image: {
+            url: user.image?.url || '',
+            alt: user.image?.alt || '',
+        },
+        address: {
+            state: user.address?.state || '',
+            country: user.address?.country,
+            city: user.address?.city,
+            street: user.address?.street,
+            // @ts-ignore-next-line
+            houseNumber: String(user.address?.houseNumber),
+            // @ts-ignore-next-line
+            zip: String(user.address?.zip),
+        }
+    })
+
+    const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, } = useForm<TUsers>({
         mode: 'all',
         resolver: joiResolver(registrationSchema),
-        defaultValues: user || {},
+        defaultValues: cleanedUserData(user),
     });
 
+    useEffect(() => {
+        if (user) {
+            const defaultUserValues = cleanedUserData(user);
+            reset(defaultUserValues);
+        };
+    }, [reset, user])
+    
     const onSubmit = async (data:FieldValues) => {
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
@@ -47,7 +73,7 @@ export function EditProfile() {
     }
     
     return(
-        <Flex ref={editRef} mt={20} direction='column' align='center' gap={20} >
+        <Flex mt={20} direction='column' align='center' gap={20} >
 
             <Title>Edit Profile</Title>
 
@@ -60,7 +86,7 @@ export function EditProfile() {
                         <Fieldset legend='Name'>
                             <TextInput
                                 label='First'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 required
                                 {...register('name.first')}
                                 error= {errors.name?.first?.message}
@@ -68,14 +94,14 @@ export function EditProfile() {
 
                             <TextInput
                                 label='Middle'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('name.middle')}
                                 error={errors.name?.middle?.message}
                             />
 
                             <TextInput
                                 label='Last'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 required
                                 {...register('name.last')}  
                                 error={errors.name?.last?.message}
@@ -85,7 +111,7 @@ export function EditProfile() {
                         <Fieldset legend='Address'>
                             <TextInput
                                 label='Country'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('address.country')}
                                 required
                                 error={errors.address?.country?.message}
@@ -93,14 +119,14 @@ export function EditProfile() {
 
                             <TextInput
                                 label='State'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('address.state')}
                                 error={errors.address?.state?.message}
                             />
 
                             <TextInput
                                 label='City'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('address.city')}
                                 required
                                 error={errors.address?.city?.message}
@@ -108,7 +134,7 @@ export function EditProfile() {
 
                             <TextInput
                                 label='Street'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('address.street')}
                                 required
                                 error={errors.address?.street?.message}
@@ -116,7 +142,7 @@ export function EditProfile() {
 
                             <TextInput
                                 label='House Number'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('address.houseNumber', {
                                 onChange: (e) => {
                                 e.target.value = e.target.value.replace(/\D/g, '');
@@ -128,7 +154,7 @@ export function EditProfile() {
 
                             <TextInput
                                 label='Zipcode'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('address.zip', {
                                 onChange: (e) => {
                                 e.target.value = e.target.value.replace(/\D/g, '');
@@ -142,26 +168,26 @@ export function EditProfile() {
                         <Fieldset legend="Credentials">
                             <TextInput
                                 label='Email'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('email')}
                                 required
                                 error={errors.email?.message}
                             />
 
-                            <PasswordInput
+                            {/* <PasswordInput
                                 label='Password'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 {...register('password')}
                                 required
                                 error={errors.password?.message}
-                            />
+                            /> */}
                         </Fieldset> 
 
                         <Fieldset legend="Other Details">
                             <TextInput
                                 rightSection={<IconPhone/>} 
                                 label='Phone'
-                                disabled={disabled}
+                                disabled={isDisabled}
                                 required
                                 {...register('phone', {
                                     onChange: (e) => {
@@ -182,14 +208,14 @@ export function EditProfile() {
 
                                 <TextInput
                                     label="New URL"
-                                    disabled={disabled}
+                                    disabled={isDisabled}
                                     {...register('image.url')}
                                     error={errors.image?.url?.message}
                                 />
 
                                 <TextInput
                                     label="New Image Alt"
-                                    disabled={disabled}
+                                    disabled={isDisabled}
                                     {...register('image.alt')}
                                     error={errors.image?.alt?.message}
                                 />
@@ -198,15 +224,18 @@ export function EditProfile() {
 
                         <Flex direction="column" gap={5} w="50%" mx="auto">
                             {!user?.isBusiness && <Button>Become a Business User</Button>}
-                            {disabled && <Button onClick={() => {
+                            
+                            {isDisabled && 
+                                <Button onClick={() => {
                                 setDisabled(false);
-                                editRef.current?.scrollIntoView({behavior:'smooth'})}}
+                                scrollToTop();
+                                }}
                                 >
                                 Edit Profile
-                            </Button>}
+                                </Button>}
 
                             <Button
-                                disabled={!isValid}
+                                disabled={!isValid || !isDirty}
                                 type="submit"
                             >
                                 Update Info
@@ -214,7 +243,7 @@ export function EditProfile() {
                         </Flex>
                         
                     </Flex>
-
+                   {JSON.stringify({ isValid, isDirty, errors}, null, 2)}      
                 </form>
 
             </Flex>

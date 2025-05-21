@@ -88,7 +88,7 @@ export function LoginPage() {
         </Anchor>
       </Text>
 
-      <Paper withBorder p={30} mt={30} radius="md">
+      <Paper withBorder p={30} mt={30} radius="md" shadow='lg'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput 
             label="Email" 

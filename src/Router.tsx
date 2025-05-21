@@ -7,7 +7,7 @@ import About from './pages/About.pages';
 import { RegisterForm } from './pages/Register.pages';
 import { FavoriteCards } from './pages/Favorites.pages';
 import { MyCards } from './pages/MyListings.pages';
-import { CardDetails } from './pages/CardDetails.modal';
+import { CardDetails } from './pages/CardDetails.pages';
 import { LoginPage } from './pages/LoginPage/Login.pages';
 import RouteGuard from './RouteGuard';
 import { EditProfile } from './pages/EditProfile.pages';

@@ -8,19 +8,25 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "@mantine/hooks";
+import { useDispatch } from "react-redux";
+import { editCard } from "@/store/cardSlice";
 
 export function EditCard() {
+    const {id} = useParams();
     const isMobile = useMediaQuery('(max-width: 700px)');
     const jumpTo = useNavigate();
     const [isDisabled, setDisabled] = useState(true);
     const scrollToTop = () => window.scrollTo({top: 0, behavior: 'smooth'});
+
+    const dispatch = useDispatch();
     
-    const { register, handleSubmit, trigger, reset, formState: {errors, isValid, isDirty} } = useForm<TCards>({
-        mode: 'all',
-        resolver: joiResolver(cardSchema)
+    
+    const { register, handleSubmit, reset, formState: {errors, isValid, isDirty} } = useForm<TCards>({
+            mode: 'all',
+            resolver: joiResolver(cardSchema)
     });
 
-    const {id} = useParams();
+    
 
     const getCard = async () => {
         return await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`);
@@ -29,38 +35,38 @@ export function EditCard() {
     useEffect(() => {
         const loadCard = async () => {
             const response = await getCard();
-            if (response.data) {
-                const {title, subtitle, description, phone, email, web, image, address,} = response.data;
-                reset({
-                title,
-                subtitle,
-                description,
-                phone,
-                email,
-                web,
-                image: {
-                    url: image?.url || '',
-                    alt: image?.alt || '',
-                },
-                address: {
-                    state: address?.state || '',
-                    country: address?.country || '',
-                    city: address?.city || '',
-                    street: address?.street || '',
-                    // @ts-ignore-next-line
-                    houseNumber: String(address?.houseNumber || ''),
-                    // @ts-ignore-next-line
-                    zip: String(address?.zip || ''),
-                }
-            });
-        }
-        await trigger();
-        }  
-    loadCard();
-    }, [reset, trigger])
-    
-    
 
+            if (response.data) {
+                const {title, subtitle, description, phone, email, web, image, address} = response.data;
+                
+                reset({
+                    title,
+                    subtitle,
+                    description,
+                    phone,
+                    email,
+                    web,
+                    image: {
+                        url: image?.url || '',
+                        alt: image?.alt || '',
+                    },
+                    address: {
+                        state: address?.state || '',
+                        country: address?.country || '',
+                        city: address?.city || '',
+                        street: address?.street || '',
+                        // @ts-ignore-next-line
+                        houseNumber: String(address?.houseNumber || ''),
+                        // @ts-ignore-next-line
+                        zip: String(address?.zip || ''),
+                    }
+                });
+            }
+        } 
+
+        loadCard();
+    }, [reset])
+    
     const onSubmit = async (data:FieldValues) => {
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
@@ -68,6 +74,8 @@ export function EditCard() {
         try {
             const response = await axios.put(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`, data);
             if (response.status === 200) {
+                dispatch(editCard({card : response.data as TCards}));
+
                 toast.success('Card Updated Successfully!', {position: `bottom-right`}); 
                 jumpTo('/my-listings');               
             }
@@ -76,8 +84,6 @@ export function EditCard() {
         } 
     }
 
-
-    
     return (
         <Paper>
             <Title ta="center" my={10}>Edit Listing</Title>

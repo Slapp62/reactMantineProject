@@ -35,16 +35,15 @@ export function HomePage() {
     (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage) : [];
 
   if (isLoading) {
-    return  <>
+    return <>
       <Box pos='relative'>
         <Hero/>
       </Box>
 
       <Center>
         <Loader color="cyan" size="xl" mt={30}/>
-      </Center>;
-    </>
-            
+      </Center>
+    </>      
   }
 
   return (

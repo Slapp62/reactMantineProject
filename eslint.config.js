@@ -3,12 +3,18 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   ...mantine,
-  { ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}', './.storybook/main.ts'] },
+
+  // Override for story files
   {
     files: ['**/*.story.tsx'],
-    rules: { 
+    rules: {
       'no-console': 'off',
-      'max-lines': 200,
-     },
+      'max-lines': ['error', 200], // ✅ Fix: must be an array
+    },
+  },
+
+  // General ignore rules
+  {
+    ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}', './.storybook/main.ts'],
   }
 );

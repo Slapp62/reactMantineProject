@@ -10,7 +10,7 @@ export function FavoriteCards()  {
     const cards = useSelector((state:RootState) => state.cardSlice.cards);
     const user = useSelector((state:RootState) => state.userSlice.user);
 
-    const likedCards = cards?.filter((card) => card.likes.includes(`${user?._id}`))
+    const likedCards = cards?.filter((card) => card.likes?.includes(`${user?._id}`))
 
     return (
         <Flex m={20} direction='column' align='center' gap={20}>

@@ -1,16 +1,53 @@
 import { MiniCard } from "@/components/Cards/MiniCard";
+import { Hero } from "@/components/Hero";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
-import { Flex, Title } from "@mantine/core";
+import { Box, Center, Flex, Loader, Title } from "@mantine/core";
+import axios from "axios";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 
 export function MyCards()  {
     const cards = useSelector((state:RootState) => state.cardSlice.cards);
     const user = useSelector((state:RootState) => state.userSlice.user);
-
-    const userCards = cards?.filter((card) => card.user_id === user?._id);
+    const [userCards, setUserCards] = useState<TCards[]>([]);
     
+    useEffect(() => {
+        const loadUserCards = async () => {
+            try {
+                const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                
+                const response = await axios.get(
+                    'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/my-cards',
+                    {headers: {'x-auth-token': token}}
+                );
+
+                setUserCards(response.data);
+            } catch (error) {
+                console.log(error);
+            }  
+        }
+
+        if (cards && user) {
+            setUserCards(cards?.filter((card) => card.user_id === user?._id));
+        } else {
+            loadUserCards();
+        }
+    }, [cards, user]);
+    
+    if (!userCards) {
+        return  <>
+          <Box pos='relative'>
+            <Hero/>
+          </Box>
+    
+          <Center>
+            <Loader color="cyan" size="xl" mt={30}/>
+          </Center>
+        </>      
+    }
+
     return (
         <Flex mt={20} direction='column' align='center' gap={20}>
             
