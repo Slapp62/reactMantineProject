@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const registrationSchema = Joi.object({
+const editProfileSchema = Joi.object({
     name: {
         first: Joi.string().min(2).max(256).required(),
         middle: Joi.string().min(2).max(256).allow('').optional(),
@@ -10,20 +10,6 @@ const registrationSchema = Joi.object({
     phone: Joi.string().min(9).max(11).required().pattern(/^(?:\+972-?|0)?5\d([- ]?)\d{7}$/).messages({
         'string.pattern.base':'Please enter a valid Israeli phone number.'
     }),
-
-    email: Joi.string().email({tlds: {allow:false}}).required().messages({
-        'string.min':'Email is too short',
-        'any.required': 'Email is required',
-    }),
-
-    password: Joi.string()
-        .min(7)
-        .max(20)
-        .required()
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-]).{7,20}$/)
-        .messages({
-            'string.pattern.base': 'Password must be between 7 and 20 characters and contain at least 1 uppercase, 1 number, and 1 special character '
-        }),
 
     image: Joi.object({
         url: Joi.string().uri().allow(''),
@@ -42,4 +28,4 @@ const registrationSchema = Joi.object({
     isBusiness: Joi.boolean()
 })
 
-export {registrationSchema}
+export {editProfileSchema}

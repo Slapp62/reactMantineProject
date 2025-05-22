@@ -57,8 +57,8 @@ export type TUsers = {
     country: string;
     city: string;
     street: string;
-    houseNumber: number;
-    zip: number;
+    houseNumber: string;
+    zip: string;
     _id: string;
   };
   isAdmin: boolean;

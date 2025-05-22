@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
-import { IconBrandInstagram, IconBrandLinkedin, IconBrandWhatsapp, IconShare, IconShare2, IconShare3 } from "@tabler/icons-react";
+import { IconBrandInstagram, IconBrandLinkedin, IconBrandWhatsapp, IconShare } from "@tabler/icons-react";
 
 export function CardDetails() {
     const isMobile = useMediaQuery('(max-width: 700px)');

@@ -22,6 +22,7 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@hookform/devtools": "^4.4.0",
     "@hookform/resolvers": "^5.0.1",
     "@mantine/core": "^7.17.4",
     "@mantine/form": "^8.0.1",

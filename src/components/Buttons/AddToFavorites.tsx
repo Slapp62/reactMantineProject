@@ -18,7 +18,7 @@ export function FavoritesButton({ card } : { card: TCards }) {
     const isLiked = thisGlobalCard?.likes?.includes(`${user?._id}`)
 
     return (
-        <Button variant='outline' color="purple" onClick={() => toggleLike(card)}>
+        <Button radius="xl" variant='outline' color="purple" onClick={() => toggleLike(card)}>
             {isLiked ? heartFilled : heartOutline}
         </Button>
     )

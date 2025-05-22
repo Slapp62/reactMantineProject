@@ -1,6 +1,6 @@
 import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group} from '@mantine/core';
 import { TCards } from '@/Types';
-import { IconBrandLinkedin, IconBrandWhatsapp, IconEdit, IconShare, IconTrash } from '@tabler/icons-react';
+import {IconBrandWhatsapp, IconEdit, IconShare, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -66,13 +66,10 @@ export function MiniCard({ card } : { card: TCards }) {
             </Button>}
         </Flex>
 
-        <Group my={10} justify='space-between' >
-          <FavoritesButton card={card}/>
-          
-          
-
-          <Button variant='outline'><IconShare/></Button>
-          <Button variant='outline' c="green"><IconBrandWhatsapp/></Button>
+        <Group my={10} justify='center' >
+          <FavoritesButton card={card} />
+          <Button variant='outline' radius="xl" c="blue"><IconShare/></Button>
+          <Button variant='outline' radius="xl" c="green"><IconBrandWhatsapp/></Button>
         </Group>
           
         
