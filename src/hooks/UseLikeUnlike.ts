@@ -15,10 +15,8 @@ export function useLikeUnlike() {
 
     const toggleLike = useCallback(async (card:TCards) => {
         //get current liked state
-        
-        
         const thisGlobalCard = globalCards?.find((globalCard) => globalCard._id === card._id);
-        const isLiked = thisGlobalCard?.likes.includes(`${user?._id}`)
+        const isLiked = thisGlobalCard?.likes?.includes(`${user?._id}`)
         console.log(user?._id);
         
         console.log(thisGlobalCard?.likes);
