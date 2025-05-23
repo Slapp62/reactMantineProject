@@ -67,7 +67,7 @@ export function MiniCard({ card } : { card: TCards }) {
         </Flex>
 
         <Group my={10} justify='center' >
-          <FavoritesButton card={card} />
+          {loggedIn && <FavoritesButton card={card} />}
           <Button variant='outline' radius="xl" c="blue"><IconShare/></Button>
           <Button variant='outline' radius="xl" c="green"><IconBrandWhatsapp/></Button>
         </Group>

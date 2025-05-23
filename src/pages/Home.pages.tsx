@@ -48,39 +48,35 @@ export function HomePage() {
 
   return (
     <>
-      <Box>
-        <Box pos='relative'>
-          <Hero/>
-        </Box>
+      <Hero/>
+        
+      <Flex ref={cardsRef} direction='column' align='center' gap={20}>
+        <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
+          {paginatedCards.map((card:TCards) => (
+            <motion.div
+            key={card._id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true, amount: 0.2 }}>
 
-        <Flex ref={cardsRef} direction='column' align='center' gap={20}>
-          <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
-            {paginatedCards.map((card:TCards) => (
-              <motion.div
-              key={card._id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true, amount: 0.2 }}>
+            <MiniCard key={card._id} card={card} />
 
-              <MiniCard key={card._id} card={card} />
-
-              </motion.div>
-            ))}
-          </Flex>
-          
-          <Pagination
-            total={filteredCards ? Math.ceil(filteredCards.length / cardsPerPage) : 0}
-            value={currentPage}
-            onChange={(page)=>{
-              setCurrentPage(page);
-              cardsRef.current?.scrollIntoView({behavior:'smooth'});
-            }}
-            mt="md"
-          />
-
+            </motion.div>
+          ))}
         </Flex>
-      </Box>
+        
+        <Pagination
+          total={filteredCards ? Math.ceil(filteredCards.length / cardsPerPage) : 0}
+          value={currentPage}
+          onChange={(page)=>{
+            setCurrentPage(page);
+            cardsRef.current?.scrollIntoView({behavior:'smooth'});
+          }}
+          mt="md"
+        />
+
+      </Flex>
     </>
   );
 }
