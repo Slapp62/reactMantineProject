@@ -4,6 +4,7 @@ import { Flex } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
 import Footer from "./Footer.tsx";
 
+
 export function Layout() {
     return (
       <>

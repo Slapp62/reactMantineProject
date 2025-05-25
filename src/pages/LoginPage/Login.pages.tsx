@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 import {
  Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
 import classes from './Login.module.css';
 import  { FieldValues, useForm } from 'react-hook-form';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { loginSchema } from '@/validationRules/login.joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { toast } from 'react-toastify';
@@ -12,7 +11,7 @@ import { TdecodedToken } from '@/Types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/userSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
@@ -23,21 +22,42 @@ export function LoginPage() {
 
   const dispatch = useDispatch<AppDispatch>();
   const [rememberMe, setRemember] = useState(false);
-  
-  const tokenHandler = async (response: AxiosResponse<any, any> ) => {
-    const token = response.data;
-    {rememberMe ? localStorage.setItem('token', token) : sessionStorage.setItem('token', token)};
-    axios.defaults.headers.common['x-auth-token'] = token;
 
-    const decodedToken = jwtDecode<TdecodedToken>(token);
-    const id = decodedToken._id;
-    
-    const userData = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`)
-    dispatch(setUser(userData.data))
-    console.log(userData);
-    
-  }
   
+  const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0
+  const [loginAttempts, setLoginAttempts] = useState(storedAttempts);
+  const [attemptsLeft, setAttemptsLeft] = useState(0);
+
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  
+  useEffect(() => {
+    const dayInMs = 1000 * 60 * 60 * 24
+    const loginBlock = Number(localStorage.getItem('loginBlock'));
+    const blockExpire = Date.now() - loginBlock;
+
+    if (localStorage.getItem('loginBlock')){
+      setHours(Math.floor(blockExpire / 24));
+      setMinutes( Math.floor((blockExpire % 3_600_000) / 60_000));
+
+      if (blockExpire > dayInMs) {
+        setIsBlocked(false)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    setAttemptsLeft(3 - loginAttempts);
+
+    if (loginAttempts > 2) {
+      localStorage.setItem('loginBlock', JSON.stringify(Date.now()));
+      setIsBlocked(true)
+    }
+  }, [loginAttempts])
+  
+  //const [attemptsLeft, setAttemptsLeft] = useState(Number);
+
   const {register, handleSubmit, formState: {errors, isValid} } = useForm({
     defaultValues: {
       email: '',
@@ -50,30 +70,52 @@ export function LoginPage() {
   
   const onSubmit = async (data: FieldValues) => {
     try {
-      const response = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
+      const {data: token} = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
         {
           email: data.email, 
           password: data.password,
         });
 
-      if (response.status === 200){
+      if (rememberMe) {
+        localStorage.setItem('token', token);
+      } else {
+        sessionStorage.setItem('token', token);
+      }
 
-        try {
-          tokenHandler(response);
-        } catch (error) {
-          console.error(`Problem with token! ${error}`)
-        }
-      
-        toast.success('Logged In!', {position: 'bottom-right'});
-        jumpTo('/');
-        
-        }
-      
-    } catch (error) {
+      axios.defaults.headers.common['x-auth-token'] = token;
 
-      toast.error(`Login Failed! ${error}`, {position: 'bottom-right'})
-    };
-  };
+      const { _id } = jwtDecode<TdecodedToken>(token);
+      const userResponse = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${_id}`)
+    
+      dispatch(setUser(userResponse.data))
+      toast.success('Logged In!', {position: 'bottom-right'});
+      setLoginAttempts(0);
+      localStorage.removeItem('loginAttempts');
+
+      if (localStorage.getItem('loginBlock')){
+        localStorage.removeItem('loginBlock')
+      }
+
+      jumpTo('/');
+    
+    } catch (error : any) {
+      if (error.response?.status === 400) {
+        toast.error('Login Failed. Error 400', {position: 'bottom-right'});
+
+        setLoginAttempts(prev => {
+          const next = prev + 1;
+          localStorage.setItem('loginAttempts', JSON.stringify(next));
+          return next
+          });
+
+        // setAttemptsLeft(prev => {
+        //   const maxAttempts = prev + 3;
+        //   const next = maxAttempts - 1
+        //   return next
+        // }
+    }
+  }
+}
 
   return (
     <Container size={420} mt={100}>
@@ -104,6 +146,12 @@ export function LoginPage() {
             error={errors.password?.message}
             />
 
+          {!isBlocked && loginAttempts > 0 && 
+          <Text c="red" ta='center' mt='sm'>You have {attemptsLeft} attempt(s) remaining.</Text>}
+
+          {isBlocked && 
+          <Text c="red" ta='center' mt='sm'>Too many attempts. You must wait {hours}hr {minutes}m minutes before you can login in.</Text>}
+
           <Group justify="space-between" mt="lg">
             <Checkbox 
               label="Remember me" 
@@ -114,7 +162,7 @@ export function LoginPage() {
             </Anchor>
           </Group>
 
-          <Button type='submit' fullWidth mt="xl" disabled={!isValid}>
+          <Button type='submit' fullWidth mt="xl" disabled={!isValid || isBlocked}>
             Sign in
           </Button>
         </form>
