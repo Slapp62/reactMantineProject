@@ -14,7 +14,6 @@ import { setUser } from '@/store/userSlice';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-
 export function LoginPage() {
   const jumpTo = useNavigate();
   const location = useLocation();
@@ -26,30 +25,35 @@ export function LoginPage() {
   
   const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0
   const [loginAttempts, setLoginAttempts] = useState(storedAttempts);
-  const [attemptsLeft, setAttemptsLeft] = useState(0);
-
+  const attemptsLeft = 3 - loginAttempts;
+  const loginBlock = Number(localStorage.getItem('loginBlock'));
   const [isBlocked, setIsBlocked] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   
   useEffect(() => {
-    const dayInMs = 1000 * 60 * 60 * 24
-    const loginBlock = Number(localStorage.getItem('loginBlock'));
-    const blockExpire = Date.now() - loginBlock;
+    if (loginBlock){
+      const dayInMs = 1000 * 60 * 60 * 2
+      const timeElapsed = Date.now() - loginBlock;
+      const hoursElapsed = Math.floor(timeElapsed / (1000 * 60 * 60));
+      const minsRemainder = Math.floor((timeElapsed % (1000 * 60 * 60)) / (1000 * 60));
+      setHours(Math.max(2 - hoursElapsed));
+      setMinutes(Math.max(59 - minsRemainder));
 
-    if (localStorage.getItem('loginBlock')){
-      setHours(Math.floor(blockExpire / 24));
-      setMinutes( Math.floor((blockExpire % 3_600_000) / 60_000));
+      if (loginBlock && timeElapsed < dayInMs) {
+        setIsBlocked(true);
+      }
 
-      if (blockExpire > dayInMs) {
+      if (loginBlock && timeElapsed > dayInMs) {
         setIsBlocked(false)
+        setLoginAttempts(0)
+        localStorage.removeItem('loginAttempts')
+        localStorage.removeItem('loginBlock')
       }
     }
   }, [])
 
   useEffect(() => {
-    setAttemptsLeft(3 - loginAttempts);
-
     if (loginAttempts > 2) {
       localStorage.setItem('loginBlock', JSON.stringify(Date.now()));
       setIsBlocked(true)
@@ -92,7 +96,7 @@ export function LoginPage() {
       setLoginAttempts(0);
       localStorage.removeItem('loginAttempts');
 
-      if (localStorage.getItem('loginBlock')){
+      if (loginBlock){
         localStorage.removeItem('loginBlock')
       }
 
@@ -150,7 +154,7 @@ export function LoginPage() {
           <Text c="red" ta='center' mt='sm'>You have {attemptsLeft} attempt(s) remaining.</Text>}
 
           {isBlocked && 
-          <Text c="red" ta='center' mt='sm'>Too many attempts. You must wait {hours}hr {minutes}m minutes before you can login in.</Text>}
+          <Text c="red" ta='center' mt='sm'>Too many attempts. You must wait {hours}h:{minutes}m minutes before you can login in.</Text>}
 
           <Group justify="space-between" mt="lg">
             <Checkbox 
