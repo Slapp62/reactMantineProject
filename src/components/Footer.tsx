@@ -18,7 +18,7 @@ const Footer = () => {
           <Link 
             to='https://slapp62.github.io/portfolio_site/' 
             target='_blank' 
-            style={{ textUnderlineOffset: '2px' }}
+            style={{ textDecorationLine: 'none' }}
           >
             <Text c='gray'>Created by Simcha Lapp</Text>
           </Link>
