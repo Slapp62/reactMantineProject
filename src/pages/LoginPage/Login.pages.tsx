@@ -11,7 +11,7 @@ import { TdecodedToken } from '@/Types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/userSlice';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
@@ -21,7 +21,7 @@ export function LoginPage() {
 
   const dispatch = useDispatch<AppDispatch>();
   const [rememberMe, setRemember] = useState(false);
-  const [seconds, setSeconds] = useState(60);
+  const [_ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   
   const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0
@@ -44,20 +44,14 @@ export function LoginPage() {
 
   useEffect(() => {
     if (momentBlocked) {
-      const BLOCK_DURATION = 1000 * 60; // 1 minute
-      const blockEnd = momentBlocked + BLOCK_DURATION;
-      const timeLeft = blockEnd - Date.now();
+      const blockDuration = 1000 * 60; // 1 minute
+      const timeElapsed = Date.now() - momentBlocked;
+      const timeLeft = blockDuration - timeElapsed;
 
       if (timeLeft > 0) {
         setIsBlocked(true);
 
-        const updateSeconds = () => {
-          const secondsLeft = Math.max(0, Math.floor((blockEnd - Date.now()) / 1000));
-          setSeconds(secondsLeft);
-        }
-
-        updateSeconds();
-        const intervalID = setInterval(updateSeconds, 1000);
+        const intervalID = setInterval(forceUpdate, 1000);
 
         const timeoutID = setTimeout(() => {
           setIsBlocked(false)
@@ -162,7 +156,7 @@ export function LoginPage() {
 
           {isBlocked && 
           <Text c="red" ta='center' mt='sm'>
-            You must wait {seconds} seconds before you can login in again.
+            You must wait {Math.floor(Math.max(0, (60000 - (Date.now() - momentBlocked)) / 1000))} seconds before you can login in again.
           </Text>}
 
           <Group justify="space-between" mt="lg">
