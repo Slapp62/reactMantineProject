@@ -26,41 +26,47 @@ export function LoginPage() {
   const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0
   const [loginAttempts, setLoginAttempts] = useState(storedAttempts);
   const attemptsLeft = 3 - loginAttempts;
-  const loginBlock = Number(localStorage.getItem('loginBlock'));
+  const [momentBlocked, setMomentBlocked] = useState(Number(localStorage.getItem('momentBlocked')));
   const [isBlocked, setIsBlocked] = useState(false);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
   
   useEffect(() => {
-    if (loginBlock){
-      const dayInMs = 1000 * 60 * 60 * 2
-      const timeElapsed = Date.now() - loginBlock;
-      const hoursElapsed = Math.floor(timeElapsed / (1000 * 60 * 60));
-      const minsRemainder = Math.floor((timeElapsed % (1000 * 60 * 60)) / (1000 * 60));
-      setHours(Math.max(2 - hoursElapsed));
-      setMinutes(Math.max(59 - minsRemainder));
-
-      if (loginBlock && timeElapsed < dayInMs) {
-        setIsBlocked(true);
-      }
-
-      if (loginBlock && timeElapsed > dayInMs) {
-        setIsBlocked(false)
-        setLoginAttempts(0)
-        localStorage.removeItem('loginAttempts')
-        localStorage.removeItem('loginBlock')
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (loginAttempts > 2) {
-      localStorage.setItem('loginBlock', JSON.stringify(Date.now()));
+    if (!momentBlocked && loginAttempts > 2) {
+      const timestamp = Date.now();
+      localStorage.setItem('momentBlocked', timestamp.toString());
+      setMomentBlocked(timestamp);
       setIsBlocked(true)
     }
-  }, [loginAttempts])
-  
-  //const [attemptsLeft, setAttemptsLeft] = useState(Number);
+
+    if (momentBlocked) {
+      // eslint-disable-next-line prefer-const
+      let timeRemainingID: ReturnType<typeof setInterval>;
+      const timeRemaining = () => {
+        const timeElapsed = Date.now() - momentBlocked;
+        const blockDuration = 1000 * 60; // 1 minute
+        const timeLeft = blockDuration - timeElapsed;
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        setSeconds(Math.max(seconds, 0));
+
+        if (timeElapsed < blockDuration) {
+          setIsBlocked(true);
+        }
+
+        if (timeElapsed > blockDuration) {
+          setIsBlocked(false)
+          setLoginAttempts(0)
+          localStorage.removeItem('loginAttempts')
+          localStorage.removeItem('momentBlocked')
+          clearInterval(timeRemainingID)
+        }
+      }
+      timeRemaining();
+      timeRemainingID = setInterval(timeRemaining, 1000);
+
+      return () => clearInterval(timeRemainingID)
+    }
+  }, [momentBlocked, loginAttempts]);
+
 
   const {register, handleSubmit, formState: {errors, isValid} } = useForm({
     defaultValues: {
@@ -96,8 +102,8 @@ export function LoginPage() {
       setLoginAttempts(0);
       localStorage.removeItem('loginAttempts');
 
-      if (loginBlock){
-        localStorage.removeItem('loginBlock')
+      if (momentBlocked){
+        localStorage.removeItem('momentBlocked')
       }
 
       jumpTo('/');
@@ -111,12 +117,6 @@ export function LoginPage() {
           localStorage.setItem('loginAttempts', JSON.stringify(next));
           return next
           });
-
-        // setAttemptsLeft(prev => {
-        //   const maxAttempts = prev + 3;
-        //   const next = maxAttempts - 1
-        //   return next
-        // }
     }
   }
 }
@@ -154,7 +154,7 @@ export function LoginPage() {
           <Text c="red" ta='center' mt='sm'>You have {attemptsLeft} attempt(s) remaining.</Text>}
 
           {isBlocked && 
-          <Text c="red" ta='center' mt='sm'>Too many attempts. You must wait {hours}h:{minutes}m minutes before you can login in.</Text>}
+          <Text c="red" ta='center' mt='sm'>You must wait {seconds}s before you can login in again.</Text>}
 
           <Group justify="space-between" mt="lg">
             <Checkbox 
