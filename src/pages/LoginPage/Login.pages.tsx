@@ -11,7 +11,7 @@ import { TdecodedToken } from '@/Types';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/userSlice';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
@@ -21,6 +21,7 @@ export function LoginPage() {
 
   const dispatch = useDispatch<AppDispatch>();
   const [rememberMe, setRemember] = useState(false);
+  const [_ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   
   const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0
@@ -28,47 +29,49 @@ export function LoginPage() {
   const attemptsLeft = 3 - loginAttempts;
   const [momentBlocked, setMomentBlocked] = useState(Number(localStorage.getItem('momentBlocked')));
   const [isBlocked, setIsBlocked] = useState(false);
-  const [seconds, setSeconds] = useState(0);
   
   useEffect(() => {
+    localStorage.setItem('loginAttempts', loginAttempts.toString())
+
     if (!momentBlocked && loginAttempts > 2) {
       const timestamp = Date.now();
       localStorage.setItem('momentBlocked', timestamp.toString());
       setMomentBlocked(timestamp);
       setIsBlocked(true)
+      reset();
     }
+  }, [loginAttempts])
 
+  useEffect(() => {
     if (momentBlocked) {
-      // eslint-disable-next-line prefer-const
-      let timeRemainingID: ReturnType<typeof setInterval>;
-      const timeRemaining = () => {
-        const timeElapsed = Date.now() - momentBlocked;
-        const blockDuration = 1000 * 60; // 1 minute
-        const timeLeft = blockDuration - timeElapsed;
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        setSeconds(Math.max(seconds, 0));
+      const blockDuration = 1000 * 60; // 1 minute
+      const timeElapsed = Date.now() - momentBlocked;
+      const timeLeft = blockDuration - timeElapsed;
 
-        if (timeElapsed < blockDuration) {
-          setIsBlocked(true);
-        }
+      if (timeLeft > 0) {
+        setIsBlocked(true);
 
-        if (timeElapsed > blockDuration) {
+        const intervalID = setInterval(forceUpdate, 1000);
+
+        const timeoutID = setTimeout(() => {
           setIsBlocked(false)
           setLoginAttempts(0)
+          setMomentBlocked(0)
           localStorage.removeItem('loginAttempts')
           localStorage.removeItem('momentBlocked')
-          clearInterval(timeRemainingID)
+          clearInterval(intervalID)
+        }, timeLeft)
+
+        return () => {
+          clearInterval(intervalID)
+          clearTimeout(timeoutID)
         }
       }
-      timeRemaining();
-      timeRemainingID = setInterval(timeRemaining, 1000);
-
-      return () => clearInterval(timeRemainingID)
     }
-  }, [momentBlocked, loginAttempts]);
+  }, [momentBlocked]);
 
 
-  const {register, handleSubmit, formState: {errors, isValid} } = useForm({
+  const {register, handleSubmit, reset, formState: {errors, isValid} } = useForm({
     defaultValues: {
       email: '',
       password: '',
@@ -112,11 +115,7 @@ export function LoginPage() {
       if (error.response?.status === 400) {
         toast.error('Login Failed. Error 400', {position: 'bottom-right'});
 
-        setLoginAttempts(prev => {
-          const next = prev + 1;
-          localStorage.setItem('loginAttempts', JSON.stringify(next));
-          return next
-          });
+        setLoginAttempts(prev => prev + 1);
     }
   }
 }
@@ -138,6 +137,7 @@ export function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput 
             label="Email" 
+            disabled={isBlocked}
             placeholder="you@email.com" 
             {...register('email')}
             error= {errors.email?.message}
@@ -145,6 +145,7 @@ export function LoginPage() {
           <PasswordInput 
             mt={10}
             label="Password" 
+            disabled={isBlocked}
             placeholder="Your password" 
             {...register('password')}
             error={errors.password?.message}
@@ -154,7 +155,9 @@ export function LoginPage() {
           <Text c="red" ta='center' mt='sm'>You have {attemptsLeft} attempt(s) remaining.</Text>}
 
           {isBlocked && 
-          <Text c="red" ta='center' mt='sm'>You must wait {seconds}s before you can login in again.</Text>}
+          <Text c="red" ta='center' mt='sm'>
+            You must wait {Math.floor(Math.max(0, (60000 - (Date.now() - momentBlocked)) / 1000))} seconds before you can login in again.
+          </Text>}
 
           <Group justify="space-between" mt="lg">
             <Checkbox 
