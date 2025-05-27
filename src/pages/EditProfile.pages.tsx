@@ -83,7 +83,7 @@ export function EditProfile() {
         try {
             const response = await axios.delete(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${user?._id}`)
             if (response.status === 200){
-                dispatch(clearUser())
+                if (!isAdmin) {dispatch(clearUser())};
                 toast.warning('Account Deleted.', {position: 'bottom-right'})
             }
         } catch (error : any) {
