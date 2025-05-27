@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HomePage } from './pages/Home.pages';
 import { Layout } from './components/Layout';
-import AdminControls from './pages/Admin.pages';
+import AdminControls from './pages/AdminControls.pages';
 import Error404 from './pages/404.pages';
 import About from './pages/About.pages';
 import { RegisterForm } from './pages/Register.pages';
@@ -23,14 +23,18 @@ const router = createBrowserRouter([
       {index: true, element: <HomePage />},
       {path: 'login', element: <LoginPage/>},
       {path: 'about', element: <About/>},
-      {path: 'admin', element: <RouteGuard isAdmin><AdminControls/></RouteGuard> },
       {path: 'register', element: <RegisterForm/>},
-      {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
-      {path: 'create-card', element: <RouteGuard><CreateCard/></RouteGuard>},
-      {path: 'my-listings', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
       {path: 'card-details/:id', element: <CardDetails/>},
       {path: 'edit-card/:id', element: <EditCard/>},
-      {path: 'edit-profile', element: <RouteGuard><EditProfile/></RouteGuard>},
+
+      {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
+      {path: 'create-card', element: <RouteGuard><CreateCard/></RouteGuard>},
+      {path: 'edit-profile/:id', element: <RouteGuard><EditProfile/></RouteGuard>},
+
+      {path: 'admin', element: <RouteGuard isAdmin><AdminControls/></RouteGuard> },
+      
+      {path: 'my-listings', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
+      
       {path: '*', element: <Error404/>},
     ]
   },

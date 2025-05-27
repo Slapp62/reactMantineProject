@@ -7,6 +7,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
+import { toast } from "react-toastify";
 
 export function MyCards()  {
     const cards = useSelector((state:RootState) => state.cardSlice.cards);
@@ -24,8 +25,8 @@ export function MyCards()  {
                 );
 
                 setUserCards(response.data);
-            } catch (error) {
-                console.log(error);
+            } catch (error : any) {
+                toast.error(error);
             }  
         }
 

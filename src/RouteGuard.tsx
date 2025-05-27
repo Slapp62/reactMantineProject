@@ -16,7 +16,7 @@ const RouteGuard = (props: RouteGuardProps) => {
     const accessMessage = 'You do not have access to this page.'
 
     if (!userLoggedIn) {
-        return <Navigate to="/login" replace state={{message: accessMessage}}/>
+        return <Navigate to="/" replace state={{message: accessMessage}}/>
     }
 
     if (isBusiness && !user?.isBusiness) {

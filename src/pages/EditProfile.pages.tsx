@@ -1,4 +1,3 @@
-import { RootState } from "@/store/store";
 import { TUsers } from "@/Types";
 import { Button, Fieldset, Flex, Image, TextInput, Title, Text } from "@mantine/core";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -10,22 +9,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "@mantine/hooks";
 import { editProfileSchema } from "@/validationRules/editProfile.joi";
-import { setUser, updateAccountStatus } from "@/store/userSlice";
+import { clearUser, setUser, updateAccountStatus } from "@/store/userSlice";
 import { useCleanedUserData } from "@/hooks/CleanedUserData";
+import { useParams } from "react-router-dom";
+import { RootState } from "@/store/store";
 
 export function EditProfile() {    
+    const {id} = useParams();
     const isMobile = useMediaQuery('(max-width: 700px)');
-    const user = useSelector((state:RootState) => state.userSlice.user);
+    const reduxUser = useSelector((state:RootState) => state.userSlice.user);
+    const allUsers = useSelector((state:RootState) => state.userSlice.allUsers);
+    const isAdmin = useSelector((state:RootState) => state.userSlice.user?.isAdmin);
     const [isDisabled, setDisabled] = useState(true);
     const dispatch = useDispatch();
     const cleanedUserData = useCleanedUserData();
-
-    if (!user) {return null};
     
+    const user = isAdmin ? allUsers?.find((user) => user._id === id)
+        : reduxUser;
+
     const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, } = useForm<TUsers>({
         mode: 'all',
         resolver: joiResolver(editProfileSchema),
-        defaultValues: cleanedUserData(user),
+        defaultValues: user ? cleanedUserData(user) : {},
     });
 
     useEffect(() => {
@@ -43,7 +48,7 @@ export function EditProfile() {
         data.address.zip = Number(data.address.zip);
         try {
             const response = await axios.put(
-                `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${user?._id}`, data)
+                `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`, data)
 
             if (response.status === 200) {
                 toast.success('Profile Updated Successfully!', {position: `bottom-right`});
@@ -64,11 +69,25 @@ export function EditProfile() {
         try {
             const response = await axios.patch(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${user?._id}`)
             if (response.status === 200){
-                dispatch(updateAccountStatus(!user.isBusiness))
+                dispatch(updateAccountStatus(!user?.isBusiness))
                 toast.success('Account Status Updated', {position: 'bottom-right'})
             }
         } catch (error : any) {
             toast.error(`Account Status Update Failed! ${error.message}`, {position: `bottom-right`});
+        }
+    }
+
+    const deleteUser = async () => {
+        const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
+        axios.defaults.headers.common['x-auth-token'] = token;
+        try {
+            const response = await axios.delete(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${user?._id}`)
+            if (response.status === 200){
+                dispatch(clearUser())
+                toast.warning('Account Deleted.', {position: 'bottom-right'})
+            }
+        } catch (error : any) {
+            toast.error(`Account Deletion Failed! ${error.message}`, {position: `bottom-right`});
         }
     }
 
@@ -183,12 +202,20 @@ export function EditProfile() {
 
                         <Fieldset legend="Change Account Type">
                             <Flex align="center" direction="column" gap={5}>
-                                <Text>Account Type: {user.isBusiness ? <strong>Business User</strong> : <strong>Regular User</strong>}</Text>
+                                <Text>Account Type: {user?.isBusiness ? <strong>Business User</strong> : <strong>Regular User</strong>}</Text>
                                 <Button disabled={isDisabled} onClick={() => updateBusinessStatus()}>
-                                    {user.isBusiness ? 
+                                    {user?.isBusiness ? 
                                         <Text>Become A Regular User</Text> 
                                         : <Text>Become A Business User</Text>} 
                                 </Button>
+                            </Flex>
+                        </Fieldset>
+
+                        <Fieldset legend="Delete Account">
+                            <Flex align="center" direction="column" gap={5}>
+                                <Text fw='bold' c='red'>All data will be lost and you will be logged out.</Text>
+                                <Button color='red' disabled={isDisabled} onClick={() => deleteUser()}>
+                                    Delete Account</Button>
                             </Flex>
                         </Fieldset>
                         

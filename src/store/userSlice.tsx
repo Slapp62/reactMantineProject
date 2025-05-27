@@ -3,11 +3,13 @@ import { TUsers } from "@/Types";
 
 interface UserState {
     user : TUsers | null;
+    allUsers: TUsers[] | null;
     isLoggedIn: boolean;
 }
 
 const initialState: UserState = {
     user: null as TUsers | null,
+    allUsers: null as TUsers[] | null,
     isLoggedIn: false,
 }
 
@@ -19,6 +21,9 @@ const userSlice = createSlice({
             state.isLoggedIn = true;
             state.user = data.payload;
         },
+        setAllUsers(state, data:PayloadAction<TUsers[]>){
+            state.allUsers = data.payload;
+        },
         updateAccountStatus(state, data:PayloadAction<boolean>){
             if(state.user){state.user.isBusiness = data.payload}
         },
@@ -29,5 +34,5 @@ const userSlice = createSlice({
     }
 });
 
-export const {setUser, updateAccountStatus, clearUser } = userSlice.actions;
+export const {setUser, setAllUsers, updateAccountStatus, clearUser } = userSlice.actions;
 export default userSlice.reducer;

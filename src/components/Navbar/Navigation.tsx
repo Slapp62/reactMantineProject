@@ -27,8 +27,8 @@ import { AvatarIcon } from './Avatar';
     const { colorScheme } = useMantineColorScheme();
   
     const logoutHandler = () => {
-      dispatch(clearUser());
       jumpTo('/');
+      dispatch(clearUser());
       toast.success('Logged out succesfully!', {position: 'bottom-right'});
     }
 
@@ -82,7 +82,7 @@ import { AvatarIcon } from './Avatar';
               </Group>
 
               <Group >
-                {loggedIn && <Link to='/edit-profile'><AvatarIcon/></Link>}
+                {loggedIn && <Link to={`/edit-profile/${user?._id}`}><AvatarIcon/></Link>}
                 <LightDarkToggle />
                 <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
               </Group>
@@ -126,7 +126,7 @@ import { AvatarIcon } from './Avatar';
             <Divider my="sm" />
 
             {loggedIn && <Center my="md">
-              <Link to='/user-profile' onClick={closeDrawer}><AvatarIcon/></Link>
+              {loggedIn && <Link to={`/edit-profile/${user?._id}`}><AvatarIcon/></Link>}
             </Center>}
 
             <Flex justify="space-evenly" ta="center" p="sm" gap={5} direction="column">
