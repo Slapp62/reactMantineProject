@@ -19,6 +19,9 @@ const userSlice = createSlice({
             state.isLoggedIn = true;
             state.user = data.payload;
         },
+        updateAccountStatus(state, data:PayloadAction<boolean>){
+            if(state.user){state.user.isBusiness = data.payload}
+        },
         clearUser(state){
             state.isLoggedIn = false;
             state.user = null;
@@ -26,5 +29,5 @@ const userSlice = createSlice({
     }
 });
 
-export const {setUser, clearUser } = userSlice.actions;
+export const {setUser, updateAccountStatus, clearUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,16 +1,16 @@
 import { RootState } from "@/store/store";
 import { TUsers } from "@/Types";
-import { Button, Fieldset, Flex, Image, TextInput, Title } from "@mantine/core";
+import { Button, Fieldset, Flex, Image, TextInput, Title, Text } from "@mantine/core";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm, FieldValues,} from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "@mantine/hooks";
 import { editProfileSchema } from "@/validationRules/editProfile.joi";
-import { setUser } from "@/store/userSlice";
+import { setUser, updateAccountStatus } from "@/store/userSlice";
 import { useCleanedUserData } from "@/hooks/CleanedUserData";
 
 export function EditProfile() {    
@@ -58,6 +58,20 @@ export function EditProfile() {
         }
     }
     
+    const updateBusinessStatus = async () => {
+        const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
+        axios.defaults.headers.common['x-auth-token'] = token;
+        try {
+            const response = await axios.patch(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${user?._id}`)
+            if (response.status === 200){
+                dispatch(updateAccountStatus(!user.isBusiness))
+                toast.success('Account Status Updated', {position: 'bottom-right'})
+            }
+        } catch (error : any) {
+            toast.error(`Account Status Update Failed! ${error.message}`, {position: `bottom-right`});
+        }
+    }
+
     return(
         <Flex mt={20} direction='column' align='center' gap={20} >
             <Title>Edit Profile</Title>
@@ -166,9 +180,20 @@ export function EditProfile() {
                                 error={errors.image?.alt?.message}
                             />
                         </Fieldset>
+
+                        <Fieldset legend="Change Account Type">
+                            <Flex align="center" direction="column" gap={5}>
+                                <Text>Account Type: {user.isBusiness ? <strong>Business User</strong> : <strong>Regular User</strong>}</Text>
+                                <Button disabled={isDisabled} onClick={() => updateBusinessStatus()}>
+                                    {user.isBusiness ? 
+                                        <Text>Become A Regular User</Text> 
+                                        : <Text>Become A Business User</Text>} 
+                                </Button>
+                            </Flex>
+                        </Fieldset>
                         
                         <Flex direction="column" gap={5} w="50%" mx="auto">
-                            {!user?.isBusiness && <Button>Become a Business User</Button>}
+                            
                             
                             {isDisabled && 
                                 <Button onClick={() => {
