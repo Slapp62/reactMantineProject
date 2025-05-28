@@ -1,11 +1,20 @@
 import { RootState } from '@/store/store';
-import { Avatar } from '@mantine/core';
-import { useSelector } from 'react-redux';
-
-
+import { toggleAdminView } from '@/store/userSlice';
+import { ActionIcon, Avatar} from '@mantine/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export function AvatarIcon() {
-    const image = useSelector((state:RootState) => state.userSlice.user?.image?.url);
+    const dispatch = useDispatch();
+    const jumpTo = useNavigate();
+    const user = useSelector((state:RootState) => state.userSlice.user);
     
-  return <Avatar src={image}/>;
+  return (
+      <ActionIcon variant='outline' color='green' radius={100} size={40} onClick={() => {
+        dispatch(toggleAdminView(false));
+        jumpTo(`/edit-profile/${user?._id}`);
+      }}>
+        <Avatar src={user?.image?.url} style={{ cursor: 'pointer' }} size={30}/>
+      </ActionIcon>
+  )
 }

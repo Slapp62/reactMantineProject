@@ -1,54 +1,38 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { TUsers } from '../Types'
+import { useState } from "react";
 import { ActionIcon, Anchor, Flex, Loader, Pagination, Table, Text } from "@mantine/core";
-import { IconPencil } from "@tabler/icons-react";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAllUsers } from "@/store/userSlice";
+import { removeUser, toggleAdminView } from "@/store/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useGetAllUsers } from "@/hooks/UseGetAllUser";
 
 const AdminControls = () => {
   const dispatch = useDispatch();
-  const [users, setUsers] = useState<TUsers[]>([]);
+  const jumpTo = useNavigate();
+  const {allUsers, isLoading} = useGetAllUsers();
 
-  const getAllUsers = async () => { 
-      try {
-          const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-          axios.defaults.headers.common['x-auth-token'] = token;
-          return await axios.get('https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users');
-      } catch (error : any) {
-          toast.error(error)
-          return { data: [] };
-      }
-  };
-   
-  const [loading, setLoading] = useState(true)
+  const deleteUser = async (id: string) => {
+    const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
+    axios.defaults.headers.common['x-auth-token'] = token;
+    try {
+        const response = await axios.delete(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`);
+        if (response.status === 200){
+            toast.warning('Account Deleted.', {position: 'bottom-right'})
+            dispatch(removeUser(id));
+        }
+    } catch (error : any) {
+        toast.error(`Account Deletion Failed! ${error.message}`, {position: `bottom-right`});
+    }
+  }
 
-  useEffect(() => { 
-      const loadUsers = async () => {
-          try {
-              setLoading(true);
-              const response: { data: TUsers[] } = await getAllUsers();
-              dispatch(setAllUsers(response.data));
-              setUsers(response.data);
-          } catch (error : any) {
-              toast.error(error);
-          } finally {
-            setLoading(false)
-          }
-      };
-
-      loadUsers();
-  }, []);
-
-    
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 30;
-  const paginatedUsers = users.slice(
-  (currentPage - 1) * usersPerPage, currentPage * usersPerPage);
+  const paginatedUsers = allUsers ? allUsers.slice(
+  (currentPage - 1) * usersPerPage, currentPage * usersPerPage) : [];
 
-  if (loading) {
+  if (isLoading) {
       return  <>
         <Flex align="center" direction="column" mt={100}>
           <Text size="xl" fw={600}>Users Are Loading</Text>
@@ -60,18 +44,28 @@ const AdminControls = () => {
   return (
       <Flex direction="column" w="100%">
       <Table.ScrollContainer minWidth={800}>
-      <Table verticalSpacing="sm" maw='75%' mx='auto'>
+      <Table verticalSpacing="sm" maw='75%' mx='auto' >
         <Table.Thead>
           <Table.Tr>
+              <Table.Th/>
               <Table.Th>First Name</Table.Th>
               <Table.Th>Last Name</Table.Th>
               <Table.Th>Email</Table.Th>
-              <Table.Th>Phone</Table.Th>
+              <Table.Th>Account Type</Table.Th>
+              <Table.Th>Date Created</Table.Th>
+              <Table.Th>Edit</Table.Th>
+              <Table.Th>Delete</Table.Th>
           </Table.Tr>
         </Table.Thead>
 
         <Table.Tbody>{paginatedUsers.map((user) => (
           <Table.Tr key={user._id}>
+            <Table.Td styles={{td: {borderLeft: '1px solid #eee', borderRight: '1px solid #eee' }}}>
+              <Text fz="sm" fw="bold" c="dimmed" ta='center'>
+                {paginatedUsers.indexOf(user) + 1}
+              </Text>
+            </Table.Td>
+
             <Table.Td>
               <Text fz="sm" fw={500}>
                 {user.name.first}
@@ -91,16 +85,26 @@ const AdminControls = () => {
             </Table.Td>
 
             <Table.Td>
-              <Text fz="sm">{user.phone}</Text>
+              <Text fz="sm">{user.isAdmin ? 'Admin' : user.isBusiness ? 'Business' : 'Regular'}</Text>
             </Table.Td>
 
             <Table.Td>
-              <Link to={`/edit-profile/${user._id}`}>
-                <ActionIcon variant="subtle" color="gray" >
-                  <IconPencil size={16} stroke={1.5}/>
-                </ActionIcon>
-              </Link>
-                
+              <Text fz="sm">{new Date(user.createdAt).toLocaleString()}</Text>
+            </Table.Td>
+
+            <Table.Td>
+                <ActionIcon size={30} variant="outline" color="yellow" onClick={() => {
+                  dispatch(toggleAdminView(true));
+                  jumpTo(`/edit-profile/${user?._id}`)
+                }}>
+                  <IconPencil size={25} stroke={1.5}/>
+                </ActionIcon>              
+            </Table.Td>
+
+            <Table.Td styles={{td: {borderRight: '1px solid #eee' }}}>
+                <ActionIcon size={30} variant="outline" color="red" onClick={() => {deleteUser(user._id)}}>
+                  <IconTrash size={25} stroke={1.5}/>
+                </ActionIcon>              
             </Table.Td>
 
           </Table.Tr>))}
@@ -108,18 +112,19 @@ const AdminControls = () => {
       </Table>
       </Table.ScrollContainer>
             
+      {allUsers && 
       <Pagination
-          total={Math.ceil(users.length / usersPerPage)}
-          value={currentPage}
-          onChange={(page)=>{
-              setCurrentPage(page);
-              window.scrollTo({top:0, behavior:'smooth'});
-          }}
-          mt="md"
-          m="auto"
-          />
+        total={Math.ceil(allUsers.length / usersPerPage)}
+        value={currentPage}
+        onChange={(page)=>{
+            setCurrentPage(page);
+            window.scrollTo({top:0, behavior:'smooth'});
+        }}
+        mt="md"
+        m="auto"
+      />}
           
-          </Flex>
+    </Flex>
   )
 }
 

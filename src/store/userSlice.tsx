@@ -5,12 +5,14 @@ interface UserState {
     user : TUsers | null;
     allUsers: TUsers[] | null;
     isLoggedIn: boolean;
+    isAdminView: boolean;
 }
 
 const initialState: UserState = {
     user: null as TUsers | null,
     allUsers: null as TUsers[] | null,
     isLoggedIn: false,
+    isAdminView: false,
 }
 
 const userSlice = createSlice({
@@ -31,8 +33,16 @@ const userSlice = createSlice({
             state.isLoggedIn = false;
             state.user = null;
         },
+        removeUser(state, data:PayloadAction<string>){
+            if (state.allUsers) {
+                state.allUsers = state.allUsers?.filter((user) => user._id !== data.payload)
+            };
+        },
+        toggleAdminView(state, data:PayloadAction<boolean>){
+            state.isAdminView = data.payload;
+        },
     }
 });
 
-export const {setUser, setAllUsers, updateAccountStatus, clearUser } = userSlice.actions;
+export const {setUser, setAllUsers, updateAccountStatus, clearUser, removeUser, toggleAdminView } = userSlice.actions;
 export default userSlice.reducer;

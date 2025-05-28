@@ -82,7 +82,7 @@ import { AvatarIcon } from './Avatar';
               </Group>
 
               <Group >
-                {loggedIn && <Link to={`/edit-profile/${user?._id}`}><AvatarIcon/></Link>}
+                {loggedIn && <AvatarIcon/>}
                 <LightDarkToggle />
                 <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
               </Group>
@@ -126,7 +126,7 @@ import { AvatarIcon } from './Avatar';
             <Divider my="sm" />
 
             {loggedIn && <Center my="md">
-              {loggedIn && <Link to={`/edit-profile/${user?._id}`}><AvatarIcon/></Link>}
+              <AvatarIcon/>
             </Center>}
 
             <Flex justify="space-evenly" ta="center" p="sm" gap={5} direction="column">
