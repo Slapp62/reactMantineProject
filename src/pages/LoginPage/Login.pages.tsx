@@ -164,9 +164,6 @@ export function LoginPage() {
               label="Remember me" 
               checked={rememberMe}
               onChange={(event) => setRemember(event.currentTarget.checked)}/>
-            <Anchor component="button" size="sm">
-              Forgot password?
-            </Anchor>
           </Group>
 
           <Button type='submit' fullWidth mt="xl" disabled={!isValid || isBlocked}>
