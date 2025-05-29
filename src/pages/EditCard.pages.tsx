@@ -26,8 +26,6 @@ export function EditCard() {
             resolver: joiResolver(cardSchema)
     });
 
-    
-
     const getCard = async () => {
         return await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`);
     }
@@ -63,7 +61,7 @@ export function EditCard() {
                 });
             }
         } 
-
+        
         loadCard();
     }, [reset])
     
@@ -84,6 +82,7 @@ export function EditCard() {
         } 
     }
 
+    
     return (
         <Paper>
             <Title ta="center" my={10}>Edit Listing</Title>

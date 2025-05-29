@@ -21,10 +21,10 @@ const editProfileSchema = Joi.object({
         country: Joi.string().min(2).max(256).required(),
         city: Joi.string().min(2).max(256).required(),
         street: Joi.string().min(2).max(256).required(),
-        houseNumber: Joi.string().pattern(/^\d+$/).min(2).max(256).required(),
-        zip: Joi.string().min(2).pattern(/^\d+$/).max(256).required(),
+        houseNumber: Joi.string().min(2).max(256).pattern(/^\d+$/).required(),
+        zip: Joi.string().min(2).max(256).pattern(/^\d+$/).required(),
     }),
-    
+
     isBusiness: Joi.boolean()
 })
 

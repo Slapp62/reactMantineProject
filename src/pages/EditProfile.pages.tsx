@@ -4,12 +4,12 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm, FieldValues,} from "react-hook-form";
+import { useForm, FieldValues} from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "@mantine/hooks";
 import { editProfileSchema } from "@/validationRules/editProfile.joi";
-import { clearUser, setUser, updateAccountStatus } from "@/store/userSlice";
+import { clearUser, setUser, updateAccountStatus, updateUser } from "@/store/userSlice";
 import { useCleanedUserData } from "@/hooks/CleanedUserData";
 import { RootState } from "@/store/store";
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,7 +30,7 @@ export function EditProfile() {
         
     const userData = isAdminView ? paramsUser : currentUser;
     
-    const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, } = useForm<TUsers>({
+    const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, trigger} = useForm<TUsers>({
         mode: 'all',
         resolver: joiResolver(editProfileSchema),
         defaultValues: userData ? cleanedUserData(userData) : {},
@@ -55,15 +55,17 @@ export function EditProfile() {
                 toast.success('Profile Updated Successfully!', {position: `bottom-right`});
 
                 const updatedUser = response.data;
-                dispatch(setUser(updatedUser));
+                {!isAdminView && dispatch(setUser(updatedUser))}
+                if (allUsers){
+                    dispatch(updateUser(updatedUser))
+                }
                 reset(cleanedUserData(updatedUser));
-                setDisabled(true);
-               
             }
         } catch (error: any) {    
             toast.error(`Update Failed! ${error.message}`, {position: `bottom-right`});
         }
     }
+    
     
     const updateBusinessStatus = async () => {
         const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -76,6 +78,9 @@ export function EditProfile() {
             }
         } catch (error : any) {
             toast.error(`Account Status Update Failed! ${error.message}`, {position: `bottom-right`});
+            if (error.response){
+                toast.error(`Account Status Update Failed! ${error.response.data.message}`, {position: `bottom-right`});
+            }
         }
     }
 
@@ -146,23 +151,26 @@ export function EditProfile() {
                                 {...register('address.street')}
                                 error={errors.address?.street?.message}
                             />
-                            <TextInput
-                                label='House Number'
-                                disabled={isDisabled}
-                                {...register('address.houseNumber', {
+                            <TextInput 
+                            label='House Number' 
+                            required
+                            disabled={isDisabled}
+                            {...register('address.houseNumber', {
                                 onChange: (e) => {
-                                e.target.value = e.target.value.replace(/\D/g, '');},
-                                })}
-                                error={errors.address?.houseNumber?.message}
+                                e.target.value = e.target.value.replace(/\D/g, '');
+                                },
+                            })}
+                            error= {errors.address?.houseNumber?.message}
                             />
-                            <TextInput
-                                label='Zipcode'
-                                disabled={isDisabled}
-                                {...register('address.zip', {
+                            <TextInput 
+                            label='Zipcode' 
+                            disabled={isDisabled}
+                            {...register('address.zip', {
                                 onChange: (e) => {
-                                e.target.value = e.target.value.replace(/\D/g, '')},
-                                })}
-                                error={errors.address?.zip?.message}
+                                e.target.value = e.target.value.replace(/\D/g, '');
+                                },
+                            })}
+                            error= {errors.address?.zip?.message}
                             />
                         </Fieldset>
 
@@ -211,7 +219,7 @@ export function EditProfile() {
                             </Flex>
                         </Fieldset>
 
-                        {userData?.isAdmin === false && 
+                        {userData?.isAdmin === false && isAdminView === false &&
                         <Fieldset legend="Delete Account">
                             <Flex align="center" direction="column" gap={5}>
                                 <Text fw='bold' c='red'>All data will be lost and you will be logged out.</Text>
@@ -226,6 +234,7 @@ export function EditProfile() {
                             {isDisabled && 
                                 <Button onClick={() => {
                                 setDisabled(false);
+                                trigger();
                                 }}
                                 > Edit Profile</Button>}
 

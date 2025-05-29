@@ -19,30 +19,38 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers:{
-        setUser(state, data:PayloadAction<TUsers>){
+        setUser(state, action:PayloadAction<TUsers>){
             state.isLoggedIn = true;
-            state.user = data.payload;
+            state.user = action.payload;
         },
-        setAllUsers(state, data:PayloadAction<TUsers[]>){
-            state.allUsers = data.payload;
+        setAllUsers(state, action:PayloadAction<TUsers[]>){
+            state.allUsers = action.payload;
         },
-        updateAccountStatus(state, data:PayloadAction<boolean>){
-            if(state.user){state.user.isBusiness = data.payload}
+        updateUser(state, action:PayloadAction<TUsers>){
+            if (state.allUsers){
+                const index = state.allUsers.findIndex((user) => user._id === action.payload._id)
+                if (index !== -1){
+                    state.allUsers[index] = action.payload
+                }
+            }
+        },
+        updateAccountStatus(state, action:PayloadAction<boolean>){
+            if(state.user){state.user.isBusiness = action.payload}
         },
         clearUser(state){
             state.isLoggedIn = false;
             state.user = null;
         },
-        removeUser(state, data:PayloadAction<string>){
+        removeUser(state, action:PayloadAction<string>){
             if (state.allUsers) {
-                state.allUsers = state.allUsers?.filter((user) => user._id !== data.payload)
+                state.allUsers = state.allUsers?.filter((user) => user._id !== action.payload)
             };
         },
-        toggleAdminView(state, data:PayloadAction<boolean>){
-            state.isAdminView = data.payload;
+        toggleAdminView(state, action:PayloadAction<boolean>){
+            state.isAdminView = action.payload;
         },
     }
 });
 
-export const {setUser, setAllUsers, updateAccountStatus, clearUser, removeUser, toggleAdminView } = userSlice.actions;
+export const {setUser, setAllUsers, updateUser, updateAccountStatus, clearUser, removeUser, toggleAdminView } = userSlice.actions;
 export default userSlice.reducer;

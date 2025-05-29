@@ -1,17 +1,20 @@
 import axios from "axios";
 import { useState } from "react";
-import { ActionIcon, Anchor, Flex, Loader, Pagination, Table, Text } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Anchor, Flex, Group, Loader, Pagination, Select, Table, Text, TextInput, Title } from "@mantine/core";
+import { IconFilter, IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { removeUser, toggleAdminView } from "@/store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useGetAllUsers } from "@/hooks/UseGetAllUser";
+import { TUsers } from "@/Types";
 
 const AdminControls = () => {
   const dispatch = useDispatch();
   const jumpTo = useNavigate();
   const {allUsers, isLoading} = useGetAllUsers();
+  const [sortOption, setSortOption] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const deleteUser = async (id: string) => {
     const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -27,9 +30,34 @@ const AdminControls = () => {
     }
   }
 
+  const getAccountType = (user : TUsers) => {
+    return user.isAdmin ? 'Admin' : user.isBusiness ? 'Business' : 'Regular';
+  }
+
+  const sortedUsers = allUsers ? [...allUsers].sort((a,b) => {
+    if (sortOption === 'last-name-asc'){
+      return a.name.last.localeCompare(b.name.last);
+    } else if (sortOption === 'last-name-desc') {
+      return b.name.last.localeCompare(a.name.last);
+    } else if (sortOption === "account-type"){
+      return getAccountType(a).localeCompare(getAccountType(b));
+    } else if (sortOption === 'date-created-old'){
+      return a.createdAt.localeCompare(b.createdAt)
+    } else if (sortOption === 'date-created-new'){
+      return b.createdAt.localeCompare(a.createdAt)
+    }
+    return 0
+  }) : [];
+
+  const filteredUsers = sortedUsers ? sortedUsers.filter((user) => {
+    const accountType = getAccountType(user);
+    const userSearchFields = `${user.name.first} ${user.name.last} ${user.email} ${accountType}`;
+    return userSearchFields.toLowerCase().includes(searchTerm.toLowerCase());
+  }) : [];
+  
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 30;
-  const paginatedUsers = allUsers ? allUsers.slice(
+  const paginatedUsers = filteredUsers ? filteredUsers.slice(
   (currentPage - 1) * usersPerPage, currentPage * usersPerPage) : [];
 
   if (isLoading) {
@@ -42,7 +70,35 @@ const AdminControls = () => {
   }
 
   return (
-      <Flex direction="column" w="100%">
+    <Flex direction="column" w="100%">
+      <Title fz={30} w="fit" mx="auto" my="sm">Admin Control Table</Title>
+      <Group mx="auto" my="md" >
+        <Select
+          data={[
+            {value: "last-name-asc", label: "Last Name (A-Z)"},
+            {value: "last-name-desc", label: "Last Name (Z-A)"},
+            {value: "account-type", label: "Account Type"},
+            {value: "date-created-old", label: "Date Created (Oldest First)"},
+            {value: "date-created-new", label: "Date Created (Latest First)"}
+            ]}
+          placeholder="Sort By"
+          value={sortOption}
+          onChange={(value) => {
+            setSortOption(value || "");
+            setCurrentPage(1);
+          }}
+          miw={210}
+          rightSection={<IconFilter/>}
+        />
+        <TextInput
+          placeholder="Search"
+          rightSection={<IconSearch/>}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          miw={210}
+        />
+      </Group>
+      
       <Table.ScrollContainer minWidth={800}>
       <Table verticalSpacing="sm" maw='75%' mx='auto' >
         <Table.Thead>
@@ -101,11 +157,11 @@ const AdminControls = () => {
                 </ActionIcon>              
             </Table.Td>
 
-            <Table.Td styles={{td: {borderRight: '1px solid #eee' }}}>
+          {!user.isAdmin && <Table.Td styles={{td: {borderRight: '1px solid #eee' }}}>
                 <ActionIcon size={30} variant="outline" color="red" onClick={() => {deleteUser(user._id)}}>
                   <IconTrash size={25} stroke={1.5}/>
                 </ActionIcon>              
-            </Table.Td>
+            </Table.Td>}
 
           </Table.Tr>))}
         </Table.Tbody>
