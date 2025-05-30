@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
 import { IconBrandInstagram, IconBrandLinkedin, IconBrandWhatsapp, IconShare } from "@tabler/icons-react";
+import { toast } from "react-toastify";
 
 export function CardDetails() {
     const isMobile = useMediaQuery('(max-width: 700px)');
@@ -21,8 +22,8 @@ export function CardDetails() {
             try {
                 const response = await getCard();
                 setCard(response.data);
-            } catch (error) {
-                console.error(error);
+            } catch (error : any) {
+                toast.error(error, {position: "bottom-right"});
             }
         }  
     loadCard();
@@ -30,7 +31,7 @@ export function CardDetails() {
     
     
     return ( 
-        <Container style={{width: isMobile ? "90%" : "30%"}}>
+        <Container style={{width: isMobile ? "90%" : "40%"}}>
             <Title ta="center" my={10}>Card Details</Title>
             <Card shadow="sm" padding="lg" radius="md" withBorder mx="auto">
                 <Card.Section>
@@ -47,30 +48,30 @@ export function CardDetails() {
                 </Card.Section> 
 
                 <Card.Section p={15} >
-                    <Text  size="xl" fw={500}>{card?.title}</Text>
-
-                    <Text  size="lg" w='90%'>{card?.description}</Text>
+                    <Text  size="xl" fw={500}><strong>Title:</strong> {card?.title}</Text>
+                    <Text size='md'><strong>Subtitle:</strong> {card?.subtitle}</Text>
                     <hr/>
-                    <Text size='md'>{card?.subtitle}</Text>
-
-                    <Flex justify='space-between' mt={20}>
-                        <List style={{wordBreak: 'break-word'}} w='40%'>
+                    <Text  size="lg" w='90%'><strong>Description:</strong> {card?.description}</Text>
+                    <hr/>
+                    <Flex justify='space-between' mt={10} gap={10} direction='column'>
+                        <List style={{wordBreak: 'break-word'}} w='100%'>
                             <Title order={4}>Contact</Title>
-                            <hr/>
-                            <ListItem>Phone: {card?.phone}</ListItem>
-                            <ListItem>Email: {card?.email}</ListItem>
-                            <ListItem >Website: {card?.web}</ListItem>
+                            
+                            <ListItem><strong>Phone:</strong> {card?.phone}</ListItem>
+                            <ListItem><strong>Email:</strong> {card?.email}</ListItem>
+                            <ListItem ><strong>Website:</strong> {card?.web}</ListItem>
                         </List> 
-                                
-                        <List style={{wordBreak: 'break-word'}} w='40%'>
+                               
+                        <List style={{wordBreak: 'break-word'}} w='100%'>
+                            <hr/> 
                             <Title order={4}>Address</Title>
-                            <hr/>
-                            <ListItem>Country: {card?.address.country}</ListItem>
-                            <ListItem>City: {card?.address.city}</ListItem>
-                            <ListItem>State: {card?.address.state}</ListItem>
-                            <ListItem>Street: {card?.address.street}</ListItem>
-                            <ListItem>Number: {card?.address.houseNumber}</ListItem>
-                            <ListItem>Zipcode: {card?.address.zip}</ListItem>
+                            
+                            <ListItem><strong>Country:</strong> {card?.address.country}</ListItem>
+                            <ListItem><strong>City:</strong> {card?.address.city}</ListItem>
+                            <ListItem><strong>State:</strong> {card?.address.state}</ListItem>
+                            <ListItem><strong>Street:</strong> {card?.address.street}</ListItem>
+                            <ListItem><strong>Number:</strong> {card?.address.houseNumber}</ListItem>
+                            <ListItem><strong>Zipcode:</strong> {card?.address.zip}</ListItem>
                         </List>
                     </Flex>
 
