@@ -21,6 +21,7 @@ export function Hero() {
     <Box mb={20} >
       <BackgroundImage
         src={heroImage}
+        aria-label='office background image'
         mih={500}
         style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}
       >
@@ -69,20 +70,19 @@ export function Hero() {
                 />
               </Flex>
 
-              {/* Conditinally Create Listing */}
-              {isBusiness || isAdmin && 
-                <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='md' fz={25}>     
-                Create A Listing
-                </Button>}
-              
+            {/* Conditinally Register */}
             {!user &&  
               <Title order={2} ta='center' style={{color: "lightgreen"}}>
               <Link to="register" style={{textDecoration: "", color: "lightgreen"}}>Register</Link> now and start your journey
               </Title>}
-              
+
+            {/* Conditinally Create Listing */}
+            {isBusiness || isAdmin && 
+              <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='md' fz={25}>     
+              Create A Listing
+              </Button>}
           </Flex>
         </Center>
-
       </BackgroundImage>
     </Box>
   );
