@@ -76,8 +76,8 @@ export function Hero() {
                 </Button>}
               
             {!user &&  
-              <Title order={2} ta='center' c='green'>
-              <Link to="register" style={{textDecoration: "", color: "green"}}>Register</Link> now and start your journey
+              <Title order={2} ta='center' style={{color: "lightgreen"}}>
+              <Link to="register" style={{textDecoration: "", color: "lightgreen"}}>Register</Link> now and start your journey
               </Title>}
               
           </Flex>
