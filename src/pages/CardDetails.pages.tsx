@@ -1,11 +1,10 @@
 import { TCards } from "@/Types";
-import { Card, Text, Image, List, ListItem, Flex, Title, Container, Button, Group } from "@mantine/core";
+import { Card, Text, Image, List, ListItem, Flex, Title, Container} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
-import { IconBrandInstagram, IconBrandLinkedin, IconBrandWhatsapp, IconShare } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 
 export function CardDetails() {
@@ -54,18 +53,16 @@ export function CardDetails() {
                     <Text  size="lg" w='90%'><strong>Description:</strong> {card?.description}</Text>
                     <hr/>
                     <Flex justify='space-between' mt={10} gap={10} direction='column'>
-                        <List style={{wordBreak: 'break-word'}} w='100%'>
+                        <List spacing={5} style={{wordBreak: 'break-word'}} w='100%'>
                             <Title order={4}>Contact</Title>
-                            
                             <ListItem><strong>Phone:</strong> {card?.phone}</ListItem>
                             <ListItem><strong>Email:</strong> {card?.email}</ListItem>
                             <ListItem ><strong>Website:</strong> {card?.web}</ListItem>
                         </List> 
-                               
-                        <List style={{wordBreak: 'break-word'}} w='100%'>
-                            <hr/> 
+
+                        <List spacing={5} style={{wordBreak: 'break-word'}} w='100%'>
+                            <hr/>
                             <Title order={4}>Address</Title>
-                            
                             <ListItem><strong>Country:</strong> {card?.address.country}</ListItem>
                             <ListItem><strong>City:</strong> {card?.address.city}</ListItem>
                             <ListItem><strong>State:</strong> {card?.address.state}</ListItem>
@@ -73,19 +70,25 @@ export function CardDetails() {
                             <ListItem><strong>Number:</strong> {card?.address.houseNumber}</ListItem>
                             <ListItem><strong>Zipcode:</strong> {card?.address.zip}</ListItem>
                         </List>
-                    </Flex>
 
+                        {card && 
+                        <iframe
+                            title="Google Map"
+                            width="100%"
+                            height="300"
+                            style={{ border: 0, borderRadius: "10px", marginTop: "0rem" }}
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(
+                            `${card.address.street} ${card.address.houseNumber}, ${card.address.city}, ${card.address.country}`
+                            )}&output=embed`}
+                            allowFullScreen
+                        />}
+                    </Flex>     
                 </Card.Section>
+
+                <Flex my={5} justify="space-evenly">
+                        {card && <FavoritesButton card={card} />}
+                </Flex>
             </Card>
-
-            <Group my={10} gap={10} justify="space-evenly">
-                {card && <FavoritesButton card={card} />}
-                <Button variant='outline'><IconShare/></Button>
-                <Button variant='outline' c="green"><IconBrandWhatsapp/></Button>
-                <Button variant='outline'><IconBrandLinkedin/></Button> 
-                <Button variant='outline'><IconBrandInstagram/></Button> 
-            </Group>
-
         </Container>
     )
 }

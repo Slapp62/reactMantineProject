@@ -50,11 +50,6 @@ export function MiniCard({ card } : { card: TCards }) {
             <Text fw='bold'>More Info</Text>
           </Button>
 
-          {!myListingsPage && 
-            <Button bg='darkgreen'>
-              <Text fw='bold'>Apply</Text>
-            </Button>}
-
           {loggedIn && myListingsPage && 
           <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>
             <IconEdit/>
@@ -68,12 +63,8 @@ export function MiniCard({ card } : { card: TCards }) {
 
         <Group my={10} justify='center' >
           {loggedIn && <FavoritesButton card={card} />}
-          <Button variant='outline' radius="xl" c="blue"><IconShare/></Button>
-          <Button variant='outline' radius="xl" c="green"><IconBrandWhatsapp/></Button>
         </Group>
-          
-        
-
+  
       </Card.Section>
     </Card>
   );

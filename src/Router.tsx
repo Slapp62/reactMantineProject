@@ -10,7 +10,7 @@ import { MyCards } from './pages/MyListings.pages';
 import { CardDetails } from './pages/CardDetails.pages';
 import { LoginPage } from './pages/LoginPage/Login.pages';
 import RouteGuard from './RouteGuard';
-import { EditProfile } from './pages/EditProfile.pages';
+import { EditProfile } from './pages/EditProfilePage/EditProfile.pages';
 import { CreateCard } from './pages/CreateCard.pages';
 import { EditCard } from './pages/EditCard.pages';
 

@@ -4,12 +4,18 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   ...mantine,
 
+  // Global rules
+  {
+    rules: {
+      'max-lines': ['error', 200], // This applies to all files
+    },
+  },
+
   // Override for story files
   {
     files: ['**/*.story.tsx'],
     rules: {
       'no-console': 'off',
-      'max-lines': ['error', 200], // ✅ Fix: must be an array
     },
   },
 

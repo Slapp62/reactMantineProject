@@ -17,8 +17,8 @@ export type TCards = {
     country: string;
     city: string;
     street: string;
-    houseNumber: number;
-    zip: number;
+    houseNumber: number | string;
+    zip: number | string;
     _id: string;
   };
   bizNumber?: number;
@@ -57,8 +57,8 @@ export type TUsers = {
     country: string;
     city: string;
     street: string;
-    houseNumber: string;
-    zip: string;
+    houseNumber: string | number;
+    zip: string | number;
     _id: string;
   };
   isAdmin: boolean;

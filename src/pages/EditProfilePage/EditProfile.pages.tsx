@@ -1,104 +1,10 @@
-import { TUsers } from "@/Types";
 import { Button, Fieldset, Flex, Image, TextInput, Title, Text, Modal, Group } from "@mantine/core";
-import { joiResolver } from "@hookform/resolvers/joi";
 import { IconPhone } from "@tabler/icons-react";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useForm, FieldValues} from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { editProfileSchema } from "@/validationRules/editProfile.joi";
-import { clearUser, setUser, updateAccountStatus, updateUser } from "@/store/userSlice";
-import { useCleanedUserData } from "@/hooks/CleanedUserData";
-import { RootState } from "@/store/store";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEditProfile } from "./useEditProfile";
 
 
 export function EditProfile() {
-    const jumpTo = useNavigate();
-    const {id} = useParams();
-    const isMobile = useMediaQuery('(max-width: 700px)');
-    const [isDisabled, setDisabled] = useState(true);
-    const dispatch = useDispatch();
-    const cleanedUserData = useCleanedUserData();
-
-    const [opened, { open, close }] = useDisclosure(false);
-
-    const isAdminView = useSelector((state:RootState) => state.userSlice.isAdminView);
-    const currentUser = useSelector((state:RootState) => state.userSlice.user);
-    const allUsers = useSelector((state:RootState) => state.userSlice.allUsers);
-    const paramsUser = allUsers?.find((account) => account._id === id);
-        
-    const userData = isAdminView ? paramsUser : currentUser;
-    
-    const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, trigger} = useForm<TUsers>({
-        mode: 'all',
-        resolver: joiResolver(editProfileSchema),
-        defaultValues: userData ? cleanedUserData(userData) : {},
-    });
-
-    useEffect(() => {
-        const defaultUserValues = userData ? cleanedUserData(userData) : {};
-        reset(defaultUserValues);
-    }, [reset, userData])
-    
-    const onSubmit = async (data:FieldValues) => {
-        if (!data.password) {
-            delete data.password
-        }
-        data.address.houseNumber = Number(data.address.houseNumber);
-        data.address.zip = Number(data.address.zip);
-        try {
-            const response = await axios.put(
-                `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`, data);
-
-            if (response.status === 200) {
-                toast.success('Profile Updated Successfully!', {position: `bottom-right`});
-
-                const updatedUser = response.data;
-                {!isAdminView && dispatch(setUser(updatedUser))}
-                if (allUsers){
-                    dispatch(updateUser(updatedUser))
-                }
-                reset(cleanedUserData(updatedUser));
-            }
-        } catch (error: any) {    
-            toast.error(`Update Failed! ${error.message}`, {position: `bottom-right`});
-        }
-    }
-    
-    
-    const updateBusinessStatus = async () => {
-        const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
-        axios.defaults.headers.common['x-auth-token'] = token;
-        try {
-            const response = await axios.patch(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`);
-            if (response.status === 200){
-                dispatch(updateAccountStatus(!userData?.isBusiness));
-                toast.success('Account Status Updated', {position: 'bottom-right'});
-            }
-        } catch (error : any) {
-            toast.error(`Account Status Update Failed! ${error.message}`, {position: `bottom-right`});
-            if (error.response){
-                toast.error(`Account Status Update Failed! ${error.response.data.message}`, {position: `bottom-right`});
-            }
-        }
-    }
-
-    const deleteUser = async () => {
-        const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
-        axios.defaults.headers.common['x-auth-token'] = token;
-        try {
-            const response = await axios.delete(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`);
-            if (response.status === 200){
-                !isAdminView ? dispatch(clearUser()) : jumpTo('/admin');
-                toast.warning('Account Deleted.', {position: 'bottom-right'})
-            }
-        } catch (error : any) {
-            toast.error(`Account Deletion Failed! ${error.message}`, {position: `bottom-right`});
-        }
-    }
+    const {isAdminView, userData, register, handleSubmit, onSubmit, trigger, errors, isDirty, isValid, isDisabled, setDisabled, updateBusinessStatus, isMobile, opened, open, close, deleteUser} = useEditProfile();
 
     return(
         <>
