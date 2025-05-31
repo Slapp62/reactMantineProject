@@ -9,16 +9,31 @@ import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export function HomePage() {
-  
   const {cards, isLoading} = useGetCards();
-
   const cardsRef = useRef<HTMLDivElement>(null);
-
   const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
-  
+  const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
+
+  const sortedCards = cards ? [...cards].sort((a, b) => {
+    if (sortOption === 'title-asc'){
+      return a.title.localeCompare(b.title);
+    } else if (sortOption === 'title-desc') {
+      return b.title.localeCompare(a.title);
+    } else if (sortOption === 'date-created-old'){
+      if (a.createdAt && b.createdAt){
+        return a.createdAt?.localeCompare(b.createdAt)
+      }
+    } else if (sortOption === 'date-created-new'){
+      if (a.createdAt && b.createdAt){
+        return b.createdAt?.localeCompare(a.createdAt)
+      }
+    }
+    return 0
+  }) : [];
+
   const filterSearch = () => {
-    return cards ? 
-      cards.filter((card:TCards) => {
+    return sortedCards ? 
+      sortedCards.filter((card:TCards) => {
         return (
           card.title.toLowerCase().includes(searchWord.toLowerCase()) ||
           card.subtitle.toLowerCase().includes(searchWord.toLowerCase()) ||

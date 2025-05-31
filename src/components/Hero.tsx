@@ -1,18 +1,22 @@
-import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Grid, Title } from '@mantine/core';
-import { Search } from './Navbar/Search';
+import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Title, Select, TextInput, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import heroImage from '/office-hero.jpg'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { setSortOption } from '@/store/cardSlice';
+import { IconFilter, IconSearch } from '@tabler/icons-react';
+import { setSearchWord } from '@/store/searchSlice';
 
 export function Hero() {
     const jumpTo = useNavigate();
     const isMobile = useMediaQuery('(max-width: 700px)');
-
+    const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.userSlice.user);
     const isBusiness = user?.isBusiness;
-    
+    const isAdmin = user?.isAdmin;
+    const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
+
     return (
     <Box mb={20} >
       <BackgroundImage
@@ -28,23 +32,54 @@ export function Hero() {
             gap={20}
             p={30}
             style={{zIndex: 2}}
-            w='100%'
-            
+            w="100%"
             >
-            
+              {/* Conditional Welcome Message */}
               {!user && <Title ta='center' c='white'>Find your next career!</Title>}
-
               {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back, {user.name.first}</Text>}
 
-              <Flex w='100%' gap={10} align='center' style={{flexDirection: isMobile ? 'column' : 'row'}}>
-                <Text fz={20} c='white'>Search for a listing:</Text>
-                <Flex flex={1}><Search/></Flex>
+              {/* Search & Sort */}
+              <Flex gap={10} align='center' style={{flexDirection: isMobile ? 'column' : 'row'}}>
+
+                {/* Search */}
+                <TextInput
+                  w='65%'
+                  variant='default'
+                  rightSection={<IconSearch/>}
+                  placeholder="Search for a listing..."
+                  
+                  onChange={(e)=> {dispatch(setSearchWord(e.target.value))}}
+                />
+
+                {/* Sort */}
+                <Select 
+                  w='65%'
+                  placeholder='Sort By'
+                  rightSection={<IconFilter/>}
+                  data={[
+                    {value: "title-asc", label: "Title (A-Z)"},
+                    {value: "title-desc", label: "Title (Z-A)"},
+                    {value: "date-created-old", label: "Date Created (Oldest First)"},
+                    {value: "date-created-new", label: "Date Created (Latest First)"}
+                  ]}
+                  value={sortOption}
+                  onChange={(value) => {
+                    dispatch(setSortOption(value || ''));
+                  }}
+                />
               </Flex>
-              
-              {isBusiness && 
-                <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='lg' fz={25}>     
-                Create a listing
+
+              {/* Conditinally Create Listing */}
+              {isBusiness || isAdmin && 
+                <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='md' fz={25}>     
+                Create A Listing
                 </Button>}
+              
+            {!user &&  
+              <Title order={2} ta='center' c='green'>
+              <Link to="register" style={{textDecoration: "", color: "green"}}>Register</Link> now and start your journey
+              </Title>}
+              
           </Flex>
         </Center>
 

@@ -3,9 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type CardState = {
     cards: TCardsArray | null;
+    sortOption: string;
 }
 const initialState:CardState = {
     cards: null as TCardsArray | null,
+    sortOption: '',
 }
 
 const cardSlice = createSlice({
@@ -54,9 +56,12 @@ const cardSlice = createSlice({
             if (alreadyLiked && thisGlobalCard) {
                 thisGlobalCard.likes = thisGlobalCard?.likes?.filter((likes) => likes !== userID)
             }
+        },
+        setSortOption: (state, action:PayloadAction<string>) => {
+            state.sortOption = action.payload   
         }
     },
 });
 
-export const {setCardsSlice, addCard, editCard, removeCard, addLike, removeLike} = cardSlice.actions;
+export const {setCardsSlice, addCard, editCard, removeCard, addLike, removeLike, setSortOption} = cardSlice.actions;
 export default cardSlice.reducer;
