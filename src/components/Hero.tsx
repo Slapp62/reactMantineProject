@@ -1,4 +1,4 @@
-import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Title, Select, TextInput, Group } from '@mantine/core';
+import { BackgroundImage, Center, Text, Box, Overlay, Button, Flex, Title, Select, TextInput } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useDispatch, useSelector } from 'react-redux';
