@@ -19,7 +19,8 @@ export const useAdminControls = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
     // delete user
-    const deleteUser = async (id: string) => {
+    const deleteUser = async (id?: string) => {
+        if (!id) {return toast.error('User ID not found.', {position: 'bottom-right'})};
         const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
         axios.defaults.headers.common['x-auth-token'] = token;
         try {
@@ -30,9 +31,7 @@ export const useAdminControls = () => {
             }
         } catch (error : any) {
             toast.error(`Account Deletion Failed! ${error.message}`, {position: `bottom-right`});
-        } finally {
-            close();
-        }
+        } 
     }
 
     // get account type for filter

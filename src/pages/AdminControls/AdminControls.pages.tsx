@@ -1,7 +1,6 @@
-import { ActionIcon, Anchor, Button, Flex, Group, Loader, Modal, Pagination, Select, Table, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Anchor, Flex, Group, Loader, Pagination, Select, Table, Text, TextInput, Title } from "@mantine/core";
 import { IconFilter, IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
 import { toggleAdminView } from "@/store/userSlice";
-
 import { useAdminControls } from "./useAdminControls";
 import { useState } from "react";
 import { DeleteUserModal } from "@/components/DeleteUserModal";

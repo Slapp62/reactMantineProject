@@ -11,14 +11,15 @@ export const DeleteUserModal = ({opened, close, deleteUser, id}: DeleteUserModal
 
     const handleDelete = () => {
         deleteUser(id);
+        close();
     }
 
     return (
         <Modal centered opened={opened} onClose={close} title="Confirmation">
-            <Text>Are you sure you want to delete your account?</Text>
+            <Text>Are you sure you want to delete this account?</Text>
             <Group mt={20} justify="center">
                 <Button color="red" onClick={handleDelete}>Yes, Delete It</Button>
-                <Button variant="outline" onClick={close}>No, I'll Stay</Button>
+                <Button variant="outline" onClick={close}>No, Take Me Back</Button>
             </Group>
         </Modal>
     )
