@@ -1,32 +1,16 @@
-import { TCards } from "@/Types";
 import { Card, Text, Image, List, ListItem, Flex, Title, Container} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import axios from "axios";
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
-import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export function CardDetails() {
     const isMobile = useMediaQuery('(max-width: 700px)');
-    const [card, setCard] = useState<TCards>();
     const {id} = useParams();
-
-    const getCard = async () => {
-        return await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`);
-    }
-
-    useEffect(() => {
-        const loadCard = async () => {
-            try {
-                const response = await getCard();
-                setCard(response.data);
-            } catch (error : any) {
-                toast.error(error, {position: "bottom-right"});
-            }
-        }  
-    loadCard();
-    }, [])
+    const user = useSelector((state:RootState) => state.userSlice.user);
+    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+    const card = allCards?.find((card) => card._id === id);
     
     
     return ( 
@@ -85,9 +69,10 @@ export function CardDetails() {
                     </Flex>     
                 </Card.Section>
 
-                <Flex my={5} justify="space-evenly">
-                        {card && <FavoritesButton card={card} />}
-                </Flex>
+            {user && 
+            <Flex my={5} justify="space-evenly">
+                    {card && <FavoritesButton card={card} />}
+            </Flex>}
             </Card>
         </Container>
     )

@@ -10,12 +10,14 @@ import { useGetAllUsers } from "@/hooks/UseGetAllUser";
 import { TUsers } from "@/Types";
 
 const AdminControls = () => {
+  // set up hooks
   const dispatch = useDispatch();
   const jumpTo = useNavigate();
   const {allUsers, isLoading} = useGetAllUsers();
   const [sortOption, setSortOption] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
+  // delete user
   const deleteUser = async (id: string) => {
     const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
     axios.defaults.headers.common['x-auth-token'] = token;
@@ -30,10 +32,12 @@ const AdminControls = () => {
     }
   }
 
+  // get account type for filter
   const getAccountType = (user : TUsers) => {
     return user.isAdmin ? 'Admin' : user.isBusiness ? 'Business' : 'Regular';
   }
 
+  // filter users
   const sortedUsers = allUsers ? [...allUsers].sort((a,b) => {
     if (sortOption === 'last-name-asc'){
       return a.name.last.localeCompare(b.name.last);
@@ -49,17 +53,20 @@ const AdminControls = () => {
     return 0
   }) : [];
 
+  // search on filtered users
   const filteredUsers = sortedUsers ? sortedUsers.filter((user) => {
     const accountType = getAccountType(user);
     const userSearchFields = `${user.name.first} ${user.name.last} ${user.email} ${accountType}`;
     return userSearchFields.toLowerCase().includes(searchTerm.toLowerCase());
   }) : [];
   
+  // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 30;
   const paginatedUsers = filteredUsers ? filteredUsers.slice(
   (currentPage - 1) * usersPerPage, currentPage * usersPerPage) : [];
 
+  // loader
   if (isLoading) {
       return  <>
         <Flex align="center" direction="column" mt={100}>

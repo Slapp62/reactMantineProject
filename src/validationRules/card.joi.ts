@@ -1,35 +1,79 @@
 import Joi from 'joi'
 
 const cardSchema = Joi.object({
-    title: Joi.string().min(2).max(256).required(),
-    subtitle: Joi.string().min(2).max(256).required(),
-    description: Joi.string().min(2).max(1024).required(),
-    
-    phone: Joi.string().min(9).max(11).required().pattern(/^(?:\+972-?|0)?5\d([- ]?)\d{7}$/).messages({
-        'string.pattern.base':'Please enter a valid Israeli phone number.'
+    title: Joi.string().min(2).max(256).required().messages({
+        'string.min':'Title is too short',
+        'string.empty':'This field is required',
+        'any.required': 'Field is required',
     }),
 
-    email: Joi.string().min(5).email({tlds: {allow:false}}).
+    subtitle: Joi.string().min(2).max(256).required().messages({
+        'string.min':'Subtitle is too short',
+        'string.empty':'This field is required',
+        'any.required': 'Field is required',
+    }),
+
+    description: Joi.string().min(2).max(1024).required().messages({
+        'string.min':'Description is too short',
+        'string.empty':'This field is required',
+        'any.required': 'Field is required',
+    }),
     
-    required().messages({
-        'string.min':'Email is too short',
+    phone: Joi.string().required().pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/).messages({
+            'string.empty':'This field is required',
+            'string.pattern.base':'Phone must be a valid Israeli phone number.',
+    }),
+
+    email: Joi.string().email({tlds: {allow:false}}).required().messages({
+        'string.email':'Please enter a valid email',
+        'string.empty':'This field is required',
         'any.required': 'Email is required',
     }),
 
-    web: Joi.string().min(14).uri().allow('').optional(),
+    web: Joi.string().uri().allow('').optional().messages({
+        'string.uri':'Please enter a valid URL',
+    }),
 
     image: Joi.object({
-        url: Joi.string().uri().allow('').optional(),
-        alt: Joi.string().min(2).max(256).allow('').optional(),
+        url: Joi.string().uri().allow('').messages({
+            'string.uri':'Please enter a valid URL',
+        }),
+        alt: Joi.string().min(2).max(256).allow('').messages({
+            'string.min':'Alt text is too short',
+        }),
     }).optional(),
 
     address: Joi.object({
-        state: Joi.string().allow('').optional(),
-        country: Joi.string().min(2).required(),
-        city: Joi.string().min(2).required(),
-        street: Joi.string().min(2).required(),
-        houseNumber: Joi.string().pattern(/^\d+$/).min(1).required(),
-        zip: Joi.string().pattern(/^\d+$/).allow('').optional(),
+        state: Joi.string().min(2).max(256).allow('').optional().messages({
+            'string.min':'State is too short',
+        }),
+        country: Joi.string().min(2).max(256).required().messages({
+            'string.min':'Country is too short',
+            'string.empty':'This field is required',
+            'any.required':'Country is required',
+        }),
+        city: Joi.string().min(2).max(256).required().messages({
+            'string.min':'City is too short',
+            'string.empty': 'This field is required',
+            'any.required':'City is required',
+        }),
+        street: Joi.string().min(2).max(256).required().messages({
+            'string.min':'Street is too short',
+            'string.empty': 'This field is required',
+            'any.required':'Street is required',
+        }),
+        houseNumber: Joi.string().pattern(/^\d+$/).min(2).max(256).required().messages({
+            'string.pattern.base':'House Number must be a number',
+            'string.min':'House Number is too short',
+           'string.empty': 'This field is required',
+            'any.required':'House Number is required',
+        }),
+        zip: Joi.string().pattern(/^\d+$/).min(2).max(256).required().messages({
+            'string.pattern.base':'Zipcode must be a number',
+            'string.min':'Zipcode is too short',
+            'string.empty': 'This field is required',
+            'any.required':'Zipcode is required',
+        }),        
     }),
     
 })

@@ -1,5 +1,6 @@
 import { MiniCard } from "@/components/Cards/MiniCard";
 import { Hero } from "@/components/Hero";
+import { useGetCards } from "@/hooks/UseGetCards";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
 import { Box, Center, Flex, Loader, Title } from "@mantine/core";
@@ -10,7 +11,7 @@ import { useSelector } from "react-redux"
 import { toast } from "react-toastify";
 
 export function MyCards()  {
-    const cards = useSelector((state:RootState) => state.cardSlice.cards);
+    const {cards, isLoading} = useGetCards();
     const user = useSelector((state:RootState) => state.userSlice.user);
     const [userCards, setUserCards] = useState<TCards[]>([]);
     
@@ -37,16 +38,16 @@ export function MyCards()  {
         }
     }, [cards, user]);
     
-    if (!userCards) {
-        return  <>
-          <Box pos='relative'>
-            <Hero/>
-          </Box>
-    
-          <Center>
-            <Loader color="cyan" size="xl" mt={30}/>
-          </Center>
-        </>      
+    if (isLoading || !userCards) {
+    return <>
+      <Box pos='relative'>
+        <Hero/>
+      </Box>
+
+      <Center>
+        <Loader color="cyan" size="xl" mt={30}/>
+      </Center>
+    </>      
     }
 
     return (

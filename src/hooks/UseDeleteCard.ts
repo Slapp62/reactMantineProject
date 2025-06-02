@@ -36,9 +36,7 @@ export function useDeleteCard() {
                 toast.success(`Card deleted successfully`, {position: 'bottom-right'});
             }
 
-        } catch (error:any){
-            console.log(error, error.response.data, error.request, error.message);
-            
+        } catch (error:any){ 
             toast.error(`Error deleting card: ${error}`, {position: 'bottom-right'});
         }
         }

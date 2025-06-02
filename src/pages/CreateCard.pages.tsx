@@ -53,19 +53,23 @@ export function CreateCard() {
             <Flex direction='column' gap={10} py={10} mx="auto" style={{width: isMobile ? '90%' : '50%'}}>
                 <Fieldset legend='Job Info'>
                     <TextInput label='Title'
+                        required
                         {...register('title')}
                         error= {errors.title?.message}
                     />
                     <TextInput label='Subtitle'
+                        required
                         {...register('subtitle')}
                         error= {errors.subtitle?.message}
                     />
                     <Textarea label='Description'
+                        required
                         {...register('description')}
                         error= {errors.description?.message}
                     />
 
                     <TextInput label='Phone' 
+                        required
                         {...register('phone', {
                             onChange: (e) => {
                                 e.target.value = e.target.value.replace(/[^\d-]/g, '');
@@ -74,6 +78,7 @@ export function CreateCard() {
                         error= {errors.phone?.message}
                     />
                     <TextInput label='Email'
+                        required
                         {...register('email')}
                         error= {errors.email?.message}
                     />
@@ -97,18 +102,22 @@ export function CreateCard() {
                         error= {errors.address?.state?.message}
                     />
                     <TextInput label='Country' 
+                        required
                         {...register('address.country')}
                         error= {errors.address?.country?.message}
                     />
                     <TextInput label='City' 
+                        required
                         {...register('address.city')}
                         error= {errors.address?.city?.message}
                     />
                     <TextInput label='Street' 
+                        required
                         {...register('address.street')}
                         error= {errors.address?.street?.message}
                     />
                     <TextInput label='House Number' 
+                        required
                         {...register('address.houseNumber', {
                             onChange: (e) => {
                             e.target.value = e.target.value.replace(/\D/g, '');
@@ -117,6 +126,7 @@ export function CreateCard() {
                         error= {errors.address?.houseNumber?.message}
                     />
                     <TextInput label='Zipcode' 
+                        required
                         {...register('address.zip', {
                             onChange: (e) => {
                             e.target.value = e.target.value.replace(/\D/g, '');

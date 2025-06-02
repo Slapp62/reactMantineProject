@@ -1,16 +1,30 @@
 import { MiniCard } from "@/components/Cards/MiniCard"
+import { Hero } from "@/components/Hero";
+import { useGetCards } from "@/hooks/UseGetCards";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
-import { Flex, Title } from "@mantine/core"
+import { Box, Center, Flex, Loader, Title } from "@mantine/core"
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux"
 
 export function FavoriteCards()  {
 
-    const cards = useSelector((state:RootState) => state.cardSlice.cards);
+    const {cards, isLoading} = useGetCards();
     const user = useSelector((state:RootState) => state.userSlice.user);
 
     const likedCards = cards?.filter((card) => card.likes?.includes(`${user?._id}`))
+
+    if (isLoading) {
+        return <>
+          <Box pos='relative'>
+            <Hero/>
+          </Box>
+    
+          <Center>
+            <Loader color="cyan" size="xl" mt={30}/>
+          </Center>
+        </>      
+    }
 
     return (
         <Flex m={20} direction='column' align='center' gap={20}>

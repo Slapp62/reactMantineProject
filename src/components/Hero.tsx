@@ -77,7 +77,7 @@ export function Hero() {
               </Title>}
 
             {/* Conditinally Create Listing */}
-            {isBusiness || isAdmin && 
+            {(isBusiness || isAdmin) && 
               <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='md' fz={25}>     
               Create A Listing
               </Button>}
