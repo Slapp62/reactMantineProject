@@ -1,6 +1,7 @@
-import { Button, Fieldset, Flex, Image, TextInput, Title, Text, Modal, Group } from "@mantine/core";
+import { Button, Fieldset, Flex, Image, TextInput, Title, Text} from "@mantine/core";
 import { IconPhone } from "@tabler/icons-react";
 import { useEditProfile } from "./useEditProfile";
+import { DeleteUserModal } from "@/components/DeleteUserModal";
 
 
 export function EditProfile() {
@@ -157,13 +158,7 @@ export function EditProfile() {
                 </Flex>
             </Flex>
 
-            <Modal centered opened={opened} onClose={close} title="Confirmation">
-                <Text>Are you sure you want to delete your account?</Text>
-                <Group mt={20} justify="center">
-                    <Button color="red" onClick={deleteUser}>Yes, Delete It</Button>
-                    <Button variant="outline" onClick={close}>No, I'll Stay</Button>
-                </Group>
-            </Modal>
+            <DeleteUserModal opened={opened} close={close} deleteUser={deleteUser} />
         </> 
     )
 }
