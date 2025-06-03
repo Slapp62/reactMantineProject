@@ -5,8 +5,8 @@ import { DeleteUserModal } from "@/components/DeleteUserModal";
 
 
 export function EditProfile() {
-    const {isAdminView, userData, register, handleSubmit, onSubmit, trigger, errors, isDirty, isValid, isDisabled, setDisabled, updateBusinessStatus, isMobile, opened, open, close, deleteUser} = useEditProfile();
-
+    const {isSubmitting,isAdminView, userData, register, handleSubmit, onSubmit, trigger, errors, isDirty, isValid, isDisabled, setDisabled, updateBusinessStatus, isMobile, opened, open, close, deleteUser} = useEditProfile();
+    
     return(
         <>
             <Flex mt={20} direction='column' align='center' gap={20} >
@@ -122,10 +122,19 @@ export function EditProfile() {
 
                             <Fieldset legend="Change Account Type">
                                 <Flex align="center" direction="column" justify="center" gap={10}>
-                                    <Text>Account Type: {userData?.isBusiness ? <strong>Business User</strong> : <strong>Regular User</strong>}</Text>
-                                    <Button size="xs" disabled={isDisabled} onClick={() => updateBusinessStatus()}>
+                                    <Text>
+                                        Account Type: {userData?.isAdmin ? <strong>Admin User</strong> 
+                                        : userData?.isBusiness ? <strong>Business User</strong> 
+                                        : <strong>Regular User</strong>}
+                                    </Text>
+
+                                    {!userData?.isAdmin && 
+                                    <Button size="xs" disabled={isDisabled} loading={isSubmitting} onClick={() => updateBusinessStatus()}>
                                         <Text fz="sm">Change</Text> 
-                                    </Button>
+                                    </Button>}
+
+                                    {userData?.isAdmin && 
+                                    <Text size="xs" c='red'>Cannot change or delete an admin user</Text>}
                                 </Flex>
                             </Fieldset>
 
@@ -151,7 +160,8 @@ export function EditProfile() {
                                 <Button
                                     disabled={!isValid || !isDirty}
                                     type="submit"
-                                > Update Info </Button>
+                                > Update Info 
+                                </Button>
                             </Flex>
                         </Flex>
                     </form>

@@ -12,8 +12,8 @@ export const cleanedUserData = (user: TUsers) => ({
             alt: user.image?.alt || '',
         },
         address: {
-            state: user.address?.state || '',
             country: user.address?.country,
+            state: user.address?.state === "not defined" || !user.address?.state ? '' : user.address?.state,
             city: user.address?.city,
             street: user.address?.street,
             houseNumber: String(user.address?.houseNumber),
@@ -33,8 +33,8 @@ export const cleanedCardData = (card: TCards) => ({
             alt: card.image?.alt || '',
         },
         address: {
-            state: card.address?.state || '',
             country: card.address?.country,
+            state: card.address?.state || '',
             city: card.address?.city,
             street: card.address?.street,
             houseNumber: String(card.address?.houseNumber),

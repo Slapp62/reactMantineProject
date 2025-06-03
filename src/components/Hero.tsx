@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import heroImage from '/office-hero.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import { setSortOption } from '@/store/cardSlice';
-import { IconFilter, IconSearch } from '@tabler/icons-react';
+import { IconCards, IconFilter, IconNews, IconSearch } from '@tabler/icons-react';
 import { setSearchWord } from '@/store/searchSlice';
 
 export function Hero() {
@@ -33,18 +33,18 @@ export function Hero() {
             gap={20}
             p={30}
             style={{zIndex: 2}}
-            w="100%"
+            w='100%'
             >
               {/* Conditional Welcome Message */}
               {!user && <Title ta='center' c='white'>Find your next career!</Title>}
               {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back, {user.name.first}</Text>}
 
               {/* Search & Sort */}
-              <Flex gap={10} align='center' style={{flexDirection: isMobile ? 'column' : 'row'}}>
+              <Flex gap={10} align='center' w={isMobile ? '100%' : '100%'} direction= {isMobile ? 'column' : 'row'}>
 
                 {/* Search */}
                 <TextInput
-                  w='65%'
+                  w={isMobile ? '100%' : '50%'}
                   variant='default'
                   rightSection={<IconSearch/>}
                   placeholder="Search for a listing..."
@@ -54,7 +54,7 @@ export function Hero() {
 
                 {/* Sort */}
                 <Select 
-                  w='65%'
+                  w={isMobile ? '100%' : '50%'}
                   placeholder='Sort By'
                   rightSection={<IconFilter/>}
                   data={[
@@ -78,8 +78,16 @@ export function Hero() {
 
             {/* Conditinally Create Listing */}
             {(isBusiness || isAdmin) && 
-              <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='md' fz={25}>     
-              Create A Listing
+              <Button onClick={() => jumpTo('create-card')} 
+                style={{width: isMobile ? '100%' : '100%'}} 
+                w={isMobile ? '80%' : '85%'} 
+                mx='auto' variant='filled' 
+                color='blue' 
+                size='md' 
+                fz={20}
+                rightSection={<IconCards/>}
+                >     
+                Create A Listing
               </Button>}
           </Flex>
         </Center>

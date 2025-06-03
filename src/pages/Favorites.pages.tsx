@@ -3,12 +3,14 @@ import { Hero } from "@/components/Hero";
 import { useGetCards } from "@/hooks/UseGetCards";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
-import { Box, Center, Flex, Loader, Title } from "@mantine/core"
+import { Box, Button, Center, Flex, Loader, Title } from "@mantine/core"
+import { IconMoodSad } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom";
 
 export function FavoriteCards()  {
-
+    const jumpTo = useNavigate();
     const {cards, isLoading} = useGetCards();
     const user = useSelector((state:RootState) => state.userSlice.user);
 
@@ -24,6 +26,19 @@ export function FavoriteCards()  {
             <Loader color="cyan" size="xl" mt={30}/>
           </Center>
         </>      
+    }
+
+    if (likedCards?.length === 0) {
+        return (
+            <Flex mt={20} direction='column' align='center' gap={20}>
+                <Box mt={20}><IconMoodSad color="gray" size={100}/></Box>
+                <Title my={10} c='gray'>No Favorites Found</Title>
+                
+                <Button onClick={() => jumpTo('/')} variant='filled' color='blue' size='lg' fz={20}>     
+                    Find Some Favorites
+                </Button>
+            </Flex>
+        )
     }
 
     return (

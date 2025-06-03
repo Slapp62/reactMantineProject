@@ -49,7 +49,7 @@ import { AvatarIcon } from './Avatar';
           <Flex justify="space-between" h='100%' >
             <Logo/>
 
-            <Group visibleFrom="sm">
+            <Group visibleFrom="md" gap={5}>
               <Link  to="/" className={classes.link}>
                 <Text fw={700}>Home</Text>
               </Link>
@@ -69,8 +69,6 @@ import { AvatarIcon } from './Avatar';
               {user?.isAdmin && <Link to='/admin' className={classes.link}>
                 <Text fw={700}>Admin Controls</Text>
               </Link>}
-
-              
             </Group>
 
             <Group>
@@ -84,7 +82,7 @@ import { AvatarIcon } from './Avatar';
               <Group >
                 {loggedIn && <AvatarIcon/>}
                 <LightDarkToggle />
-                <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
+                <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="md" />
               </Group>
               
             </Group>

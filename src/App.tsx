@@ -1,6 +1,6 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core';
-import { Router } from './Router';
+import { Router } from './Routing/Router';
 import { theme } from './theme';
 import './App.css'; // or './styles/global.css'
 import { Provider } from 'react-redux';

@@ -9,10 +9,12 @@ import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
 import { useRef } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
 export function RegisterForm()  {
+    const jumpTo = useNavigate();
     const registerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 700px)');
 
@@ -30,6 +32,7 @@ export function RegisterForm()  {
                 'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users', 
                 data)
             if (response.status === 201) {
+                jumpTo('login');
                 toast.success('Registered!')
             }
 

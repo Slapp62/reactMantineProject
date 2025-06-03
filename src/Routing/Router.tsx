@@ -1,18 +1,18 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage } from './pages/Home.pages';
-import { Layout } from './components/Layout';
-import AdminControls from './pages/AdminControls/AdminControls.pages';
-import Error404 from './pages/404.pages';
-import About from './pages/About.pages';
-import { RegisterForm } from './pages/Register.pages';
-import { FavoriteCards } from './pages/Favorites.pages';
-import { MyCards } from './pages/MyListings.pages';
-import { CardDetails } from './pages/CardDetails.pages';
-import { LoginPage } from './pages/LoginPage/Login.pages';
+import { HomePage } from '../pages/Home.pages';
+import { Layout } from './Layout';
+import AdminControls from '../pages/AdminControls/AdminControls.pages';
+import Error404 from '../pages/404.pages';
+import About from '../pages/About.pages';
+import { RegisterForm } from '../pages/Register.pages';
+import { FavoriteCards } from '../pages/Favorites.pages';
+import { MyCards } from '../pages/MyListings.pages';
+import { CardDetails } from '../pages/CardDetails.pages';
+import { LoginPage } from '../pages/LoginPage/Login.pages';
 import RouteGuard from './RouteGuard';
-import { EditProfile } from './pages/EditProfilePage/EditProfile.pages';
-import { CreateCard } from './pages/CreateCard.pages';
-import { EditCard } from './pages/EditCard.pages';
+import { EditProfile } from '../pages/EditProfilePage/EditProfile.pages';
+import { CreateCard } from '../pages/CreateCard.pages';
+import { EditCard } from '../pages/EditCard.pages';
 
 const router = createBrowserRouter([
   {

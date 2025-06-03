@@ -44,6 +44,8 @@ export function EditCard() {
             }
         } catch (error) {
                 toast.error(`Update Failed! ${error}`, {position: `bottom-right`});
+                console.log(error, error.response.data, error.request, error.message);
+                
         } 
     }
 
@@ -155,6 +157,7 @@ export function EditCard() {
                         />
                         <TextInput 
                             label='Zipcode' 
+                            required
                             disabled={isDisabled}
                             {...register('address.zip', {
                                 onChange: (e) => {

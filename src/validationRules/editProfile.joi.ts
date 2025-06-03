@@ -48,13 +48,13 @@ const editProfileSchema = Joi.object({
             'string.empty':'Street is required',
             'any.required':'Street is required',
         }),
-        houseNumber: Joi.string().pattern(/^\d+$/).min(2).max(256).required().messages({
+        houseNumber: Joi.string().pattern(/^\d+$/).min(1).max(15).required().messages({
             'string.pattern.base':'House Number must be a number',
             'string.min':'House Number is too short',
             'string.empty':'House Number is required',
             'any.required':'House Number is required',
         }),
-        zip: Joi.string().pattern(/^\d+$/).min(2).max(256).required().messages({
+        zip: Joi.string().pattern(/^\d+$/).min(1).max(15).required().messages({
             'string.pattern.base':'Zipcode must be a number',
             'string.min':'Zipcode is too short',
             'string.empty':'Zipcode is required',

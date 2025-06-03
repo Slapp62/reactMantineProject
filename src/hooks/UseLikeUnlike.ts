@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { addLike, removeLike } from "@/store/cardSlice";
 import { RootState } from "@/store/store";
 import { TCards } from "@/Types";
@@ -16,22 +15,15 @@ export function useLikeUnlike() {
     const toggleLike = useCallback(async (card:TCards) => {
         //get current liked state
         const thisGlobalCard = globalCards?.find((globalCard) => globalCard._id === card._id);
-        const isLiked = thisGlobalCard?.likes?.includes(`${user?._id}`)
-        console.log(user?._id);
-        
-        console.log(thisGlobalCard?.likes);
-        
+        const isLiked = thisGlobalCard?.likes?.includes(`${user?._id}`)        
 
         // update Redux slice
             if (isLiked){ 
                 dispatch(removeLike({card, userID:user!._id!}))
-                toast.warning('Card Unliked!', {position: 'bottom-right'});
-                console.log('dispatched new unlike');
-                
+                toast.warning('Card Unliked!');                
             } else {
                 dispatch(addLike({card, userID:user!._id!}));
-                toast.success('Card Liked!', {position: 'bottom-right'});
-                console.log('dispatched new like');
+                toast.success('Card Liked!');
             }
 
         // update API
@@ -43,13 +35,10 @@ export function useLikeUnlike() {
                 await axios.patch(
                     `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${card._id}`,
                 );
-                console.log('dispatched new api like/unlike');
-
             } catch (error) {
                 toast.error(`Error liking/unliking card:${  error}`);
             }
-
-            console.log(!isLiked);
+            
             return !isLiked;
     }, [dispatch, user, globalCards]);
     

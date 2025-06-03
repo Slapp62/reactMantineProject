@@ -1,13 +1,13 @@
 import { cleanedUserData } from "@/hooks/getCleanedData";
 import { RootState } from "@/store/store";
-import { setUser, updateUser, updateAccountStatus, clearUser } from "@/store/userSlice";
+import { setUser, updateUser, clearUser } from "@/store/userSlice";
 import { TUsers } from "@/Types";
 import { editProfileSchema } from "@/validationRules/editProfile.joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm, FieldValues, set } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ export const useEditProfile = () => {
     const isMobile = useMediaQuery('(max-width: 700px)');
     const [isDisabled, setDisabled] = useState(true);
     const dispatch = useDispatch();
-
+    const [isSubmitting, setSubmitting] = useState(false);
     const [opened, { open, close }] = useDisclosure(false);
 
     const isAdminView = useSelector((state:RootState) => state.userSlice.isAdminView);
@@ -27,19 +27,24 @@ export const useEditProfile = () => {
     const paramsUser = allUsers?.find((account) => account._id === id);
         
     const userData = isAdminView ? paramsUser : currentUser;
-    
+
     const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, trigger} = useForm<TUsers>({
         mode: 'all',
         resolver: joiResolver(editProfileSchema),
         defaultValues: userData ? cleanedUserData(userData) : {},
     });
+    
 
     useEffect(() => {
-        const defaultUserValues = userData ? cleanedUserData(userData) : {};
-        reset(defaultUserValues);
+        if (userData) {
+            const defaultUserValues = cleanedUserData(userData);
+            reset(defaultUserValues)
+        };
+        
     }, [reset, userData])
-    
+   
     const onSubmit = async (data:FieldValues) => {
+
         if (!data.password) {
             delete data.password
         }
@@ -50,15 +55,20 @@ export const useEditProfile = () => {
                 `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`, data);
 
             if (response.status === 200) {
-                toast.success('Profile Updated Successfully!', {position: `bottom-right`});
-
                 const updatedUser = response.data;
-                {!isAdminView && dispatch(setUser(updatedUser))}
+
+                // if not admin view, update the current user information
+                if (!isAdminView) {
+                    dispatch(setUser(updatedUser))
+                }
+                
+                // update the user in the allUsers array regardless of admin view or not
                 if (allUsers){
                     dispatch(updateUser(updatedUser))
                 }
                 reset(cleanedUserData(updatedUser));
                 setDisabled(true);
+                toast.success('Profile Updated Successfully!', {position: `bottom-right`});
             }
         } catch (error: any) {    
             toast.error(`Update Failed! ${error.message}`, {position: `bottom-right`});
@@ -72,8 +82,13 @@ export const useEditProfile = () => {
         try {
             const response = await axios.patch(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`);
             if (response.status === 200){
-                dispatch(updateAccountStatus(!userData?.isBusiness));
-                toast.success('Account Status Updated', {position: 'bottom-right'});
+                const updatedUser = response.data;
+                setSubmitting(true);
+                setTimeout(() => {
+                    dispatch(updateUser(updatedUser));
+                    toast.success('Account Status Updated');
+                    setSubmitting(false);
+                }, 2000);
             }
         } catch (error : any) {
             toast.error(`Account Status Update Failed! ${error.message}`, {position: `bottom-right`});
@@ -97,5 +112,5 @@ export const useEditProfile = () => {
         }
     }
     
-    return {isAdminView,userData, register, handleSubmit, onSubmit, trigger, errors, isDirty, isValid, isDisabled, setDisabled, updateBusinessStatus, isMobile, opened, open, close, deleteUser}
+    return {isSubmitting, isAdminView,userData, register, handleSubmit, onSubmit, trigger, errors, isDirty, isValid, isDisabled, setDisabled, updateBusinessStatus, isMobile, opened, open, close, deleteUser}
 }

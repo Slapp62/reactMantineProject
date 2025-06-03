@@ -10,16 +10,9 @@ export function useDeleteCard() {
     const globalCards = useSelector((state:RootState) => state.cardSlice.cards)
 
     const deleteCard = async (card:TCards) => {
-        // update Redux
-        
-        const thisCard = globalCards?.find((globalCard) => globalCard._id === card._id )
-        dispatch(removeCard(thisCard!))
-        
-
         // update API
         try {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-
             const response = await axios.delete(
                 `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${card._id}`, 
                 {
@@ -31,15 +24,17 @@ export function useDeleteCard() {
                     }
                 }
             )
-
             if (response.status === 200){
+                // update Redux
+                const thisCard = globalCards?.find((globalCard) => globalCard._id === card._id )
+                dispatch(removeCard(thisCard!))
                 toast.success(`Card deleted successfully`, {position: 'bottom-right'});
             }
 
         } catch (error:any){ 
             toast.error(`Error deleting card: ${error}`, {position: 'bottom-right'});
         }
-        }
+    }
 
     return deleteCard;
 }
