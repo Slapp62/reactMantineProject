@@ -1,24 +1,10 @@
 import { FC } from 'react';
-import {
-  Container,
-  Title,
-  Text,
-  Grid,
-  Image,
-  Paper,
-  Group,
-  ThemeIcon,
-  Button,
-  SimpleGrid,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
-import {
-  IconBriefcase,
-  IconUsers,
-  IconWorld,
-} from '@tabler/icons-react';
+import {Container,Title,Text,Grid,Image,Paper,Group,ThemeIcon,Button,SimpleGrid,Textarea,TextInput,}from '@mantine/core';
+import {IconBriefcase,IconUsers,IconWorld,} from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
+import emailjs from '@emailjs/browser';
+import { toast } from 'react-toastify';
+
 
 const AboutPage: FC = () => {
   const form = useForm({
@@ -34,6 +20,22 @@ const AboutPage: FC = () => {
       subject: (value) => value.trim().length === 0,
     },
   });
+
+const handleSubmit = (values: typeof form.values) => {
+  // Replace with your EmailJS service ID, template ID, and public key
+  const serviceID = 'service_5zblm38';
+  const templateID = 'template_itsqp9u';
+  const publicKey = 'a6IxywqmqlHjFDfxD';
+
+  emailjs.send(serviceID, templateID, values, publicKey)
+    .then(() => {
+      toast.success('Message sent successfully!');
+      form.reset();
+    })
+    .catch((error:any) => {
+      toast.error(`Failed to send the message, please try again. ${error.message}`);
+    });
+};
 
   return (
     <Container size="md" py="xl">
@@ -72,7 +74,7 @@ const AboutPage: FC = () => {
       </Group>
 
 
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         `<Title
           order={2}
           size="h1"
