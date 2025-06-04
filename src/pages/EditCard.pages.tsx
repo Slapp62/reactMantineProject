@@ -44,7 +44,6 @@ export function EditCard() {
             }
         } catch (error) {
                 toast.error(`Update Failed! ${error}`, {position: `bottom-right`});
-                console.log(error, error.response.data, error.request, error.message);
                 
         } 
     }
