@@ -1,34 +1,107 @@
-# Mantine Vite template
+# 📘 React Mantine School Project
 
-## Features
+A modern React frontend application built with **React**, **Vite**, **TypeScript**, and **Mantine UI**. This project interfaces with the school's API to display and manage a collection of cards, featuring search, sorting, animations, and pagination. It allows a user to create basic account, as well as a business account with card creating capabilities. There is also built-in account management features for users and admins.
 
-This template comes with the following features:
+---
 
-- [PostCSS](https://postcss.org/) with [mantine-postcss-preset](https://mantine.dev/styles/postcss-preset)
+## 🚀 Features
+
+- 🔧 **Built with Vite** for lightning-fast development
+- 🎨 **UI powered by Mantine** – clean, responsive, and accessible
+- 🔎 **Search functionality** by title, subtitle, or description
+- ↕️ **Sorting** by title (A–Z or Z–A) and date created (newest/oldest)
+- 📄 **Pagination** (12 cards per page)
+- 💫 **Framer Motion animations** for smooth UI transitions
+- 🗂️ **Redux state management** for search and sort control
+- 🧠 **TypeScript** for strict type safety and developer experience
+
+---
+
+## 🏗️ Project Structure
+
+```
+reactMantineProject/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── Cards/
+│   │   │   └── MiniCard.tsx
+│   │   └── Hero.tsx
+│   ├── hooks/
+│   │   └── useGetCards.ts
+│   ├── store/
+│   │   ├── cardSlice.ts
+│   │   ├── searchSlice.ts
+│   │   └── store.ts
+│   ├── types/
+│   │   └── index.ts
+│   ├── pages/
+│   │   └── HomePage.tsx
+│   ├── App.tsx
+│   └── main.tsx
+├── .gitignore
+├── index.html
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
+
+---
+
+## 📦 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Slapp62/reactMantineProject.git
+cd reactMantineProject
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the development server
+
+```bash
+npm run dev
+```
+
+Visit `http://localhost:5173` in your browser.
+
+---
+
+## ⚙️ Available Scripts
+
+- `npm run dev` – Start the development server
+- `npm run build` – Build the app for production
+- `npm run preview` – Preview the production build locally
+
+---
+
+## 📄 Public Site
+
+The site is currently deployed live at `https://reactMantineProject.onrender.com`
+
+---
+
+## 📄 License
+
+This project is for academic purposes only and not intended for production use.
+
+---
+
+## 🙌 Acknowledgements
+
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Mantine UI](https://mantine.dev/)
+- [Redux](https://redux.js.org/)
+- [Framer Motion](https://www.framer.com/motion/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Storybook](https://storybook.js.org/)
-- [Vitest](https://vitest.dev/) setup with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
-- ESLint setup with [eslint-config-mantine](https://github.com/mantinedev/eslint-config-mantine)
 
-## npm scripts
+---
 
-## Build and dev scripts
-
-- `dev` – start development server
-- `build` – build production version of the app
-- `preview` – locally preview production build
-
-### Testing scripts
-
-- `typecheck` – checks TypeScript types
-- `lint` – runs ESLint
-- `prettier:check` – checks files with Prettier
-- `vitest` – runs vitest tests
-- `vitest:watch` – starts vitest watch
-- `test` – runs `vitest`, `prettier:check`, `lint` and `typecheck` scripts
-
-### Other scripts
-
-- `storybook` – starts storybook dev server
-- `storybook:build` – build production storybook bundle to `storybook-static`
-- `prettier:write` – formats all files with Prettier
+_Developed by Elazar Lapp._
