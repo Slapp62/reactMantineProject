@@ -79,8 +79,7 @@ export function Hero() {
             {/* Conditinally Create Listing */}
             {(isBusiness || isAdmin) && 
               <Button onClick={() => jumpTo('create-card')} 
-                style={{width: isMobile ? '100%' : '100%'}} 
-                w={isMobile ? '80%' : '85%'} 
+                fullWidth 
                 mx='auto' variant='filled' 
                 color='blue' 
                 size='md' 
