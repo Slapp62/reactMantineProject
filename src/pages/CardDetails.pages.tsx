@@ -11,7 +11,8 @@ export function CardDetails() {
     const user = useSelector((state:RootState) => state.userSlice.user);
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
     const card = allCards?.find((card) => card._id === id);
-    
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
     
     return ( 
         <Container style={{width: isMobile ? "90%" : "40%"}}>
@@ -61,11 +62,12 @@ export function CardDetails() {
                             width="100%"
                             height="300"
                             style={{ border: 0, borderRadius: "10px", marginTop: "0rem" }}
-                            src={`https://www.google.com/maps?q=${encodeURIComponent(
-                            `${card.address.street} ${card.address.houseNumber}, ${card.address.city}, ${card.address.country}`
-                            )}&output=embed`}
+                            src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
+                                `${card.address.street} ${card.address.houseNumber}, ${card.address.city}, ${card.address.country}`
+                            )}`}
                             allowFullScreen
-                        />}
+                            referrerPolicy="no-referrer-when-downgrade"
+                            />}
                     </Flex>     
                 </Card.Section>
 
