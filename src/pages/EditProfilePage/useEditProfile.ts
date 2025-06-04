@@ -7,7 +7,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useForm, FieldValues, set } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -22,8 +22,9 @@ export const useEditProfile = () => {
     const [opened, { open, close }] = useDisclosure(false);
 
     const isAdminView = useSelector((state:RootState) => state.userSlice.isAdminView);
-    const currentUser = useSelector((state:RootState) => state.userSlice.user);
+
     const allUsers = useSelector((state:RootState) => state.userSlice.allUsers);
+    const currentUser = useSelector((state:RootState) => state.userSlice.user);     
     const paramsUser = allUsers?.find((account) => account._id === id);
         
     const userData = isAdminView ? paramsUser : currentUser;
@@ -61,11 +62,12 @@ export const useEditProfile = () => {
                 if (!isAdminView) {
                     dispatch(setUser(updatedUser))
                 }
-                
+
                 // update the user in the allUsers array regardless of admin view or not
-                if (allUsers){
+                if (isAdminView) {
                     dispatch(updateUser(updatedUser))
                 }
+                
                 reset(cleanedUserData(updatedUser));
                 setDisabled(true);
                 toast.success('Profile Updated Successfully!', {position: `bottom-right`});

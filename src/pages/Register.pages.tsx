@@ -32,7 +32,7 @@ export function RegisterForm()  {
                 'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users', 
                 data)
             if (response.status === 201) {
-                jumpTo('login');
+                jumpTo('/login');
                 toast.success('Registered!')
             }
 

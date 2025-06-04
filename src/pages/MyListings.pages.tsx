@@ -60,7 +60,7 @@ export function MyCards()  {
                 <Box mt={20}><IconMoodSad color="gray" size={100}/></Box>
                 <Title my={10} c='gray'>No Listings Found</Title>
                 
-                <Button onClick={() => jumpTo('create-card')} variant='filled' color='blue' size='lg' fz={20}>     
+                <Button onClick={() => jumpTo('/create-card')} variant='filled' color='blue' size='lg' fz={20}>     
                     Create A Listing
                 </Button>
             </Flex>

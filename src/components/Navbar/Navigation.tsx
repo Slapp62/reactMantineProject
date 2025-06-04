@@ -29,6 +29,8 @@ import { AvatarIcon } from './Avatar';
     const logoutHandler = () => {
       jumpTo('/');
       dispatch(clearUser());
+      sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
       toast.success('Logged out succesfully!', {position: 'bottom-right'});
     }
 
@@ -139,7 +141,11 @@ import { AvatarIcon } from './Avatar';
                 </Link>}
 
               {loggedIn && 
-                <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
+                <Button variant="outline" onClick={() => {
+                    logoutHandler(); 
+                    closeDrawer()}}
+                >Logout
+                </Button>}
             </Flex>
           </ScrollArea>
         </Drawer>
