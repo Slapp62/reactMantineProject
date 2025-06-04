@@ -1,12 +1,15 @@
-import { ActionIcon, Anchor, Flex, Group, Loader, Pagination, Select, Table, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Anchor, Flex, Loader, Pagination, Select, Table, Text, TextInput, Title } from "@mantine/core";
 import { IconFilter, IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
 import { toggleAdminView } from "@/store/userSlice";
 import { useAdminControls } from "./useAdminControls";
 import { useState } from "react";
 import { DeleteUserModal } from "@/components/DeleteUserModal";
+import { useMediaQuery } from "@mantine/hooks";
 
 const AdminControls = () => {
     const [id, setId] = useState('');
+    const isMobile = useMediaQuery('(max-width: 700px)');
+
     const {opened, open, close, dispatch, allUsers, isLoading, deleteUser, paginatedUsers, currentPage, setCurrentPage, usersPerPage, sortOption, setSortOption, searchTerm, setSearchTerm, jumpTo} = useAdminControls();
 
     // loader
@@ -23,7 +26,7 @@ const AdminControls = () => {
     <>
         <Flex direction="column" w="100%">
         <Title fz={30} w="fit" mx="auto" my="sm">Admin Control Table</Title>
-        <Group mx="auto" my="md" >
+        <Flex direction={isMobile ? "column" : "row"} gap={5} mx="auto" my="md" >
             <Select
             data={[
                 {value: "last-name-asc", label: "Last Name (A-Z)"},
@@ -48,7 +51,7 @@ const AdminControls = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             miw={210}
             />
-        </Group>
+        </Flex>
         
         <Table.ScrollContainer minWidth={800}>
         <Table verticalSpacing="sm" maw='75%' mx='auto' >

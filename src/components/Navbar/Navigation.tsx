@@ -31,7 +31,7 @@ import { AvatarIcon } from './Avatar';
       dispatch(clearUser());
       sessionStorage.removeItem('token');
       localStorage.removeItem('token');
-      toast.success('Logged out succesfully!', {position: 'bottom-right'});
+      toast.success('Logged out successfully!');
     }
 
     const [scrolled, setScrolled] = useState(false);
