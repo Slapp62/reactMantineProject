@@ -22,9 +22,8 @@ export const useEditProfile = () => {
     const [opened, { open, close }] = useDisclosure(false);
 
     const isAdminView = useSelector((state:RootState) => state.userSlice.isAdminView);
-
+    const currentUser = useSelector((state:RootState) => state.userSlice.user);
     const allUsers = useSelector((state:RootState) => state.userSlice.allUsers);
-    const currentUser = useSelector((state:RootState) => state.userSlice.user);     
     const paramsUser = allUsers?.find((account) => account._id === id);
         
     const userData = isAdminView ? paramsUser : currentUser;
@@ -62,12 +61,11 @@ export const useEditProfile = () => {
                 if (!isAdminView) {
                     dispatch(setUser(updatedUser))
                 }
-
-                // update the user in the allUsers array regardless of admin view or not
-                if (isAdminView) {
+                
+                // if it is admin view, update the selected user information
+                if (isAdminView){
                     dispatch(updateUser(updatedUser))
                 }
-                
                 reset(cleanedUserData(updatedUser));
                 setDisabled(true);
                 toast.success('Profile Updated Successfully!', {position: `bottom-right`});
@@ -87,7 +85,14 @@ export const useEditProfile = () => {
                 const updatedUser = response.data;
                 setSubmitting(true);
                 setTimeout(() => {
-                    dispatch(updateUser(updatedUser));
+                    // if not admin view, update the current user information
+                    if (!isAdminView) {
+                        dispatch(setUser(updatedUser))
+                    }
+                    // if it is admin view, update the selected user information
+                    if (isAdminView){
+                        dispatch(updateUser(updatedUser))
+                    }
                     toast.success('Account Status Updated');
                     setSubmitting(false);
                 }, 2000);
