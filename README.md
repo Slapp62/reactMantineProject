@@ -1,6 +1,6 @@
 # 📘 React Mantine School Project
 
-A modern React frontend application built with **React**, **Vite**, **TypeScript**, and **Mantine UI**. This project interfaces with the school's API to display and manage a collection of cards, featuring search, sorting, animations, and pagination. It allows a user to create basic account, as well as a business account with card creating capabilities. There is also built-in account management features for users and admins.
+A modern React frontend application built with **React**, **Vite**, **TypeScript**, and **Mantine UI**. This project interfaces with the school's API to display and manage a collection of cards, featuring search, sorting, animations, and pagination. It allows users to create basic accounts, as well as business accounts with card creation capabilities. There are also built-in account management features for users and admins.
 
 ---
 
@@ -14,6 +14,38 @@ A modern React frontend application built with **React**, **Vite**, **TypeScript
 - 💫 **Framer Motion animations** for smooth UI transitions
 - 🗂️ **Redux state management** for search and sort control
 - 🧠 **TypeScript** for strict type safety and developer experience
+- 👤 **User Authentication** with support for basic and business accounts
+- 📝 **Card Creation** capabilities for business accounts
+- 🔐 **Admin Panel** for managing users and content
+
+---
+
+## 🖥️ Interface Overview
+
+### Home Page
+
+- Displays a list of cards fetched from the school's API.
+- Includes a search bar to filter cards by title, subtitle, or description.
+- Sorting options to arrange cards by title or creation date.
+- Pagination controls to navigate through multiple pages of cards.
+- Smooth animations using Framer Motion for enhanced user experience.
+
+### User Authentication
+
+- Users can register and log in to their accounts.
+- Supports both basic and business account types.
+- Business accounts have additional privileges, such as card creation.
+
+### Card Management
+
+- Business users can create, edit, and delete cards.
+- Cards include fields like title, subtitle, description, and creation date.
+
+### Admin Panel
+
+- Admin users have access to a dedicated panel.
+- Manage user accounts, including promoting or demoting users.
+- Oversee all cards and perform administrative actions as needed.
 
 ---
 
@@ -23,22 +55,63 @@ A modern React frontend application built with **React**, **Vite**, **TypeScript
 reactMantineProject/
 ├── public/
 ├── src/
-│   ├── components/
-│   │   ├── Cards/
-│   │   │   └── MiniCard.tsx
-│   │   └── Hero.tsx
-│   ├── hooks/
-│   │   └── useGetCards.ts
-│   ├── store/
-│   │   ├── cardSlice.ts
-│   │   ├── searchSlice.ts
-│   │   └── store.ts
-│   ├── types/
-│   │   └── index.ts
-│   ├── pages/
-│   │   └── HomePage.tsx
-│   ├── App.tsx
-│   └── main.tsx
+├── assets/
+├── components/
+│ ├── Buttons/
+│ │ └── AddToFavorites.tsx
+│ ├── Cards/
+│ │ └── MiniCard.tsx
+│ ├── ComponentStyles/
+│ │ ├── FooterStyles.module.css
+│ │ ├── LightDarkToggle.module.css
+│ │ ├── Logo.module.css
+│ │ ├── Navigation.module.css
+│ ├── Navbar/
+│ │ ├── DeleteUserModal.tsx
+│ │ ├── Footer.tsx
+│ │ ├── Hero.tsx
+│ │ └── LightDarkToggle.tsx
+├── hooks/
+│ ├── getCleanedData.ts
+│ ├── useAuthRedirect.ts
+│ ├── useDeleteCard.ts
+│ ├── useDeleteProfile.ts
+│ ├── useGetAllUsers.ts
+│ ├── useGetCards.ts
+│ └── useLikeUnlike.ts
+├── pages/
+│ ├── AdminControls/
+│ │ ├── AdminControls.page.tsx
+│ │ └── useAdminControls.ts
+│ ├── EditProfilePage/
+│ │ ├── EditProfile.page.tsx
+│ │ └── useEditProfile.ts
+│ ├── LoginPage/
+│ │ └── Login.page.tsx
+│ ├── 404.page.tsx
+│ ├── About.page.tsx
+│ ├── CardDetails.page.tsx
+│ ├── CreateCard.page.tsx
+│ ├── EditCard.page.tsx
+│ ├── Favorites.page.tsx
+│ ├── Home.page.tsx
+│ ├── MyListings.page.tsx
+│ └── Register.page.tsx
+├── Routing/
+│ ├── Layout.tsx
+│ ├── RouteGuard.tsx
+│ └── Router.tsx
+├── store/
+│ ├── cardSlice.ts
+│ ├── searchSlice.ts
+│ ├── store.ts
+│ └── validationRules.ts
+├── themes.ts
+├── App.tsx
+├── main.tsx
+├── Types/
+│ └── index.ts
+├── .env
 ├── .gitignore
 ├── index.html
 ├── package.json
@@ -81,7 +154,7 @@ Visit `http://localhost:5173` in your browser.
 
 ---
 
-## 📄 Public Site
+## 🌐 Public Site
 
 The site is currently deployed live at `https://reactMantineProject.onrender.com`
 
