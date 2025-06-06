@@ -4,20 +4,32 @@ import {IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { useDeleteCard } from '@/hooks/UseDeleteCard';
 import { FavoritesButton } from '../Buttons/AddToFavorites';
 import { useDisclosure } from '@mantine/hooks';
+import translateCard from '../TranslateCard';
+import { useState } from 'react';
+import { BsTranslate } from 'react-icons/bs';
 
 export function MiniCard({ card } : { card: TCards }) {
-  const [opened, { open, close }] = useDisclosure(false);
-  
-  const deleteCard = useDeleteCard();
-  const jumpTo = useNavigate();
-  const location = useLocation();
-  const myListingsPage = location.pathname === '/my-listings';
+    const [opened, { open, close }] = useDisclosure(false);
 
-  const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
+    const deleteCard = useDeleteCard();
+    const jumpTo = useNavigate();
+    const location = useLocation();
+    const myListingsPage = location.pathname === '/my-listings';
+    const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
+    
+    const [translatedText, setTranslatedText] = useState<string[] | null>(null);
+    const cardString = `${card.title} \n ${card.subtitle} \n ${card.description}`
+    const containsHebrew = RegExp(/[\u0590-\u05FF]/).test(cardString);
+    
+    const handleTranslate = async (cardString: string) => {
+        const cardStringArr = cardString.split(' \n ');
+        const aiOutput = await translateCard(cardStringArr);                
+        setTranslatedText(aiOutput);
+    }
+    
 
   return (
     <>
@@ -35,12 +47,15 @@ export function MiniCard({ card } : { card: TCards }) {
         </Card.Section> 
 
         <Card.Section px={15}>
-            <Text my="xs" fw={500}>{card.title}</Text>
+            <Text my="xs" fw={500}>{translatedText ? translatedText[0] : card.title} </Text>
         
             <Box>
-            <Text truncate w={250}>{card.description}</Text>
+            <Text truncate w={250}>
+                <Text>{translatedText ? translatedText[1] : card.subtitle}</Text>
+            </Text>
             <hr/>
-            <Text>{card.subtitle}</Text>
+                {translatedText ? translatedText[2] : card.description} 
+            
             <List>
                 <ListItem>{card.phone}</ListItem>
                 <ListItem>{card.email}</ListItem>
@@ -51,6 +66,11 @@ export function MiniCard({ card } : { card: TCards }) {
             <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
                 <Text fw='bold'>More Info</Text>
             </Button>
+
+            {containsHebrew &&    
+            <Button rightSection={<BsTranslate/>} variant='outline' fz={12} onClick={() => handleTranslate(cardString)}>
+                <Text fw='bold'>Translate</Text>
+            </Button>}
 
             {loggedIn && myListingsPage && 
             <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>

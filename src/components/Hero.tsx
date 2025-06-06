@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import heroImage from '/office-hero.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import { setSortOption } from '@/store/cardSlice';
-import { IconCards, IconFilter, IconNews, IconSearch } from '@tabler/icons-react';
+import { IconCards, IconFilter, IconSearch } from '@tabler/icons-react';
 import { setSearchWord } from '@/store/searchSlice';
 
 export function Hero() {

@@ -10,13 +10,12 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 
 export default function App() {
-  
 
   return (
     <MantineProvider theme={theme}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-           <InnerApp/>
+            <InnerApp/>
         </PersistGate>
       </Provider>
     </MantineProvider>
@@ -25,5 +24,5 @@ export default function App() {
 
 function InnerApp() {
   useAuthInit();
-  return <Router />
+  return <Router/>
 }

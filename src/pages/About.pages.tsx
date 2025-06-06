@@ -21,21 +21,21 @@ const AboutPage: FC = () => {
     },
   });
 
-const handleSubmit = (values: typeof form.values) => {
-  // Replace with your EmailJS service ID, template ID, and public key
-  const serviceID = 'service_5zblm38';
-  const templateID = 'template_itsqp9u';
-  const publicKey = 'a6IxywqmqlHjFDfxD';
+    const handleSubmit = (values: typeof form.values) => {
+    // Replace with your EmailJS service ID, template ID, and public key
+    const serviceID = 'service_5zblm38';
+    const templateID = 'template_itsqp9u';
+    const publicKey = 'a6IxywqmqlHjFDfxD';
 
-  emailjs.send(serviceID, templateID, values, publicKey)
-    .then(() => {
-      toast.success('Message sent successfully!');
-      form.reset();
-    })
-    .catch((error:any) => {
-      toast.error(`Failed to send the message, please try again. ${error.message}`);
-    });
-};
+    emailjs.send(serviceID, templateID, values, publicKey)
+        .then(() => {
+        toast.success('Message sent successfully!');
+        form.reset();
+        })
+        .catch((error:any) => {
+        toast.error(`Failed to send the message, please try again. ${error.message}`);
+        });
+    };
 
   return (
     <Container size="md" py="xl">
