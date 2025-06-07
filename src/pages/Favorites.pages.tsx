@@ -1,4 +1,4 @@
-import { MiniCard } from "@/components/Cards/MiniCard"
+import MiniCard from "@/components/Cards/MiniCard"
 import { Hero } from "@/components/Hero";
 import { useGetCards } from "@/hooks_and_functions/UseGetCards";
 import { RootState } from "@/store/store"

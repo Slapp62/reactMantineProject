@@ -1,11 +1,10 @@
 import { useGetCards } from '@/hooks_and_functions/UseGetCards';
-import { MiniCard } from '@/components/Cards/MiniCard';
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
 import { Box, Center, Flex, Loader, Pagination } from '@mantine/core';
 import { motion } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export function HomePage() {
@@ -14,7 +13,12 @@ export function HomePage() {
   const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
   const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
 
-  const sortedCards = cards ? [...cards].sort((a, b) => {
+  const LazyMiniCard = lazy(() => import('@/components/Cards/MiniCard'));
+
+  const sortedCards = useMemo(() => {
+    if (!cards) {return []};
+
+    return [...cards].sort((a, b) => {
     if (sortOption === 'title-asc'){
       return a.title.localeCompare(b.title);
     } else if (sortOption === 'title-desc') {
@@ -29,20 +33,19 @@ export function HomePage() {
       }
     }
     return 0
-  }) : [];
+  });
+  }, [cards, sortOption]);
 
-  const filterSearch = () => {
-    return sortedCards ? 
-      sortedCards.filter((card:TCards) => {
-        return (
-          card.title.toLowerCase().includes(searchWord.toLowerCase()) ||
-          card.subtitle.toLowerCase().includes(searchWord.toLowerCase()) ||
-          card.description.toLowerCase().includes(searchWord.toLowerCase())
-        )
-      }
-    ) : cards;
-  }
-  const filteredCards = filterSearch();
+    const filteredCards = useMemo(() => {
+        return sortedCards.filter((card:TCards) => {
+            const keyWord = searchWord.toLowerCase();
+            return (
+                card.title.toLowerCase().includes(keyWord) ||
+                card.subtitle.toLowerCase().includes(keyWord) ||
+                card.description.toLowerCase().includes(keyWord)
+            )
+        });
+    }, [sortedCards, searchWord]);
   
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 12;
@@ -74,8 +77,12 @@ export function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true, amount: 0.2 }}>
+                
+                <Suspense fallback={<Loader color="cyan" size="sm" />}>
+                    <LazyMiniCard key={card._id} card={card} />
+                </Suspense>
 
-                <MiniCard key={card._id} card={card} />
+                
 
                 </motion.div>
                 ))}

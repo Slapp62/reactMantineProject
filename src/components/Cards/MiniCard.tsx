@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { BsTranslate } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 
-export function MiniCard({ card } : { card: TCards }) {
+function MiniCard({ card } : { card: TCards }) {
     const [opened, { open, close }] = useDisclosure(false);
 
     const deleteCard = useDeleteCard();
@@ -109,3 +109,5 @@ export function MiniCard({ card } : { card: TCards }) {
     </>
   );
 }
+
+export default MiniCard

@@ -3,11 +3,24 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  base: '/', 
+  base: '/',
   plugins: [react(), tsconfigPaths()],
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './vitest.setup.mjs',
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) return 'react';
+            if (id.includes('@mantine')) return 'mantine';
+            return 'vendor';
+          }
+        },
+      },
+    },
   },
 });
