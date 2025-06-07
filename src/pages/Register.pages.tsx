@@ -1,13 +1,11 @@
-/* eslint-disable no-console */
-
 import { TUsers } from "@/Types";
 import { registrationSchema } from "@/validationRules/register.joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Box, Button, Checkbox, Fieldset, Flex, PasswordInput,TextInput } from "@mantine/core";
+import { Box, Button, Checkbox, Fieldset, Flex, Image, PasswordInput,TextInput } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,7 +15,8 @@ export function RegisterForm()  {
     const jumpTo = useNavigate();
     const registerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 700px)');
-
+    const [imageURL, setURL] = useState('');
+    
     const { reset, register, handleSubmit, formState: {errors, isValid} } = useForm<TUsers>({
         mode: 'all',
         resolver: joiResolver(registrationSchema)
@@ -37,9 +36,7 @@ export function RegisterForm()  {
             }
 
         } catch (error: any) {
-            console.error('Error processing form.', error, error.response.data, error.request, error.message);
-
-            toast.error(`Registration Failed! ${error.message}`, {position: `bottom-right`});
+            toast.error(`Registration Failed! ${error.message}`);
         }
     }
         
@@ -49,8 +46,7 @@ export function RegisterForm()  {
             <Box ref={registerRef} ta='center'><h1>Registration Form</h1></Box>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Flex style={{flexDirection: isMobile ? 'column' : "row"}} gap={5}>
-                    <Flex mx='auto' direction='column' style={{width: isMobile ? '95%' : "60%"}} justify='space-between' gap={5}>
+                <Flex mx='auto' direction='column' w={isMobile ? '95%' : "60%"} justify='space-between' gap={5}>
                         <Fieldset legend="Full Name">
                             <TextInput 
                                 label="First"
@@ -101,10 +97,19 @@ export function RegisterForm()  {
                                 />
                         </Fieldset>
 
-                        <Fieldset legend="Image">
+                        <Fieldset legend="Avatar">
+                            <Image
+                                src={imageURL} 
+                            />
                             <TextInput
                                 label="URL"
-                                {...register('image.url')}
+                                value={imageURL}
+                                {...register('image.url', {
+                                    onChange: (e) => {
+                                        setURL(e.target.value);
+                                    },
+                                }
+                                )}
                                 error={errors.image?.url?.message}
                                 />
                             <TextInput
@@ -166,8 +171,8 @@ export function RegisterForm()  {
 
                         
                         <Checkbox mt={20} label='Are you an employer?' {...register('isBusiness')}/>
-                    </Flex>
                 </Flex>
+                
 
                 <Flex gap={10} align="center" w="95%" mx='auto' my={20} style={{flexDirection: isMobile ? 'row' : "column"}}>
                     <Button variant="outline" type='reset' w={200} 

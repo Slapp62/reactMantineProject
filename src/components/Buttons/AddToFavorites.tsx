@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core";
-import { useLikeUnlike } from '@/hooks/UseLikeUnlike';
+import { useLikeUnlike } from '@/hooks_and_functions/UseLikeUnlike';
 import { RootState } from "@/store/store";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { useSelector } from "react-redux";

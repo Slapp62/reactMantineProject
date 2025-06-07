@@ -5,7 +5,7 @@ import { theme } from './theme';
 import './App.css'; // or './styles/global.css'
 import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
-import { useAuthInit } from './hooks/UseAuthInit';
+import { useAuthInit } from './hooks_and_functions/UseAuthInit';
 import { PersistGate } from 'redux-persist/integration/react';
 
 

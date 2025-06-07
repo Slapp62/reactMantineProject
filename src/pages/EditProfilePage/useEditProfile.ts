@@ -1,4 +1,4 @@
-import { cleanedUserData } from "@/hooks/getCleanedData";
+import { cleanedUserData } from "@/hooks_and_functions/getCleanedData";
 import { RootState } from "@/store/store";
 import { setUser, updateUser, clearUser } from "@/store/userSlice";
 import { TUsers } from "@/Types";

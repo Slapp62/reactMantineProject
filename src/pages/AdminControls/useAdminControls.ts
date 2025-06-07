@@ -1,4 +1,4 @@
-import { useGetAllUsers } from "@/hooks/UseGetAllUser";
+import { useGetAllUsers } from "@/hooks_and_functions/UseGetAllUser";
 import { removeUser } from "@/store/userSlice";
 import { TUsers } from "@/Types";
 import { useDisclosure } from "@mantine/hooks";

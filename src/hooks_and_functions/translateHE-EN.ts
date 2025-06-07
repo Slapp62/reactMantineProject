@@ -11,7 +11,6 @@ const translateCard = async (fields: string[]) => {
 const translateEn_He = async (text:string) => {
     const client = new InferenceClient(HF_TOKEN);
     const output = await client.translation({
-        //model: "Helsinki-NLP/opus-mt-he-en",
         model: "Helsinki-NLP/opus-mt-tc-big-he-en",
         inputs: text,
         provider: "hf-inference",

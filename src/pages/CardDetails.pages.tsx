@@ -42,32 +42,36 @@ export function CardDetails() {
                             <Title order={4}>Contact</Title>
                             <ListItem><strong>Phone:</strong> {card?.phone}</ListItem>
                             <ListItem><strong>Email:</strong> {card?.email}</ListItem>
-                            <ListItem ><strong>Website:</strong> {card?.web}</ListItem>
+                            {card?.web && <ListItem ><strong>Website:</strong> {card?.web}</ListItem>}
+                            <hr/>
                         </List> 
 
-                        <List spacing={5} style={{wordBreak: 'break-word'}} w='100%'>
-                            <hr/>
-                            <Title order={4}>Address</Title>
-                            <ListItem><strong>Country:</strong> {card?.address.country}</ListItem>
-                            <ListItem><strong>City:</strong> {card?.address.city}</ListItem>
-                            <ListItem><strong>State:</strong> {card?.address.state}</ListItem>
-                            <ListItem><strong>Street:</strong> {card?.address.street}</ListItem>
-                            <ListItem><strong>Number:</strong> {card?.address.houseNumber}</ListItem>
-                            <ListItem><strong>Zipcode:</strong> {card?.address.zip}</ListItem>
-                        </List>
+                        <Flex justify='space-between' direction='column' gap={20}>    
+                            <List spacing={5} style={{wordBreak: 'break-word'}}>
+                                <Title order={4}>Address</Title>
+                                <ListItem><strong>Country:</strong> {card?.address.country}</ListItem>
+                                <ListItem><strong>City:</strong> {card?.address.city}</ListItem>
+                                {card?.address.state && <ListItem><strong>State:</strong> {card?.address.state}</ListItem>}
+                                <ListItem><strong>Street:</strong> {card?.address.street}</ListItem>
+                                <ListItem><strong>Number:</strong> {card?.address.houseNumber}</ListItem>
+                                <ListItem><strong>Zipcode:</strong> {card?.address.zip}</ListItem>
+                            </List>
 
-                        {card && 
-                        <iframe
-                            title="Google Map"
-                            width="100%"
-                            height="300"
-                            style={{ border: 0, borderRadius: "10px", marginTop: "0rem" }}
-                            src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
-                                `${card.address.street} ${card.address.houseNumber}, ${card.address.city}, ${card.address.country}`
-                            )}`}
-                            allowFullScreen
-                            referrerPolicy="no-referrer-when-downgrade"
-                            />}
+                            <Flex>
+                                {card && 
+                                <iframe
+                                    title="Google Map"
+                                    width="100%"
+                                    height="300"
+                                    style={{ border: 0, borderRadius: "10px", marginTop: "0rem" }}
+                                    src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
+                                        `${card.address.street} ${card.address.houseNumber}, ${card.address.city}, ${card.address.country}`
+                                    )}`}
+                                    allowFullScreen
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />}
+                            </Flex>
+                        </Flex>
                     </Flex>     
                 </Card.Section>
 

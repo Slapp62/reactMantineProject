@@ -4,12 +4,13 @@ import {IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDeleteCard } from '@/hooks/UseDeleteCard';
+import { useDeleteCard } from '@/hooks_and_functions/UseDeleteCard';
 import { FavoritesButton } from '../Buttons/AddToFavorites';
 import { useDisclosure } from '@mantine/hooks';
-import translateCard from '../TranslateCard';
+import translateCard from '../../hooks_and_functions/translateHE-EN';
 import { useState } from 'react';
 import { BsTranslate } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
 export function MiniCard({ card } : { card: TCards }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -23,13 +24,20 @@ export function MiniCard({ card } : { card: TCards }) {
     const [translatedText, setTranslatedText] = useState<string[] | null>(null);
     const cardString = `${card.title} \n ${card.subtitle} \n ${card.description}`
     const containsHebrew = RegExp(/[\u0590-\u05FF]/).test(cardString);
+    const [translationLoading, setTranslationLoading] = useState(false);
     
     const handleTranslate = async (cardString: string) => {
-        const cardStringArr = cardString.split(' \n ');
-        const aiOutput = await translateCard(cardStringArr);                
-        setTranslatedText(aiOutput);
+        try {
+            setTranslationLoading(true);
+            const cardStringArr = cardString.split(' \n ');
+            const aiOutput = await translateCard(cardStringArr);                
+            setTranslatedText(aiOutput);
+        } catch (error : any) {
+            toast.error('Translation error:', error);
+        } finally {
+            setTranslationLoading(false);
+        }
     }
-    
 
   return (
     <>
@@ -47,37 +55,34 @@ export function MiniCard({ card } : { card: TCards }) {
         </Card.Section> 
 
         <Card.Section px={15}>
-            <Text my="xs" fw={500}>{translatedText ? translatedText[0] : card.title} </Text>
-        
-            <Box>
-            <Text truncate w={250}>
-                <Text>{translatedText ? translatedText[1] : card.subtitle}</Text>
-            </Text>
-            <hr/>
-                {translatedText ? translatedText[2] : card.description} 
+            <Box p={5}>
+                <Text truncate my="xs" fw={500}>{translatedText ? translatedText[0] : card.title} </Text>
+                <Text truncate >{translatedText ? translatedText[1] : card.subtitle}</Text>
+                <hr/>
+                <Text truncate >{translatedText ? translatedText[2] : card.description} </Text>
             
-            <List>
-                <ListItem>{card.phone}</ListItem>
-                <ListItem>{card.email}</ListItem>
-            </List>
+                <List>
+                    <ListItem>{card.phone}</ListItem>
+                    <ListItem>{card.email}</ListItem>
+                </List>
             </Box>
 
             <Flex mx="auto" mt={10} gap={10} direction='column'>
-            <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
-                <Text fw='bold'>More Info</Text>
-            </Button>
+                <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
+                    <Text fw='bold'>More Info</Text>
+                </Button>
 
-            {containsHebrew &&    
-            <Button rightSection={<BsTranslate/>} variant='outline' fz={12} onClick={() => handleTranslate(cardString)}>
-                <Text fw='bold'>Translate</Text>
-            </Button>}
+                {containsHebrew &&    
+                <Button loading={translationLoading} rightSection={<BsTranslate/>} variant='outline' fz={12} onClick={() => handleTranslate(cardString)}>
+                    <Text fw='bold'>Translate</Text>
+                </Button>}
 
-            {loggedIn && myListingsPage && 
-            <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>
-                <IconEdit/>
-            </Button>}
+                {loggedIn && myListingsPage && 
+                <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>
+                    <IconEdit/>
+                </Button>}
 
-            {myListingsPage && 
+                {myListingsPage && 
                 <Button bg='red' onClick={open}>
                 <IconTrash />
                 </Button>}

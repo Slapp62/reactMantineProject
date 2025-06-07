@@ -1,4 +1,4 @@
-import { useGetCards } from '@/hooks/UseGetCards';
+import { useGetCards } from '@/hooks_and_functions/UseGetCards';
 import { MiniCard } from '@/components/Cards/MiniCard';
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
