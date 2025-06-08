@@ -7,10 +7,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDeleteCard } from '@/hooks_and_functions/UseDeleteCard';
 import { FavoritesButton } from '../Buttons/AddToFavorites';
 import { useDisclosure } from '@mantine/hooks';
-import translateCard from '../../hooks_and_functions/translateHE-EN';
-import { useState } from 'react';
+import { useTranslateHEtoEN } from '../../hooks_and_functions/UseTranslateHEtoEN';
 import { BsTranslate } from 'react-icons/bs';
-import { toast } from 'react-toastify';
 
 function MiniCard({ card } : { card: TCards }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -21,23 +19,8 @@ function MiniCard({ card } : { card: TCards }) {
     const myListingsPage = location.pathname === '/my-listings';
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
     
-    const [translatedText, setTranslatedText] = useState<string[] | null>(null);
-    const cardString = `${card.title} \n ${card.subtitle} \n ${card.description}`
-    const containsHebrew = RegExp(/[\u0590-\u05FF]/).test(cardString);
-    const [translationLoading, setTranslationLoading] = useState(false);
-    
-    const handleTranslate = async (cardString: string) => {
-        try {
-            setTranslationLoading(true);
-            const cardStringArr = cardString.split(' \n ');
-            const aiOutput = await translateCard(cardStringArr);                
-            setTranslatedText(aiOutput);
-        } catch (error : any) {
-            toast.error('Translation error:', error);
-        } finally {
-            setTranslationLoading(false);
-        }
-    }
+    const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
+    useTranslateHEtoEN(card.title, card.subtitle, card.description);
 
   return (
     <>
@@ -74,7 +57,7 @@ function MiniCard({ card } : { card: TCards }) {
 
                 {containsHebrew &&    
                 <Button loading={translationLoading} rightSection={<BsTranslate/>} variant='outline' fz={12} onClick={() => handleTranslate(cardString)}>
-                    <Text fw='bold'>Translate</Text>
+                    <Text fw='bold'>{currentLang === 'he' ? 'Translate' : 'Show Original'}</Text>
                 </Button>}
 
                 {loggedIn && myListingsPage && 

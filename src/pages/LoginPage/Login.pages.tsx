@@ -161,7 +161,7 @@ export function LoginPage() {
 
                 <Text c="dimmed" size="sm" ta="center" my='lg'>
                     Don't have an account yet?{' '}
-                    <Anchor size="sm" component="button" onClick={() => jumpTo('/register')}>
+                    <Anchor size="sm" component="button" onClick={() => jumpTo('/register')} underline='hover'>
                     Create account
                     </Anchor>
                 </Text>

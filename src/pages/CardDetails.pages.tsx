@@ -1,9 +1,11 @@
-import { Card, Text, Image, List, ListItem, Flex, Title, Container} from "@mantine/core";
+import { Card, Text, Image, List, ListItem, Flex, Title, Container, Button} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import useTranslateHEtoEN from "@/hooks_and_functions/UseTranslateHEtoEN";
+import { BsTranslate } from "react-icons/bs";
 
 export function CardDetails() {
     const isMobile = useMediaQuery('(max-width: 700px)');
@@ -13,6 +15,9 @@ export function CardDetails() {
     const card = allCards?.find((card) => card._id === id);
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
+    const {currentLang, translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
+        useTranslateHEtoEN(card?.title, card?.subtitle, card?.description);
+    
     
     return ( 
         <Container style={{width: isMobile ? "90%" : "40%"}}>
@@ -32,10 +37,20 @@ export function CardDetails() {
                 </Card.Section> 
 
                 <Card.Section p={15} >
-                    <Text  size="xl" fw={500}><strong>Title:</strong> {card?.title}</Text>
-                    <Text size='md'><strong>Subtitle:</strong> {card?.subtitle}</Text>
-                    <hr/>
-                    <Text  size="lg" w='90%'><strong>Description:</strong> {card?.description}</Text>
+                    <Flex direction='column' gap={10}>
+                        <Text size="xl" fw={500}><strong>Title:</strong> {translatedText ? translatedText[0] : card?.title}</Text>
+                        <Text size='md'><strong>Subtitle:</strong> {translatedText ? translatedText[1] : card?.subtitle}</Text>
+                        <Text size="lg" w='95%'><strong>Description:</strong> {translatedText ? translatedText[2] : card?.description} </Text>
+                    
+                    
+                    
+                    {containsHebrew &&    
+                    <Button loading={translationLoading} rightSection={<BsTranslate/>} variant='outline' fz={12} 
+                        onClick={() => handleTranslate(cardString)}>
+                        <Text fw='bold'>{currentLang === 'he' ? 'Translate' : 'Show Original'}</Text>
+                    </Button>}
+                    </Flex>
+
                     <hr/>
                     <Flex justify='space-between' mt={10} gap={10} direction='column'>
                         <List spacing={5} style={{wordBreak: 'break-word'}} w='100%'>

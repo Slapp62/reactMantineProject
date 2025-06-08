@@ -181,7 +181,7 @@ export function RegisterForm()  {
 
                     <Text c="dimmed" size="sm" ta="center" mt={5}>
                         Already have an account?{' '}
-                        <Anchor size="sm" component="button" onClick={() => jumpTo('/login')}>
+                        <Anchor size="sm" component="button" onClick={() => jumpTo('/login')} underline="hover">
                             Login
                         </Anchor>
                     </Text>

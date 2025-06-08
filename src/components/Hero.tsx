@@ -22,7 +22,7 @@ export function Hero() {
       <BackgroundImage
         src={heroImage}
         aria-label='office background image'
-        mih={500}
+        mih={400}
         style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}
       >
       

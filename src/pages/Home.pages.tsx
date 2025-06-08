@@ -2,7 +2,7 @@ import { useGetCards } from '@/hooks_and_functions/UseGetCards';
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
-import { Box, Center, Flex, Loader, Pagination } from '@mantine/core';
+import { Box, Center, Flex, Loader, Pagination, Text } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -68,8 +68,7 @@ export function HomePage() {
   return (
     <>
       <Hero/>
-      
-        <Flex ref={cardsRef} direction='column' align='center' gap={20}>
+        <Flex direction='column' align='center' gap={20}>
             <Suspense fallback={<Loader color="cyan" size="xl" mt={30} />}>
                 <Flex wrap="wrap" gap={20} align='stretch' justify="space-evenly" w="70%" mx='auto'>
                     {paginatedCards.map((card:TCards) => (
@@ -86,12 +85,13 @@ export function HomePage() {
                     ))}
                 </Flex>
             </Suspense>
+            <Text >Showing {(currentPage-1)*cardsPerPage+1} to {currentPage*cardsPerPage} of {cards?.length}</Text>
             <Pagination
             total={filteredCards ? Math.ceil(filteredCards.length / cardsPerPage) : 0}
             value={currentPage}
             onChange={(page)=>{
                 setCurrentPage(page);
-                cardsRef.current?.scrollIntoView({behavior:'smooth'});
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             mt="md"
             />
