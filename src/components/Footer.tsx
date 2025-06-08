@@ -1,32 +1,85 @@
-import { Box, Flex, Text } from '@mantine/core';
+import { IconBrandInstagram, IconBrandTwitter, IconBrandYoutube, IconLocationDown, IconLocationExclamation, IconLocationFilled, IconLocationPin, IconMail, IconMailFilled, IconMapPin, IconMapPinFilled, IconPhoneFilled, IconPinFilled } from '@tabler/icons-react';
+import { ActionIcon, Container, Flex, Group, Text, Title } from '@mantine/core';
+
+import classes from './ComponentStyles/FooterStyles.module.css'
 import { Logo } from './Logo';
-import { Link } from 'react-router-dom';
-import { IconCopyright } from '@tabler/icons-react';
 
+const data = [
+  {
+    title: 'Quick Links',
+    links: [
+      { label: 'Home Page', link: '/' },
+      { label: 'Login', link: '/login' },
+      { label: 'Register', link: '/register' },
+      { label: 'About', link: '/about' },
+    ],
+  },
+  {
+    title: 'Project',
+    links: [
+      { label: 'GitHub', link: 'https://github.com/Slapp62/reactMantineProject.git' },
+      { label: 'MantineUI', link: 'https://mantine.dev' },
+      { label: 'React', link: 'https://react.dev' },
+      { label: 'Vite', link: 'https://vitejs.dev' },
+      { label: 'Redux', link: 'https://redux.js.org'},
+    ],
+  },
+  {
+    title: 'About Me',
+    links: [
+      { label: 'LinkedIn', link: 'https://www.linkedin.com/in/simcha-lapp-0b4081106/' },
+      { label: 'Portfolio Website', link: 'https://slapp62.github.io/portfolio_site/' },
+    ],
+  },
+];
 
-const Footer = () => {
-  
+export function Footer() {
+  const groups = data.map((group) => {
+    const links = group.links.map((link, index) => (
+      <Text<'a'>
+        key={index}
+        className={classes.link}
+        component="a"
+        href={link.link}
+      >
+        {link.label}
+      </Text>
+    ));
+
+    return (
+      <div className={classes.wrapper} key={group.title}>
+        <Text className={classes.title}>{group.title}</Text>
+        {links}
+      </div>
+    );
+  });
+
   return (
-    <Box h={60} px={20} style={{zIndex: 20}}>
-      <hr/>
-      <Flex justify='space-between'>
-        <Logo />
+    <footer className={classes.footer}>
+      <Container className={classes.inner}>
+        <div className={classes.logo}>
+          <Logo />
+          <Text size="xs" c="dimmed" className={classes.description}>
+            Creating opportunities and careers with simplicity in mind.
+          </Text>
+        </div>
+        <div className={classes.groups}>{groups}</div>
 
-        <Flex align='center' gap={4}>
-          <IconCopyright size={15} color='gray'/>
-
-          <Link 
-            to='https://slapp62.github.io/portfolio_site/' 
-            target='_blank' 
-            style={{ textDecorationLine: 'none' }}
-          >
-            <Text c='gray'>Created by Simcha Lapp</Text>
-          </Link>
+        <Flex direction="column" c="dimmed" gap={5}>
+            <Title className={classes.title}>Contact Me</Title>
+            <Group><IconMailFilled /> <Text>slapp62@gmail.com</Text></Group>
+            <Group><IconPhoneFilled /> <Text>+972-58-434-5797</Text></Group>
+            <Group><IconMapPinFilled /> <Text>Beit Shemesh, IL</Text></Group>
         </Flex>
         
-      </Flex>
-    </Box>
+      </Container>
+      <Container className={classes.afterFooter}>
+        <Text c="dimmed" size="sm">
+          © {new Date().getFullYear()} - Developed by Simcha Lapp. 
+        </Text>
+
+        <Text c="dimmed" size="sm">All rights reserved</Text>
+      </Container>
+    </footer>
   );
 }
-
-export default Footer

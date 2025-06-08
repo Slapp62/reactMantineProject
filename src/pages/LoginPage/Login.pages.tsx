@@ -121,56 +121,56 @@ export function LoginPage() {
 }
 
   return (
-    <Container size={420} mt={100}>
+    <Container size={420} my={100}>
       {message && <Title order={3} ta="center" c="red" mb={10}>{message}</Title>}
       {!message && <Title ta="center" className={classes.title}>
         Welcome back!
       </Title>}
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Don't have an account yet?{' '}
-        <Anchor size="sm" component="button">
-          Create account
-        </Anchor>
-      </Text>
 
-      <Paper withBorder p={30} mt={30} radius="md" shadow='lg'>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <TextInput 
-            label="Email" 
-            disabled={isBlocked}
-            placeholder="you@email.com" 
-            {...register('email')}
-            error= {errors.email?.message}
-            />
-          <PasswordInput 
-            mt={10}
-            label="Password" 
-            disabled={isBlocked}
-            placeholder="Your password" 
-            {...register('password')}
-            error={errors.password?.message}
-            />
+        <Paper withBorder p={30} mt={30} radius="md" shadow='lg'>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <TextInput 
+                    label="Email" 
+                    disabled={isBlocked}
+                    placeholder="you@email.com" 
+                    {...register('email')}
+                    error= {errors.email?.message}
+                />
+                <PasswordInput 
+                    mt={10}
+                    label="Password" 
+                    disabled={isBlocked}
+                    placeholder="Your password" 
+                    {...register('password')}
+                    error={errors.password?.message}
+                />
+                {!isBlocked && loginAttempts > 0 && 
+                <Text c="red" ta='center' mt='sm'>You have {attemptsLeft} attempt(s) remaining.</Text>}
 
-          {!isBlocked && loginAttempts > 0 && 
-          <Text c="red" ta='center' mt='sm'>You have {attemptsLeft} attempt(s) remaining.</Text>}
+                {isBlocked && 
+                <Text c="red" ta='center' mt='sm'>
+                    You must wait {Math.floor(Math.max(0, (60000 - (Date.now() - momentBlocked)) / 1000))} seconds before you can login in again.
+                </Text>}
 
-          {isBlocked && 
-          <Text c="red" ta='center' mt='sm'>
-            You must wait {Math.floor(Math.max(0, (60000 - (Date.now() - momentBlocked)) / 1000))} seconds before you can login in again.
-          </Text>}
+                <Group justify="space-between" mt="lg">
+                    <Checkbox 
+                    label="Remember me" 
+                    checked={rememberMe}
+                    onChange={(event) => setRemember(event.currentTarget.checked)}/>
+                </Group>
 
-          <Group justify="space-between" mt="lg">
-            <Checkbox 
-              label="Remember me" 
-              checked={rememberMe}
-              onChange={(event) => setRemember(event.currentTarget.checked)}/>
-          </Group>
+                <Text c="dimmed" size="sm" ta="center" my='lg'>
+                    Don't have an account yet?{' '}
+                    <Anchor size="sm" component="button" onClick={() => jumpTo('/register')}>
+                    Create account
+                    </Anchor>
+                </Text>
 
-          <Button type='submit' fullWidth mt="xl" disabled={!isValid || isBlocked}>
-            Sign in
-          </Button>
-        </form>
-      </Paper>
+                <Button type='submit' fullWidth disabled={!isValid || isBlocked}>
+                Sign in
+                </Button>
+            </form>
+        </Paper>
     </Container>
   );
 }
