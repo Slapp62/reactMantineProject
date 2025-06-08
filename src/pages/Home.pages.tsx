@@ -8,33 +8,34 @@ import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export function HomePage() {
-  const {cards, isLoading} = useGetCards();
-  const cardsRef = useRef<HTMLDivElement>(null);
-  const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
-  const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
+    const LazyMiniCard = lazy(() => import('@/components/Cards/MiniCard'));
+    const {cards, isLoading} = useGetCards();
+    const cardsRef = useRef<HTMLDivElement>(null);
+    const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
+    const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
 
-  const LazyMiniCard = lazy(() => import('@/components/Cards/MiniCard'));
+  
 
-  const sortedCards = useMemo(() => {
-    if (!cards) {return []};
+    const sortedCards = useMemo(() => {
+        if (!cards) {return []};
 
-    return [...cards].sort((a, b) => {
-    if (sortOption === 'title-asc'){
-      return a.title.localeCompare(b.title);
-    } else if (sortOption === 'title-desc') {
-      return b.title.localeCompare(a.title);
-    } else if (sortOption === 'date-created-old'){
-      if (a.createdAt && b.createdAt){
-        return a.createdAt?.localeCompare(b.createdAt)
-      }
-    } else if (sortOption === 'date-created-new'){
-      if (a.createdAt && b.createdAt){
-        return b.createdAt?.localeCompare(a.createdAt)
-      }
-    }
-    return 0
-  });
-  }, [cards, sortOption]);
+        return [...cards].sort((a, b) => {
+        if (sortOption === 'title-asc'){
+        return a.title.localeCompare(b.title);
+        } else if (sortOption === 'title-desc') {
+        return b.title.localeCompare(a.title);
+        } else if (sortOption === 'date-created-old'){
+        if (a.createdAt && b.createdAt){
+            return a.createdAt?.localeCompare(b.createdAt)
+        }
+        } else if (sortOption === 'date-created-new'){
+        if (a.createdAt && b.createdAt){
+            return b.createdAt?.localeCompare(a.createdAt)
+        }
+        }
+        return 0
+    });
+    }, [cards, sortOption]);
 
     const filteredCards = useMemo(() => {
         return sortedCards.filter((card:TCards) => {
@@ -47,22 +48,22 @@ export function HomePage() {
         });
     }, [sortedCards, searchWord]);
   
-  const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 12;
-  const paginatedCards = filteredCards ? filteredCards.slice(
-    (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage) : [];
+    const [currentPage, setCurrentPage] = useState(1);
+    const cardsPerPage = 12;
+    const paginatedCards = filteredCards ? filteredCards.slice(
+        (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage) : [];
 
-  if (isLoading) {
-    return <>
-      <Box pos='relative'>
-        <Hero/>
-      </Box>
+    if (isLoading) {
+        return <>
+        <Box pos='relative'>
+            <Hero/>
+        </Box>
 
-      <Center>
-        <Loader color="cyan" size="xl" mt={30}/>
-      </Center>
-    </>      
-  }
+        <Center>
+            <Loader color="cyan" size="xl" mt={30}/>
+        </Center>
+        </>      
+    }
     
   return (
     <>
@@ -78,7 +79,7 @@ export function HomePage() {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true, amount: 0.2 }}>
                 
-                <Suspense fallback={<Loader color="cyan" size="sm" />}>
+                <Suspense>
                     <LazyMiniCard key={card._id} card={card} />
                 </Suspense>
 
