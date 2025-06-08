@@ -1,4 +1,3 @@
-import MiniCard from "@/components/Cards/MiniCard";
 import { Hero } from "@/components/Hero";
 import { useGetCards } from "@/hooks_and_functions/UseGetCards";
 import { RootState } from "@/store/store"
@@ -7,12 +6,13 @@ import { Box, Button, Center, Flex, Loader, Title } from "@mantine/core";
 import { IconMoodSad } from "@tabler/icons-react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function MyCards()  {
+    const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
     const {cards, isLoading} = useGetCards();
     const user = useSelector((state:RootState) => state.userSlice.user);
     const [userCards, setUserCards] = useState<TCards[]>([]);
@@ -71,21 +71,24 @@ export function MyCards()  {
         <Flex mt={20} direction='column' align='center' gap={20}>
             
             <Title>My Listings</Title>
+            <Suspense fallback={<Loader color="cyan" size="xl" mt={30}/>} >
+                <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
+                    {userCards && userCards.map((card:TCards) => (
+                    <motion.div
+                    key={card._id}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true, amount: 0.2 }}>
 
-            <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
-                {userCards && userCards.map((card:TCards) => (
-                <motion.div
-                key={card._id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true, amount: 0.2 }}>
+                    
+                        <MiniCard key={card._id} card={card} />
+                
 
-                <MiniCard key={card._id} card={card} />
-
-                </motion.div>
-                ))}
-            </Flex>
+                    </motion.div>
+                    ))}
+                </Flex>
+            </Suspense>
         </Flex>
     )
 }

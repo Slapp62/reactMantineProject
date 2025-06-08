@@ -8,7 +8,7 @@ import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export function HomePage() {
-    const LazyMiniCard = lazy(() => import('@/components/Cards/MiniCard'));
+    const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
     const {cards, isLoading} = useGetCards();
     const cardsRef = useRef<HTMLDivElement>(null);
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
@@ -70,25 +70,22 @@ export function HomePage() {
       <Hero/>
       
         <Flex ref={cardsRef} direction='column' align='center' gap={20}>
-            <Flex wrap="wrap" gap={20} align='stretch' justify="space-evenly" w="70%" mx='auto'>
-                {paginatedCards.map((card:TCards) => (
-                <motion.div
-                key={card._id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true, amount: 0.2 }}>
-                
-                <Suspense>
-                    <LazyMiniCard key={card._id} card={card} />
-                </Suspense>
-
-                
-
-                </motion.div>
-                ))}
-            </Flex>
-        
+            <Suspense fallback={<Loader color="cyan" size="xl" mt={30} />}>
+                <Flex wrap="wrap" gap={20} align='stretch' justify="space-evenly" w="70%" mx='auto'>
+                    {paginatedCards.map((card:TCards) => (
+                    <motion.div
+                    key={card._id}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true, amount: 0.2 }}>
+                    
+                    <MiniCard key={card._id} card={card} />
+                    
+                    </motion.div>
+                    ))}
+                </Flex>
+            </Suspense>
             <Pagination
             total={filteredCards ? Math.ceil(filteredCards.length / cardsPerPage) : 0}
             value={currentPage}
