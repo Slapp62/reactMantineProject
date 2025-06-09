@@ -47,8 +47,9 @@ function MiniCard({ card } : { card: TCards }) {
                 <List>
                     <ListItem>{card.phone}</ListItem>
                     <ListItem>{card.email}</ListItem>
-                    {card.createdAt && <ListItem>{new Date(card.createdAt).toLocaleString()}</ListItem>}
+                    
                 </List>
+                {card.createdAt && <Text size='sm' mt={5}>Date Posted: {new Date(card.createdAt).toLocaleDateString()}</Text>}
             </Box>
 
             <Flex mx="auto" mt={10} gap={10} direction='column'>

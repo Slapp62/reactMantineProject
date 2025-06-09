@@ -4,7 +4,7 @@ import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
 import { Box, Center, Flex, Loader, Pagination, Text } from '@mantine/core';
 import { motion } from 'framer-motion';
-import { lazy, Suspense, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export function HomePage() {

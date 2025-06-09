@@ -18,15 +18,14 @@ export function useGetCards() {
             const loadCards = async () => {
             try {
                 const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
-                if (response.data === 200) {
-                    const sortedNewestFirst = response.data.sort((a : TCards, b : TCards) => {
-                        if (a.createdAt && b.createdAt){
-                            return a.createdAt?.localeCompare(b.createdAt)
-                        }
-                        return 0
-                    });
-                    dispatch(setCardsSlice(sortedNewestFirst));   
-                }
+                const sortedNewestFirst : TCards[] = response.data.sort((a : TCards, b : TCards) => {
+                    if (a.createdAt && b.createdAt){
+                        return b.createdAt?.localeCompare(a.createdAt)
+                    }
+                    return 0
+                });
+                dispatch(setCardsSlice(sortedNewestFirst));   
+                
             } catch (error : any) {
                 toast.error(`Failed to fetch cards: ${error}`, {position: `bottom-right`}); 
             }
