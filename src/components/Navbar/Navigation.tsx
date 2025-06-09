@@ -75,8 +75,8 @@ import { AvatarIcon } from './Avatar';
 
             <Group>
               <Group visibleFrom="xs">
-                {!loggedIn && <Link to='/login'><Button variant="outline">Login</Button></Link>}
-                {!loggedIn && <Link to='/register'><Button>Register</Button></Link>}
+                {!loggedIn && <Button component={Link} to='/login' variant="outline">Login</Button>}
+                {!loggedIn && <Button component={Link} to='/register'>Register</Button>}
 
                 {loggedIn && <Button variant="outline" onClick={logoutHandler}>Logout</Button>}
               </Group>
@@ -131,14 +131,10 @@ import { AvatarIcon } from './Avatar';
 
             <Flex justify="space-evenly" ta="center" p="sm" gap={5} direction="column">
               {!loggedIn && 
-                <Link  to='/login' onClick={closeDrawer}>
-                  <Button w="95%" variant="outline">Login</Button>
-                </Link>}
+               <Button component={Link} to='/login' onClick={closeDrawer} w="95%" variant="outline">Login</Button>}
 
               {!loggedIn && 
-                <Link to='/register' onClick={closeDrawer}>
-                  <Button w="95%">Register</Button>
-                </Link>}
+              <Button w="95%" component={Link} to='/register' onClick={closeDrawer}>Register</Button>}
 
               {loggedIn && 
                 <Button variant="outline" onClick={() => {

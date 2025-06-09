@@ -3,7 +3,7 @@ import { TCards } from '@/Types';
 import {IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDeleteCard } from '@/hooks_and_functions/UseDeleteCard';
 import { FavoritesButton } from '../Buttons/AddToFavorites';
 import { useDisclosure } from '@mantine/hooks';
@@ -14,7 +14,6 @@ function MiniCard({ card } : { card: TCards }) {
     const [opened, { open, close }] = useDisclosure(false);
 
     const deleteCard = useDeleteCard();
-    const jumpTo = useNavigate();
     const location = useLocation();
     const myListingsPage = location.pathname === '/my-listings';
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
@@ -53,7 +52,7 @@ function MiniCard({ card } : { card: TCards }) {
             </Box>
 
             <Flex mx="auto" mt={10} gap={10} direction='column'>
-                <Button variant='outline' fz={12} onClick={() => jumpTo(`/card-details/${card._id}`)}>
+                <Button variant='outline' fz={12} component={Link} to={`/card-details/${card._id}`}>
                     <Text fw='bold'>More Info</Text>
                 </Button>
 
@@ -63,7 +62,7 @@ function MiniCard({ card } : { card: TCards }) {
                 </Button>}
 
                 {loggedIn && myListingsPage && 
-                <Button onClick={() => jumpTo(`/edit-card/${card._id}`)}>
+                <Button component={Link} to={`/edit-card/${card._id}`}>
                     <IconEdit/>
                 </Button>}
 

@@ -29,7 +29,8 @@ export function LoginPage() {
   const attemptsLeft = 3 - loginAttempts;
   const [momentBlocked, setMomentBlocked] = useState(Number(localStorage.getItem('momentBlocked')));
   const [isBlocked, setIsBlocked] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     localStorage.setItem('loginAttempts', loginAttempts.toString())
 
@@ -82,6 +83,7 @@ export function LoginPage() {
   });
   
   const onSubmit = async (data: FieldValues) => {
+    setIsLoading(true);
     try {
       const {data: token} = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
         {
@@ -112,11 +114,12 @@ export function LoginPage() {
       jumpTo('/');
     
     } catch (error : any) {
-      if (error.response?.status === 400) {
-        toast.error('Login Failed. Error 400', {position: 'bottom-right'});
-
-        setLoginAttempts(prev => prev + 1);
-    }
+        if (error.response?.status === 400) {
+            toast.error('Login Failed. Error 400', {position: 'bottom-right'});
+            setLoginAttempts(prev => prev + 1);
+        } 
+    } finally {
+      setIsLoading(false);
   }
 }
 
@@ -166,7 +169,7 @@ export function LoginPage() {
                     </Anchor>
                 </Text>
 
-                <Button type='submit' fullWidth disabled={!isValid || isBlocked}>
+                <Button type='submit' fullWidth loading={isLoading} disabled={!isValid || isBlocked}>
                 Sign in
                 </Button>
             </form>

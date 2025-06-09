@@ -1,5 +1,5 @@
-import { IconBrandInstagram, IconBrandTwitter, IconBrandYoutube, IconLocationDown, IconLocationExclamation, IconLocationFilled, IconLocationPin, IconMail, IconMailFilled, IconMapPin, IconMapPinFilled, IconPhoneFilled, IconPinFilled } from '@tabler/icons-react';
-import { ActionIcon, Container, Flex, Group, Text, Title } from '@mantine/core';
+import { IconMailFilled, IconMapPinFilled, IconPhoneFilled } from '@tabler/icons-react';
+import { Container, Flex, Group, Text, Title } from '@mantine/core';
 
 import classes from './ComponentStyles/FooterStyles.module.css'
 import { Logo } from './Logo';
