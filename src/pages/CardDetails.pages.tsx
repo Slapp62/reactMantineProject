@@ -41,7 +41,7 @@ export function CardDetails() {
                         <Text size="xl" fw={500}><strong>Title:</strong> {translatedText ? translatedText[0] : card?.title}</Text>
                         <Text size='md'><strong>Subtitle:</strong> {translatedText ? translatedText[1] : card?.subtitle}</Text>
                         <Text size="md" w='95%'><strong>Description:</strong> {translatedText ? translatedText[2] : card?.description} </Text>
-                        {card.createdAt && <Text size="sm" mt={5}><strong>Posted: </strong>{new Date(card.createdAt).toLocaleDateString()}</Text>}
+                        {card?.createdAt && <Text size="sm" mt={5}><strong>Posted: </strong>{new Date(card?.createdAt).toLocaleDateString()}</Text>}
                     
                     
                     {containsHebrew &&    
