@@ -47,6 +47,7 @@ function MiniCard({ card } : { card: TCards }) {
                 <List>
                     <ListItem>{card.phone}</ListItem>
                     <ListItem>{card.email}</ListItem>
+                    {card.createdAt && <ListItem>{new Date(card.createdAt).toLocaleString()}</ListItem>}
                 </List>
             </Box>
 

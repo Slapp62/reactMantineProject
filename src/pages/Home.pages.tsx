@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 export function HomePage() {
     const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
     const {cards, isLoading} = useGetCards();
-    const cardsRef = useRef<HTMLDivElement>(null);
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
     const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
 

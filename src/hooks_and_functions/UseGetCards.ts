@@ -1,5 +1,6 @@
 import { setCardsSlice } from "@/store/cardSlice";
 import { RootState } from "@/store/store";
+import { TCards } from "@/Types";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +18,15 @@ export function useGetCards() {
             const loadCards = async () => {
             try {
                 const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
-                dispatch(setCardsSlice(response.data));   
+                if (response.data === 200) {
+                    const sortedNewestFirst = response.data.sort((a : TCards, b : TCards) => {
+                        if (a.createdAt && b.createdAt){
+                            return a.createdAt?.localeCompare(b.createdAt)
+                        }
+                        return 0
+                    });
+                    dispatch(setCardsSlice(sortedNewestFirst));   
+                }
             } catch (error : any) {
                 toast.error(`Failed to fetch cards: ${error}`, {position: `bottom-right`}); 
             }
