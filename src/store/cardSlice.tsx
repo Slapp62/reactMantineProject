@@ -40,22 +40,35 @@ const cardSlice = createSlice({
         },
         addLike: (state, action:PayloadAction<{card:TCards; userID:string}>) => {
             const {card, userID} = action.payload;
-            const thisGlobalCard = state.cards?.find((reduxCard) => reduxCard._id === card._id);
-
-            const alreadyLiked = thisGlobalCard?.likes?.includes(userID);
-            if (!alreadyLiked) {
-                thisGlobalCard?.likes?.push(userID);
-            }            
+            if (!state.cards) {return}
+            
+            const cardIndex = state.cards.findIndex((reduxCard) => reduxCard._id === card._id);
+            if (cardIndex !== -1) {
+                const currentCard = state.cards[cardIndex];
+            
+                if (!currentCard.likes?.includes(userID)) {
+                    state.cards[cardIndex] = {
+                        ...currentCard, 
+                        likes: [...(currentCard.likes || []), userID]
+                    }
+                }
+            }          
         },
         removeLike: (state, action:PayloadAction<{card:TCards; userID:string}>) => {
             const {card, userID} = action.payload;
+            if (!state.cards) {return}
 
-            const thisGlobalCard = state.cards?.find((reduxCard) => reduxCard._id === card._id);
-            const alreadyLiked = thisGlobalCard?.likes?.includes(userID);
-
-            if (alreadyLiked && thisGlobalCard) {
-                thisGlobalCard.likes = thisGlobalCard?.likes?.filter((likes) => likes !== userID)
-            }
+            const cardIndex = state.cards.findIndex((reduxCard) => reduxCard._id === card._id);
+            if (cardIndex !== -1) {
+                const currentCard = state.cards[cardIndex];
+                const currentLikes = currentCard.likes || [];
+                if (currentCard.likes?.includes(userID)) {
+                    state.cards[cardIndex] = {
+                        ...currentCard!, 
+                        likes: currentLikes.filter((like) => like !== userID)
+                    }
+                }
+            }          
         },
         setSortOption: (state, action:PayloadAction<string>) => {
             state.sortOption = action.payload   

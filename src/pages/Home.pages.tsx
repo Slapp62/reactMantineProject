@@ -4,17 +4,15 @@ import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
 import { Box, Button, Center, Flex, Loader, Pagination, Text } from '@mantine/core';
 import { motion } from 'framer-motion';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IconArrowUp } from '@tabler/icons-react';
+import MiniCard from '@/components/Cards/MiniCard';
 
 export function HomePage() {
-    const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
     const {cards, isLoading} = useGetCards();
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
     const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
-
-  
 
     const sortedCards = useMemo(() => {
         if (!cards) {return []};
@@ -37,7 +35,7 @@ export function HomePage() {
     });
     }, [cards, sortOption]);
 
-    const filteredCards = useMemo(() => {
+    const searchCards = useMemo(() => {
         return sortedCards.filter((card:TCards) => {
             const keyWord = searchWord.toLowerCase();
             return (
@@ -50,8 +48,13 @@ export function HomePage() {
   
     const [currentPage, setCurrentPage] = useState(1);
     const cardsPerPage = 12;
-    const paginatedCards = filteredCards ? filteredCards.slice(
+    
+    const paginatedCards = searchCards ? searchCards.slice(
         (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage) : [];
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchCards]);
 
     if (isLoading) {
         return <>
@@ -69,25 +72,26 @@ export function HomePage() {
     <>
       <Hero/>
         <Flex direction='column' align='center' gap={20}>
-            <Suspense fallback={<Loader color="cyan" size="xl" mt={30} />}>
+            
                 <Flex wrap="wrap" gap={20} justify="space-evenly" w="70%" mx='auto'>
                     {paginatedCards.map((card:TCards) => (
                     <motion.div
-                    key={card._id}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true, amount: 0.2 }}>
-                    
-                    <MiniCard key={card._id} card={card} />
+                        key={card._id}
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        >
+                        
+                        <MiniCard card={card} />
                     
                     </motion.div>
                     ))}
                 </Flex>
-            </Suspense>
+            
             <Text >Showing {(currentPage-1)*cardsPerPage+1} to {currentPage*cardsPerPage} of {cards?.length}</Text>
             <Pagination
-            total={filteredCards ? Math.ceil(filteredCards.length / cardsPerPage) : 0}
+            total={searchCards ? Math.ceil(searchCards.length / cardsPerPage) : 0}
             value={currentPage}
             onChange={(page)=>{
                 setCurrentPage(page);

@@ -9,6 +9,7 @@ import { FavoritesButton } from '../Buttons/AddToFavorites';
 import { useDisclosure } from '@mantine/hooks';
 import { useTranslateHEtoEN } from '../../hooks_and_functions/UseTranslateHEtoEN';
 import { BsTranslate } from 'react-icons/bs';
+import React from 'react';
 
 function MiniCard({ card } : { card: TCards }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -91,4 +92,4 @@ function MiniCard({ card } : { card: TCards }) {
   );
 }
 
-export default MiniCard
+export default React.memo(MiniCard) as typeof MiniCard
