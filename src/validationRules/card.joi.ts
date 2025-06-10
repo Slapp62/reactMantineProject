@@ -24,10 +24,11 @@ const cardSchema = Joi.object({
             'string.pattern.base':'Phone must be a valid Israeli phone number.',
     }),
 
-    email: Joi.string().email({tlds: {allow:false}}).required().messages({
+    email: Joi.string().email({tlds: {allow:false}}).pattern(/\.[a-zA-Z]{2,}$/).required().messages({
         'string.email':'Please enter a valid email',
         'string.empty':'This field is required',
         'any.required': 'Email is required',
+        'string.pattern.base': 'Email must end with at least two letters after the dot',
     }),
 
     web: Joi.string().uri().allow('').optional().messages({

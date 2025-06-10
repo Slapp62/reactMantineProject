@@ -51,7 +51,7 @@ function MiniCard({ card } : { card: TCards }) {
                 {card.createdAt && <Text size='sm' mt={5}>Date Posted: {new Date(card.createdAt).toLocaleDateString()}</Text>}
             </Box>
 
-            <Flex mx="auto" mt={10} gap={10} direction='column'>
+            <Flex mx="auto"  my={10} gap={10} direction='column'>
                 <Button variant='outline' fz={12} component={Link} to={`/card-details/${card._id}`}>
                     <Text fw='bold'>More Info</Text>
                 </Button>
@@ -70,12 +70,9 @@ function MiniCard({ card } : { card: TCards }) {
                 <Button bg='red' onClick={open}>
                 <IconTrash />
                 </Button>}
+                
+                {loggedIn && <FavoritesButton card={card} />}
             </Flex>
-
-            <Group my={10} justify='center' >
-            {loggedIn && <FavoritesButton card={card} />}
-            </Group>
-    
         </Card.Section>
         </Card>
 

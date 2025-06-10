@@ -2,10 +2,11 @@ import { useGetCards } from '@/hooks_and_functions/UseGetCards';
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
-import { Box, Center, Flex, Loader, Pagination, Text } from '@mantine/core';
+import { Box, Button, Center, Flex, Loader, Pagination, Text } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { IconArrowUp } from '@tabler/icons-react';
 
 export function HomePage() {
     const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
@@ -69,7 +70,7 @@ export function HomePage() {
       <Hero/>
         <Flex direction='column' align='center' gap={20}>
             <Suspense fallback={<Loader color="cyan" size="xl" mt={30} />}>
-                <Flex wrap="wrap" gap={20} align='stretch' justify="space-evenly" w="70%" mx='auto'>
+                <Flex wrap="wrap" gap={20} justify="space-evenly" w="70%" mx='auto'>
                     {paginatedCards.map((card:TCards) => (
                     <motion.div
                     key={card._id}
@@ -94,7 +95,13 @@ export function HomePage() {
             }}
             mt="md"
             />
-
+            <Button 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                mt={20}
+                c='green'
+                variant='light'
+                rightSection={<IconArrowUp/>}
+            > Back to Top</Button>
         </Flex>
     </>
   );

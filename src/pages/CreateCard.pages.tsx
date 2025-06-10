@@ -22,17 +22,13 @@ export function CreateCard() {
 
     const onSubmit = async (data:FieldValues) => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-
+        axios.defaults.headers.common['x-auth-token'] = token;
+        const url = 'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards'
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
         
         try {
-            const response = await axios.post('https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards',
-                data,
-                {headers: {
-                    'x-auth-token': token
-                    }
-                })
+            const response = await axios.post(url, data)
 
             if (response.status === 201) {
                 dispatch(addCard(response.data));
@@ -40,9 +36,7 @@ export function CreateCard() {
                 jumpTo('/');
             }
         } catch (error:any) {
-            //console.log(error, error.response.data, error.request, error.message);
-            
-            toast.error(`Card creation failed! ${error}`, {position: "bottom-right"})
+            toast.error(`Card creation failed! ${error.response.data}`, {position: "bottom-right"})
         }
     }
 

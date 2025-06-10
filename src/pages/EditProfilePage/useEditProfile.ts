@@ -71,7 +71,7 @@ export const useEditProfile = () => {
                 toast.success('Profile Updated Successfully!', {position: `bottom-right`});
             }
         } catch (error: any) {    
-            toast.error(`Update Failed! ${error.message}`, {position: `bottom-right`});
+            toast.error(`Update Failed! ${error.response.data}`, {position: `bottom-right`});
         }
     }
     
@@ -98,9 +98,9 @@ export const useEditProfile = () => {
                 }, 2000);
             }
         } catch (error : any) {
-            toast.error(`Account Status Update Failed! ${error.message}`, {position: `bottom-right`});
+            toast.error(`Account Status Update Failed! ${error.response.data}`, {position: `bottom-right`});
             if (error.response){
-                toast.error(`Account Status Update Failed! ${error.response.data.message}`, {position: `bottom-right`});
+                toast.error(`Account Status Update Failed! ${error.response.data}`, {position: `bottom-right`});
             }
         }
     }
@@ -115,7 +115,7 @@ export const useEditProfile = () => {
                 toast.warning('Account Deleted.', {position: 'bottom-right'})
             }
         } catch (error : any) {
-            toast.error(`Account Deletion Failed! ${error.message}`, {position: `bottom-right`});
+            toast.error(`Account Deletion Failed! ${error.response.data}`, {position: `bottom-right`});
         }
     }
     

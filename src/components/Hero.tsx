@@ -3,13 +3,12 @@ import { useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import heroImage from '/office-hero.jpg'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { setSortOption } from '@/store/cardSlice';
 import { IconCards, IconFilter, IconSearch } from '@tabler/icons-react';
 import { setSearchWord } from '@/store/searchSlice';
 
 export function Hero() {
-    const jumpTo = useNavigate();
     const isMobile = useMediaQuery('(max-width: 700px)');
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.userSlice.user);
@@ -78,7 +77,9 @@ export function Hero() {
 
             {/* Conditinally Create Listing */}
             {(isBusiness || isAdmin) && 
-              <Button onClick={() => jumpTo('create-card')} 
+              <Button 
+                component={Link}
+                to='create-card' 
                 fullWidth 
                 mx='auto' variant='filled' 
                 color='blue' 

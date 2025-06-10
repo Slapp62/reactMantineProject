@@ -3,12 +3,12 @@ import { useGetCards } from "@/hooks_and_functions/UseGetCards";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
 import { Box, Button, Center, Flex, Loader, Title } from "@mantine/core";
-import { IconMoodSad } from "@tabler/icons-react";
+import { IconCards, IconMoodSad } from "@tabler/icons-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function MyCards()  {
@@ -71,6 +71,19 @@ export function MyCards()  {
         <Flex mt={20} direction='column' align='center' gap={20}>
             
             <Title>My Listings</Title>
+
+            <Button 
+            component={Link}
+            to='/create-card'  
+            mx='auto' variant='outline' 
+            color='green' 
+            size='md' 
+            fz={20}
+            rightSection={<IconCards/>}
+            >     
+            Create A New Listing
+            </Button>
+
             <Suspense fallback={<Loader color="cyan" size="xl" mt={30}/>} >
                 <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
                     {userCards && userCards.map((card:TCards) => (

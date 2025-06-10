@@ -42,8 +42,8 @@ export function EditCard() {
                 toast.success('Card Updated Successfully!', {position: `bottom-right`}); 
                 setDisabled(true)         
             }
-        } catch (error) {
-                toast.error(`Update Failed! ${error}`, {position: `bottom-right`});
+        } catch (error : any) {
+                toast.error(`Update Failed! ${error.response.data}`, {position: `bottom-right`});
                 
         } 
     }
