@@ -11,45 +11,31 @@ import { useMediaQuery } from '@mantine/hooks';
 
 export function HomePage() {
     const {allCards, isLoading} = useGetCards();
+    
+    const cards = useMemo(() => {
+        if (!allCards) return [];
 
-    if (allCards === null || isLoading) {
-        return (
-            <>
-                <Box pos='relative'>
-                    <Hero/>
-                </Box>
+        return [...allCards].sort((a : TCards, b : TCards) => 
+            (a.createdAt && b.createdAt) ? b.createdAt?.localeCompare(a.createdAt) :  0);
+    }, [allCards]);
 
-                <Center>
-                    <Loader color="cyan" size="xl" mt={30}/>
-                </Center>
-            </>
-        )
-    };
-
-    const cards = useMemo(() => 
-        [...allCards].sort((a : TCards, b : TCards) => 
-            (a.createdAt && b.createdAt) ? b.createdAt?.localeCompare(a.createdAt) :  0)
-    , [allCards]);
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
     const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
     const isMobile = useMediaQuery('(max-width: 500px)');
 
     const sortedCards = useMemo(() => {
-        if (!cards) {return []};
-
         return [...cards].sort((a, b) => {
-        if (sortOption === 'title-asc'){
-        return a.title.localeCompare(b.title);
-        } else if (sortOption === 'title-desc') {
-        return b.title.localeCompare(a.title);
-        } else if (sortOption === 'date-created-old'){
-        if (a.createdAt && b.createdAt){
-            return a.createdAt?.localeCompare(b.createdAt)
-        }
-        } else if (sortOption === 'date-created-new'){
-        if (a.createdAt && b.createdAt){
-            return b.createdAt?.localeCompare(a.createdAt)
-        }
+        if (sortOption === 'title-asc') {return a.title.localeCompare(b.title)}; 
+        if (sortOption === 'title-desc') {return b.title.localeCompare(a.title)}; 
+        if (sortOption === 'date-created-old'){
+            if (a.createdAt && b.createdAt){
+                return a.createdAt?.localeCompare(b.createdAt)
+            }
+        } 
+        if (sortOption === 'date-created-new'){
+            if (a.createdAt && b.createdAt){
+                return b.createdAt?.localeCompare(a.createdAt)
+            }
         }
         return 0
     });
@@ -85,42 +71,59 @@ export function HomePage() {
 
   return (
     <>
-      <Hero/>
-        <Flex direction='column' align='center' gap={20}>
-            <Flex wrap="wrap" gap={30} justify="center" w={isMobile ? "100%" : "80%"} >
-                {paginatedCards.map((id:string) => (
-                    <MiniCard cardID={id} key={id}/>
-                ))}
-            </Flex>
-             {!noCards && 
-                <Text fw={500}>Showing {startCurrentCards} to {endCurrentCards} of {totalCurrentCards} results</Text>}
+      <Hero />
+      {isLoading || !allCards ? 
+        (
+            <Center>
+                <Loader color="cyan" size="xl" mt={30} />
+            </Center>
+        ) 
+        : 
+        (
+        <Flex direction="column" align="center" gap={20}>
+          <Flex wrap="wrap" gap={30} justify="center" w={isMobile ? "100%" : "80%"}>
+            {paginatedCards.map((id: string) => (
+              <MiniCard cardID={id} key={id} />
+            ))}
+          </Flex>
 
-            {!noCards && 
-                <Pagination
-                    mt="md"
-                    total={searchCards ? Math.ceil(searchCards.length / cardsPerPage) : 0}
-                    value={currentPage}
-                    onChange={(page)=>{
-                        setCurrentPage(page);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                />}
+          {!noCards && (
+            <>
+              <Text fw={500}>
+                Showing {startCurrentCards} to {endCurrentCards} of {totalCurrentCards} results
+              </Text>
+              <Pagination
+                mt="md"
+                total={Math.ceil(searchCards.length / cardsPerPage)}
+                value={currentPage}
+                onChange={page => {
+                  setCurrentPage(page);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              />
+            </>
+          )}
 
-           
-            {noCards && 
-                <Box ta='center'>
-                    <IconMoodSad2 color='red' size={80}/>
-                    <Title order={2} fw={700} c='red'>No Cards Found</Title>
-                </Box>}
+          {noCards && (
+            <Box ta="center">
+              <IconMoodSad2 color="red" size={80} />
+              <Title order={2} fw={700} c="red">
+                No Cards Found
+              </Title>
+            </Box>
+          )}
 
-            <Button 
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                mt={20}
-                c='green'
-                variant='light'
-                rightSection={<IconArrowUp/>}
-            > Back to Top</Button>
+          <Button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            mt={20}
+            c="green"
+            variant="light"
+            rightSection={<IconArrowUp />}
+          >
+            Back to Top
+          </Button>
         </Flex>
+      )}
     </>
   );
 }
