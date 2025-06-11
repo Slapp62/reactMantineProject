@@ -1,30 +1,48 @@
-import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal} from '@mantine/core';
-import { TCards } from '@/Types';
-import {IconEdit, IconTrash } from '@tabler/icons-react';
+import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal, ActionIcon} from '@mantine/core';
+//import { TCards } from '@/Types';
+import {IconBrandLinkedin, IconBrandTwitter, IconBrandWhatsapp, IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Link, useLocation } from 'react-router-dom';
 import { useDeleteCard } from '@/hooks_and_functions/UseDeleteCard';
 import { FavoritesButton } from '../Buttons/AddToFavorites';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useTranslateHEtoEN } from '../../hooks_and_functions/UseTranslateHEtoEN';
 import { BsTranslate } from 'react-icons/bs';
 import React from 'react';
+import { motion } from 'framer-motion';
 
-function MiniCard({ card } : { card: TCards }) {
+function MiniCard({ cardID} : { cardID: string}) {
+    const card = useSelector((state:RootState) => state.cardSlice.cards?.find((card) => card._id === cardID));
+    if (!card) {return null};
+    
     const [opened, { open, close }] = useDisclosure(false);
 
     const deleteCard = useDeleteCard();
     const location = useLocation();
     const myListingsPage = location.pathname === '/my-listings';
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
-    
+    const isMobile = useMediaQuery('(max-width: 500px)');
     const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
     useTranslateHEtoEN(card.title, card.subtitle, card.description);
 
+    const cardUrl = `${window.location.origin}/card-details/${card._id}`;
+    const shareText = `Check out this listing: ${cardUrl}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?`+`url=${encodeURIComponent(shareText)}`;
+    const xUrl =`https://twitter.com/intent/tweet?` +`text=${encodeURIComponent(shareText)}` +`&url=${encodeURIComponent(cardUrl)}`;
+
   return (
-    <>
-        <Card h='100%' shadow="sm" mx={-15} radius="md" w={300} withBorder>
+    <motion.div
+        key={card._id}
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, amount: 0.2 }}
+        style={{width: isMobile ? '90%' : '350px'}}
+        >
+            
+        <Card shadow="sm" radius="md" withBorder>
         <Card.Section>
             <Image
             src={card.image.url}
@@ -52,27 +70,56 @@ function MiniCard({ card } : { card: TCards }) {
                 {card.createdAt && <Text size='sm' mt={5}>Date Posted: {new Date(card.createdAt).toLocaleDateString()}</Text>}
             </Box>
 
-            <Flex mx="auto"  my={10} gap={10} direction='column'>
-                <Button variant='outline' fz={12} component={Link} to={`/card-details/${card._id}`}>
-                    <Text fw='bold'>More Info</Text>
-                </Button>
+            <Flex mx="auto"  my={10} gap={5} direction='column'>
+                <Group justify='center'>
+                    <Button  h={40} style={{flex: 1}} fullWidth={!containsHebrew} variant='filled' fz={12} component={Link} to={`/card-details/${card._id}`}>
+                        <Text fw='bold'>More Info</Text>
+                    </Button>
 
-                {containsHebrew &&    
-                <Button loading={translationLoading} rightSection={<BsTranslate/>} variant='outline' fz={12} onClick={() => handleTranslate(cardString)}>
-                    <Text fw='bold'>{currentLang === 'he' ? 'Translate' : 'Show Original'}</Text>
-                </Button>}
+                    {containsHebrew &&    
+                        <Button 
+                            h={40}
+                            style={{flex: 1}}
+                            loading={translationLoading} 
+                            rightSection={<BsTranslate/>} 
+                            variant='outline' fz={12} 
+                            onClick={() => handleTranslate(cardString)}
+                            >
+                            <Text fw='bold'>{currentLang === 'he' ? 'Translate' : 'Show Original'}</Text>
+                        </Button>}
 
-                {loggedIn && myListingsPage && 
-                <Button component={Link} to={`/edit-card/${card._id}`}>
-                    <IconEdit/>
-                </Button>}
-
-                {myListingsPage && 
-                <Button bg='red' onClick={open}>
-                <IconTrash />
-                </Button>}
+                </Group>
                 
-                {loggedIn && <FavoritesButton card={card} />}
+
+                <Group justify='center'>
+                    {loggedIn && myListingsPage && 
+                    <Button style={{flex: 1}} component={Link} to={`/edit-card/${card._id}`}>
+                        <IconEdit/>
+                    </Button>}
+
+                    {myListingsPage && 
+                    <Button style={{flex: 1}} bg='red' onClick={open}>
+                        <IconTrash />
+                    </Button>}
+                 </Group>
+                
+                <Group>
+                    {loggedIn && <FavoritesButton card={card}/>}
+
+                    <Group mx='auto'>
+                        <ActionIcon size={40} variant='light' color='green'>
+                            <IconBrandLinkedin onClick={() => window.open(linkedInUrl, '_blank')}/>
+                        </ActionIcon>
+
+                        <ActionIcon size={40} variant='light' color='green'>
+                            <IconBrandWhatsapp onClick={() => window.open(whatsappUrl, '_blank')}/>
+                        </ActionIcon>
+
+                        <ActionIcon size={40} variant='light' color='green'>
+                            <IconBrandTwitter onClick={() => window.open(xUrl, '_blank')}/>
+                        </ActionIcon>
+                    </Group>
+                </Group>
             </Flex>
         </Card.Section>
         </Card>
@@ -88,8 +135,8 @@ function MiniCard({ card } : { card: TCards }) {
                 <Button variant="outline" onClick={close}>No, Take Me Back</Button>
             </Group>
         </Modal>
-    </>
+    </motion.div>
   );
 }
 
-export default React.memo(MiniCard) as typeof MiniCard
+export default React.memo(MiniCard, (prev, next) => prev.cardID === next.cardID);

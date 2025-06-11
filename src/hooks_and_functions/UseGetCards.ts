@@ -2,40 +2,32 @@ import { setCardsSlice } from "@/store/cardSlice";
 import { RootState } from "@/store/store";
 import { TCards } from "@/Types";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export function useGetCards() {
     const dispatch = useDispatch();
-    const cards = useSelector((state:RootState) => state.cardSlice.cards);
-    const isLoading = cards === null;
+    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if (cards !== null) {
-            //cards are already loaded in Redux
-        } else {
-            const loadCards = async () => {
-            try {
-                const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
-                const sortedNewestFirst : TCards[] = response.data.sort((a : TCards, b : TCards) => {
-                    if (a.createdAt && b.createdAt){
-                        return b.createdAt?.localeCompare(a.createdAt)
-                    }
-                    return 0
-                });
-                dispatch(setCardsSlice(sortedNewestFirst));   
-                
-            } catch (error : any) {
-                toast.error(`Failed to fetch cards: ${error}`, {position: `bottom-right`}); 
-            }
-            
-            };
-
-            loadCards();
+        if (allCards === null) {
+            (async () => {
+                try {
+                    setIsLoading(true);
+                    const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
+                    //const sortedNewestFirst : TCards[] = response.data;
+                    dispatch(setCardsSlice(response.data));   
+                } catch (error : any) {
+                    toast.error(`Failed to fetch cards: ${error}`, {position: `bottom-right`}); 
+                } finally {
+                    setIsLoading(false);
+                }
+            })();
         }
         
-    }, [cards]);
+    }, [allCards, dispatch]);
 
-    return {cards, isLoading};
+    return {allCards, isLoading, setIsLoading};
 }

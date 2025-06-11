@@ -6,12 +6,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import useTranslateHEtoEN from "@/hooks_and_functions/UseTranslateHEtoEN";
 import { BsTranslate } from "react-icons/bs";
+import { useGetCards } from "@/hooks_and_functions/UseGetCards";
 
 export function CardDetails() {
     const isMobile = useMediaQuery('(max-width: 700px)');
     const {id} = useParams();
     const user = useSelector((state:RootState) => state.userSlice.user);
-    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+    const {allCards} = useGetCards();
     const card = allCards?.find((card) => card._id === id);
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 

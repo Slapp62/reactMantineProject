@@ -2,17 +2,37 @@ import { useGetCards } from '@/hooks_and_functions/UseGetCards';
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
-import { Box, Button, Center, Flex, Loader, Pagination, Text } from '@mantine/core';
-import { motion } from 'framer-motion';
+import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IconArrowUp } from '@tabler/icons-react';
+import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import MiniCard from '@/components/Cards/MiniCard';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function HomePage() {
-    const {cards, isLoading} = useGetCards();
+    const {allCards, isLoading} = useGetCards();
+
+    if (allCards === null || isLoading) {
+        return (
+            <>
+                <Box pos='relative'>
+                    <Hero/>
+                </Box>
+
+                <Center>
+                    <Loader color="cyan" size="xl" mt={30}/>
+                </Center>
+            </>
+        )
+    };
+
+    const cards = useMemo(() => 
+        [...allCards].sort((a : TCards, b : TCards) => 
+            (a.createdAt && b.createdAt) ? b.createdAt?.localeCompare(a.createdAt) :  0)
+    , [allCards]);
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
     const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
+    const isMobile = useMediaQuery('(max-width: 500px)');
 
     const sortedCards = useMemo(() => {
         if (!cards) {return []};
@@ -34,7 +54,7 @@ export function HomePage() {
         return 0
     });
     }, [cards, sortOption]);
-
+    
     const searchCards = useMemo(() => {
         return sortedCards.filter((card:TCards) => {
             const keyWord = searchWord.toLowerCase();
@@ -49,56 +69,50 @@ export function HomePage() {
     const [currentPage, setCurrentPage] = useState(1);
     const cardsPerPage = 12;
     
-    const paginatedCards = searchCards ? searchCards.slice(
-        (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage) : [];
+    const paginatedCards = useMemo(() => {
+        return searchCards.slice(
+        (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
+    }, [searchCards, currentPage, cardsPerPage]).map((card:TCards) => card._id);
 
     useEffect(() => {
         setCurrentPage(1);
     }, [searchCards]);
 
-    if (isLoading) {
-        return <>
-        <Box pos='relative'>
-            <Hero/>
-        </Box>
+    const startCurrentCards = (currentPage - 1) * cardsPerPage + 1;
+    const endCurrentCards = Math.min(currentPage * cardsPerPage, searchCards.length);
+    const totalCurrentCards = searchCards.length;
+    const noCards = searchCards.length === 0;
 
-        <Center>
-            <Loader color="cyan" size="xl" mt={30}/>
-        </Center>
-        </>      
-    }
-    
   return (
     <>
       <Hero/>
         <Flex direction='column' align='center' gap={20}>
-            
-                <Flex wrap="wrap" gap={20} justify="space-evenly" w="70%" mx='auto'>
-                    {paginatedCards.map((card:TCards) => (
-                    <motion.div
-                        key={card._id}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true, amount: 0.2 }}
-                        >
-                        
-                        <MiniCard card={card} />
-                    
-                    </motion.div>
-                    ))}
-                </Flex>
-            
-            <Text >Showing {(currentPage-1)*cardsPerPage+1} to {currentPage*cardsPerPage} of {cards?.length}</Text>
-            <Pagination
-            total={searchCards ? Math.ceil(searchCards.length / cardsPerPage) : 0}
-            value={currentPage}
-            onChange={(page)=>{
-                setCurrentPage(page);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            mt="md"
-            />
+            <Flex wrap="wrap" gap={30} justify="center" w={isMobile ? "100%" : "80%"} >
+                {paginatedCards.map((id:string) => (
+                    <MiniCard cardID={id} key={id}/>
+                ))}
+            </Flex>
+             {!noCards && 
+                <Text fw={500}>Showing {startCurrentCards} to {endCurrentCards} of {totalCurrentCards} results</Text>}
+
+            {!noCards && 
+                <Pagination
+                    mt="md"
+                    total={searchCards ? Math.ceil(searchCards.length / cardsPerPage) : 0}
+                    value={currentPage}
+                    onChange={(page)=>{
+                        setCurrentPage(page);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                />}
+
+           
+            {noCards && 
+                <Box ta='center'>
+                    <IconMoodSad2 color='red' size={80}/>
+                    <Title order={2} fw={700} c='red'>No Cards Found</Title>
+                </Box>}
+
             <Button 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 mt={20}

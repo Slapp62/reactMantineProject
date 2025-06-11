@@ -1,5 +1,5 @@
 import {
- Anchor,Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
+ Button,Checkbox,Container,Group,Paper,PasswordInput,Text,TextInput,Title } from '@mantine/core';
 import classes from './Login.module.css';
 import  { FieldValues, useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/userSlice';
 import { useEffect, useReducer, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -162,12 +162,14 @@ export function LoginPage() {
                     onChange={(event) => setRemember(event.currentTarget.checked)}/>
                 </Group>
 
-                <Text c="dimmed" size="sm" ta="center" my='lg'>
-                    Don't have an account yet?{' '}
-                    <Anchor size="sm" component="button" onClick={() => jumpTo('/register')} underline='hover'>
-                    Create account
-                    </Anchor>
-                </Text>
+                <Group justify='center'>
+                    <Text c="dimmed" size="sm" ta="center" my='lg'>
+                        Don't have an account yet? 
+                    </Text>
+                    <Button p={0} variant='transparent' component={Link} to='/register'>
+                        Create account
+                    </Button>
+                </Group>
 
                 <Button type='submit' fullWidth loading={isLoading} disabled={!isValid || isBlocked}>
                 Sign in
