@@ -101,29 +101,30 @@ import { AvatarIcon } from './Avatar';
           hiddenFrom="md"
           zIndex={1000000}
         >
-          <ScrollArea h="calc(100vh - 80px" mx="-sm" >
+        <ScrollArea h="calc(100vh - 80px" mx="-sm" >
             <Divider/>
-              <Link to="/" className={classes.link} onClick={closeDrawer}>
-                <Text fw={700}>Home</Text>
-              </Link>
+                <Flex direction="column" >
+                    <Link to="/" className={classes.link} onClick={closeDrawer}>
+                        <Text c='indigo' fw={700}>HOME</Text>
+                    </Link>
 
-              <Link to="/about" className={classes.link} onClick={closeDrawer}>
-                <Text fw={700}>About</Text>
-              </Link>
+                    <Link to="/about" className={classes.link} onClick={closeDrawer}>
+                        <Text c='indigo' fw={700}>ABOUT</Text>
+                    </Link>
 
-              {loggedIn &&  <Link to="/favorites" className={classes.link} onClick={closeDrawer}>
-                <Text fw={700}>Favorites</Text>
-              </Link>}
+                    {loggedIn &&  <Link to="/favorites" className={classes.link} onClick={closeDrawer}>
+                        <Text c='indigo'  fw={700}>FAVORITES</Text>
+                    </Link>}
 
-              {user?.isBusiness && <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
-                <Text fw={700}>My Listings</Text>
-              </Link>}
-              
-              {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
-                <Text fw={700}>Admin Controls</Text>
-              </Link>}
-  
-            <Divider my="sm" />
+                    {user?.isBusiness && <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
+                        <Text c='indigo'  fw={700}>MY LISTINGS</Text>
+                    </Link>}
+                    
+                    {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
+                        <Text c='indigo'  fw={700}>ADMIN CONTROLS</Text>
+                    </Link>}
+                </Flex>
+            <Divider my="md" />
 
             {loggedIn && <Center my="md">
               <AvatarIcon/>

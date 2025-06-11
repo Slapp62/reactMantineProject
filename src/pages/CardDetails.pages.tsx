@@ -1,4 +1,4 @@
-import { Card, Text, Image, List, ListItem, Flex, Title, Container, Button} from "@mantine/core";
+import { Card, Text, Image, List, ListItem, Flex, Title, Container, Button, Group} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
@@ -7,6 +7,7 @@ import { RootState } from "@/store/store";
 import useTranslateHEtoEN from "@/hooks_and_functions/UseTranslateHEtoEN";
 import { BsTranslate } from "react-icons/bs";
 import { useGetCards } from "@/hooks_and_functions/UseGetCards";
+import SocialIcons from "@/components/SocialMedia";
 
 export function CardDetails() {
     const isMobile = useMediaQuery('(max-width: 700px)');
@@ -92,9 +93,10 @@ export function CardDetails() {
                 </Card.Section>
 
             {user && 
-            <Flex my={5} justify="space-evenly">
+            <Group my={5} justify="space-evenly">
                     {card && <FavoritesButton card={card} />}
-            </Flex>}
+                    {card && <SocialIcons cardID={card._id} />}
+            </Group>}
             </Card>
         </Container>
     )

@@ -13,10 +13,10 @@ export function FavoriteCards()  {
     const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
     
     const jumpTo = useNavigate();
-    const {cards, isLoading} = useGetCards();
+    const {allCards, isLoading} = useGetCards();
     const user = useSelector((state:RootState) => state.userSlice.user);
 
-    const likedCards = cards?.filter((card) => card.likes?.includes(`${user?._id}`))
+    const likedCards = allCards?.filter((card) => card.likes?.includes(`${user?._id}`))
 
     if (isLoading) {
         return <>
@@ -58,7 +58,7 @@ export function FavoriteCards()  {
                     viewport={{ once: true, amount: 0.2 }}>
 
                     
-                        <MiniCard key={card._id} card={card} />
+                        <MiniCard key={card._id} cardID={card._id} />
                 
 
                     </motion.div>

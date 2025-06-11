@@ -1,6 +1,6 @@
-import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal, ActionIcon} from '@mantine/core';
+import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal} from '@mantine/core';
 //import { TCards } from '@/Types';
-import {IconBrandLinkedin, IconBrandTwitter, IconBrandWhatsapp, IconEdit, IconTrash } from '@tabler/icons-react';
+import {IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Link, useLocation } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { useTranslateHEtoEN } from '../../hooks_and_functions/UseTranslateHEtoEN
 import { BsTranslate } from 'react-icons/bs';
 import React from 'react';
 import { motion } from 'framer-motion';
+import SocialIcons from '../SocialMedia';
 
 function MiniCard({ cardID} : { cardID: string}) {
     const card = useSelector((state:RootState) => state.cardSlice.cards?.find((card) => card._id === cardID));
@@ -25,12 +26,6 @@ function MiniCard({ cardID} : { cardID: string}) {
     const isMobile = useMediaQuery('(max-width: 500px)');
     const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
     useTranslateHEtoEN(card.title, card.subtitle, card.description);
-
-    const cardUrl = `${window.location.origin}/card-details/${card._id}`;
-    const shareText = `Check out this listing: ${cardUrl}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?`+`url=${encodeURIComponent(shareText)}`;
-    const xUrl =`https://twitter.com/intent/tweet?` +`text=${encodeURIComponent(shareText)}` +`&url=${encodeURIComponent(cardUrl)}`;
 
   return (
     <motion.div
@@ -93,12 +88,12 @@ function MiniCard({ cardID} : { cardID: string}) {
 
                 <Group justify='center'>
                     {loggedIn && myListingsPage && 
-                    <Button style={{flex: 1}} component={Link} to={`/edit-card/${card._id}`}>
+                    <Button variant='outline' color='green' style={{flex: 1}} component={Link} to={`/edit-card/${card._id}`}>
                         <IconEdit/>
                     </Button>}
 
                     {myListingsPage && 
-                    <Button style={{flex: 1}} bg='red' onClick={open}>
+                    <Button variant='outline' style={{flex: 1}} color='red' onClick={open}>
                         <IconTrash />
                     </Button>}
                  </Group>
@@ -107,17 +102,7 @@ function MiniCard({ cardID} : { cardID: string}) {
                     {loggedIn && <FavoritesButton card={card}/>}
 
                     <Group mx='auto'>
-                        <ActionIcon size={40} variant='light' color='green'>
-                            <IconBrandLinkedin onClick={() => window.open(linkedInUrl, '_blank')}/>
-                        </ActionIcon>
-
-                        <ActionIcon size={40} variant='light' color='green'>
-                            <IconBrandWhatsapp onClick={() => window.open(whatsappUrl, '_blank')}/>
-                        </ActionIcon>
-
-                        <ActionIcon size={40} variant='light' color='green'>
-                            <IconBrandTwitter onClick={() => window.open(xUrl, '_blank')}/>
-                        </ActionIcon>
+                        <SocialIcons cardID={card._id}/>
                     </Group>
                 </Group>
             </Flex>

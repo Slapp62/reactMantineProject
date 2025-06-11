@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 
 export function MyCards()  {
     const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
-    const {cards, isLoading} = useGetCards();
+    const {allCards, isLoading} = useGetCards();
     const user = useSelector((state:RootState) => state.userSlice.user);
     const [userCards, setUserCards] = useState<TCards[]>([]);
     const jumpTo = useNavigate();
@@ -33,14 +33,14 @@ export function MyCards()  {
         }
 
         // check if cards are already available in Redux
-        if (cards && user) {
-            setUserCards(cards?.filter((card) => card.user_id === user?._id));
+        if (allCards && user) {
+            setUserCards(allCards?.filter((card) => card.user_id === user?._id));
         } 
         // if they aren't, fetch from API
         else {
             loadUserCards();
         }
-    }, [cards, user]);
+    }, [allCards, user]);
     
     if (isLoading) {
     return <>
@@ -95,7 +95,7 @@ export function MyCards()  {
                     viewport={{ once: true, amount: 0.2 }}>
 
                     
-                        <MiniCard key={card._id} card={card} />
+                        <MiniCard key={card._id} cardID={card._id} />
                 
 
                     </motion.div>
