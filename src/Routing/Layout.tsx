@@ -1,11 +1,34 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "../components/Navbar/Navigation.tsx";
 import { Flex } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
 import {Footer} from "../components/Footer.tsx";
+import { useAuthInit } from "@/hooks_and_functions/UseAuthInit.ts";
+import { fetchCardsThunk } from "@/store/cardSlice.tsx";
+import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 
 
 export function Layout() {
+    // refresh all cards in redux when visitin hompage
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const fetchedRef = useRef(false);
+
+    useEffect(() => {
+        if (location.pathname === '/'){
+            if (!fetchedRef.current) {
+                dispatch(fetchCardsThunk() as any);
+                fetchedRef.current = true;
+            }
+        } else {
+            fetchedRef.current = false;
+        }
+    }, [location.pathname, dispatch]);
+    
+    // persist log in between sessions
+    useAuthInit();
+
     return (
       <>
         <Flex direction='column' mih='100vh'>

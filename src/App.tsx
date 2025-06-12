@@ -1,13 +1,11 @@
-import '@mantine/core/styles.css'
+import '@mantine/core/styles.css';
+import './App.css'; 
 import { MantineProvider } from '@mantine/core';
 import { Router } from './Routing/Router';
 import { theme } from './theme';
-import './App.css'; // or './styles/global.css'
 import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
-import { useAuthInit } from './hooks_and_functions/UseAuthInit';
 import { PersistGate } from 'redux-persist/integration/react';
-
 
 export default function App() {
 
@@ -15,14 +13,9 @@ export default function App() {
     <MantineProvider theme={theme}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <InnerApp/>
+            <Router/>
         </PersistGate>
       </Provider>
     </MantineProvider>
   );
-}
-
-function InnerApp() {
-  useAuthInit();
-  return <Router/>
 }
