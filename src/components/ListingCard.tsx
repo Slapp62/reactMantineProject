@@ -1,19 +1,20 @@
-import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal} from '@mantine/core';
+import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal, Skeleton} from '@mantine/core';
 import {IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Link, useLocation } from 'react-router-dom';
 import { useDeleteCard } from '@/hooks_and_functions/UseDeleteCard';
-import { FavoritesButton } from '../Buttons/AddToFavorites';
+import { FavoritesButton } from './Buttons/FavoritesButton';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { useTranslateHEtoEN } from '../../hooks_and_functions/UseTranslateHEtoEN';
+import { useTranslateHEtoEN } from '../hooks_and_functions/UseTranslateHEtoEN';
 import { BsTranslate } from 'react-icons/bs';
 import React from 'react';
 import { motion } from 'framer-motion';
-import SocialIcons from '../SocialMedia';
+import SocialIcons from './SocialMedia';
 
-function MiniCard({ cardID} : { cardID: string}) {
+function ListingCard({ cardID} : { cardID: string}) {
     const card = useSelector((state:RootState) => state.cardSlice.cards?.find((card) => card._id === cardID));
+    const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
     if (!card) {return null};
     
     const [opened, { open, close }] = useDisclosure(false);
@@ -38,14 +39,16 @@ function MiniCard({ cardID} : { cardID: string}) {
             
         <Card shadow="sm" radius="md" withBorder>
         <Card.Section>
-            <Image
-            src={card.image.url}
-            height={160}
-            alt="picture"
-            fit='cover'
-            loading='lazy'
-            fallbackSrc='https://www.irisoele.com/img/noimage.png'
-            />
+            <Skeleton visible={isLoading}>
+                <Image
+                src={card.image.url}
+                height={160}
+                alt="picture"
+                fit='cover'
+                loading='lazy'
+                fallbackSrc='https://images.pexels.com/photos/5598328/pexels-photo-5598328.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+                />
+            </Skeleton>
         
         </Card.Section> 
 
@@ -123,4 +126,4 @@ function MiniCard({ cardID} : { cardID: string}) {
   );
 }
 
-export default React.memo(MiniCard, (prev, next) => prev.cardID === next.cardID);
+export default React.memo(ListingCard, (prev, next) => prev.cardID === next.cardID);

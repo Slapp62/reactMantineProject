@@ -1,7 +1,7 @@
 import { IconMailFilled, IconMapPinFilled, IconPhoneFilled } from '@tabler/icons-react';
 import { Container, Flex, Group, Text, Title } from '@mantine/core';
 
-import classes from './ComponentStyles/FooterStyles.module.css'
+import classes from '../ComponentStyles/FooterStyles.module.css'
 import { Logo } from './Logo';
 
 const data = [

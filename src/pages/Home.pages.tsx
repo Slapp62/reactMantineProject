@@ -5,9 +5,9 @@ import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@man
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
-import MiniCard from '@/components/Cards/MiniCard';
 import { useMediaQuery } from '@mantine/hooks';
 import { fetchCardsThunk } from '@/store/cardSlice';
+import ListingCard from '@/components/ListingCard';
 
 export function HomePage() {
     const dispatch = useDispatch();
@@ -90,7 +90,7 @@ export function HomePage() {
         <Flex direction="column" align="center" gap={20}>
           <Flex wrap="wrap" gap={30} justify="center" w={isMobile ? "100%" : "80%"}>
             {paginatedCards.map((id: string) => (
-              <MiniCard cardID={id} key={id} />
+              <ListingCard cardID={id} key={id} />
             ))}
           </Flex>
 

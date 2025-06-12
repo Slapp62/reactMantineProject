@@ -1,7 +1,7 @@
 import { Card, Text, Image, List, ListItem, Flex, Title, Container, Button, Group} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useParams } from "react-router-dom"
-import { FavoritesButton } from "@/components/Buttons/AddToFavorites";
+import { FavoritesButton } from "@/components/Buttons/FavoritesButton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import useTranslateHEtoEN from "@/hooks_and_functions/UseTranslateHEtoEN";
@@ -31,7 +31,7 @@ export function CardDetails() {
                     alt="picture"
                     fit='cover'
                     loading='lazy'
-                    fallbackSrc='https://www.irisoele.com/img/noimage.png'
+                    fallbackSrc='https://images.pexels.com/photos/5598328/pexels-photo-5598328.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
                     p={10}
                     style={{objectPosition:"center"}}
                     />

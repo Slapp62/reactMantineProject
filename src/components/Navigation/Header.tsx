@@ -5,8 +5,8 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from '../ComponentStyles/Navigation.module.css';
-import { LightDarkToggle } from '../LightDarkToggle'
-import { Logo } from '../Logo';
+import { LightDarkToggle } from './LightDarkToggle'
+import { Logo } from './Logo';
 import clsx from 'clsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

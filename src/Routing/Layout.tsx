@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { Navbar } from "../components/Navbar/Navigation.tsx";
+import { Navbar } from "../components/Navigation/Header.tsx";
 import { Flex } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
-import {Footer} from "../components/Footer.tsx";
+import {Footer} from '../components/Navigation/Footer.tsx';
 import { useAuthInit } from "@/hooks_and_functions/UseAuthInit.ts";
 import { fetchCardsThunk } from "@/store/cardSlice.tsx";
 import { useEffect, useRef } from "react";

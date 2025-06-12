@@ -9,7 +9,7 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 
 export function FavoriteCards()  {
-    const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
+    const ListingCard = lazy(() => import('@/components/ListingCard'));
     
     const jumpTo = useNavigate();
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
@@ -58,7 +58,7 @@ export function FavoriteCards()  {
                     viewport={{ once: true, amount: 0.2 }}>
 
                     
-                        <MiniCard key={card._id} cardID={card._id} />
+                        <ListingCard key={card._id} cardID={card._id} />
                 
 
                     </motion.div>

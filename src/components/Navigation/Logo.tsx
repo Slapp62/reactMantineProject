@@ -1,6 +1,6 @@
 import { Group,Image,Text } from "@mantine/core";
 import flavicon from '/briefcase-icon.png'
-import classes from './ComponentStyles/Logo.module.css'
+import classes from '../ComponentStyles/Logo.module.css'
 import { Link } from "react-router-dom";
 
 export function Logo() {

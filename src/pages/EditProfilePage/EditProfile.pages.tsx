@@ -1,7 +1,7 @@
 import { Button, Fieldset, Flex, Image, TextInput, Title, Text} from "@mantine/core";
 import { IconPhone } from "@tabler/icons-react";
 import { useEditProfile } from "./useEditProfile";
-import { DeleteUserModal } from "@/components/DeleteUserModal";
+import { DeleteUserModal } from "@/components/Modals/DeleteUserModal";
 
 
 export function EditProfile() {

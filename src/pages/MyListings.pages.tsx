@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function MyCards()  {
-    const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
+    const MiniCard = lazy(() => import('@/components/ListingCard'));
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
     const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
     const user = useSelector((state:RootState) => state.userSlice.user);

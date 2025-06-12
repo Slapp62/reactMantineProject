@@ -3,7 +3,7 @@ import { IconFilter, IconPencil, IconSearch, IconTrash } from "@tabler/icons-rea
 import { toggleAdminView } from "@/store/userSlice";
 import { useAdminControls } from "./useAdminControls";
 import { useState } from "react";
-import { DeleteUserModal } from "@/components/DeleteUserModal";
+import { DeleteUserModal } from "@/components/Modals/DeleteUserModal";
 import { useMediaQuery } from "@mantine/hooks";
 
 const AdminControls = () => {
