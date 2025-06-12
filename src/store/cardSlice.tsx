@@ -1,12 +1,22 @@
-import { TCards, TCardsArray } from "@/Types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TCards } from "@/Types";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
+
+export const fetchCardsThunk = createAsyncThunk('card/fetchCards', async () => {
+    const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
+    return response.data
+})
 
 type CardState = {
-    cards: TCardsArray | null;
+    cards: TCards[];
+    loading: boolean;
+    error: string | null;
     sortOption: string;
 }
 const initialState:CardState = {
-    cards: null as TCardsArray | null,
+    cards: [],
+    loading: false,
+    error: null,
     sortOption: '',
 }
 
@@ -14,9 +24,6 @@ const cardSlice = createSlice({
     name: 'card',
     initialState,
     reducers: {
-        setCardsSlice: (state, action:PayloadAction<TCardsArray>) => {
-            state.cards = action.payload;
-        },
         addCard: (state, action:PayloadAction<TCards>) => {
             if (state.cards){
                 state.cards.push(action.payload);
@@ -74,7 +81,22 @@ const cardSlice = createSlice({
             state.sortOption = action.payload   
         }
     },
+    extraReducers: (builder) => {
+        builder.addCase(fetchCardsThunk.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(fetchCardsThunk.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+            state.cards = action.payload;
+        });
+        builder.addCase(fetchCardsThunk.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message || 'Failed to fetch cards';
+        });
+    },
 });
 
-export const {setCardsSlice, addCard, editCard, removeCard, addLike, removeLike, setSortOption} = cardSlice.actions;
+export const {addCard, editCard, removeCard, addLike, removeLike, setSortOption} = cardSlice.actions;
 export default cardSlice.reducer;

@@ -1,16 +1,24 @@
-import { useGetCards } from '@/hooks_and_functions/UseGetCards';
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
 import { TCards } from '@/Types';
 import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import MiniCard from '@/components/Cards/MiniCard';
 import { useMediaQuery } from '@mantine/hooks';
+import { fetchCardsThunk } from '@/store/cardSlice';
 
 export function HomePage() {
-    const {allCards, isLoading} = useGetCards();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchCardsThunk() as any);
+    }, [dispatch]);
+    
+    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+    const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
+
     const cards = useMemo(() => {
         if (!allCards) {return []};
 
