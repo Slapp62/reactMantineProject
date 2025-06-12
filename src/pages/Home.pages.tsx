@@ -8,11 +8,9 @@ import { useSelector } from 'react-redux';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import MiniCard from '@/components/Cards/MiniCard';
 import { useMediaQuery } from '@mantine/hooks';
-import useStayLoggedIn from '@/hooks_and_functions/useStayLoggedIn';
 
 export function HomePage() {
     const {allCards, isLoading} = useGetCards();
-    useStayLoggedIn();
     const cards = useMemo(() => {
         if (!allCards) {return []};
 
