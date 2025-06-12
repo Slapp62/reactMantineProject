@@ -127,7 +127,7 @@ import { AvatarIcon } from './Avatar';
             <Divider my="md" />
 
             {loggedIn && <Center my="md">
-              <AvatarIcon/>
+              <AvatarIcon closeDrawer={closeDrawer}/>
             </Center>}
 
             <Flex justify="space-evenly" ta="center" p="sm" gap={5} direction="column">
