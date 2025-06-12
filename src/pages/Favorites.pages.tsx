@@ -1,5 +1,4 @@
 import { Hero } from "@/components/Hero";
-import { useGetCards } from "@/hooks_and_functions/UseGetCards";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
 import { Box, Button, Center, Flex, Loader, Title } from "@mantine/core"
@@ -13,7 +12,8 @@ export function FavoriteCards()  {
     const MiniCard = lazy(() => import('@/components/Cards/MiniCard'));
     
     const jumpTo = useNavigate();
-    const {allCards, isLoading} = useGetCards();
+    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+    const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
     const user = useSelector((state:RootState) => state.userSlice.user);
 
     const likedCards = allCards?.filter((card) => card.likes?.includes(`${user?._id}`))
