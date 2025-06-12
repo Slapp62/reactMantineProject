@@ -1,22 +1,23 @@
 import { Hero } from "@/components/Hero";
+import MappedCards from "@/components/MappedCards";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
 import { Box, Button, Center, Flex, Loader, Title } from "@mantine/core";
 import { IconCards, IconMoodSad } from "@tabler/icons-react";
 import axios from "axios";
-import { motion } from "framer-motion";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function MyCards()  {
-    const MiniCard = lazy(() => import('@/components/ListingCard'));
+    
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
     const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
     const user = useSelector((state:RootState) => state.userSlice.user);
     const [userCards, setUserCards] = useState<TCards[]>([]);
     const jumpTo = useNavigate();
+    
     
     useEffect(() => {
         const loadUserCards = async () => {
@@ -84,24 +85,7 @@ export function MyCards()  {
             Create A New Listing
             </Button>
 
-            <Suspense fallback={<Loader color="cyan" size="xl" mt={30}/>} >
-                <Flex wrap="wrap" gap="lg" align='stretch' justify="space-evenly" w="70%" mx='auto'>
-                    {userCards && userCards.map((card:TCards) => (
-                    <motion.div
-                    key={card._id}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true, amount: 0.2 }}>
-
-                    
-                        <MiniCard key={card._id} cardID={card._id} />
-                
-
-                    </motion.div>
-                    ))}
-                </Flex>
-            </Suspense>
+            <MappedCards cardsArr={userCards}/>
         </Flex>
     )
 }

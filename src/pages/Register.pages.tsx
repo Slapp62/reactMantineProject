@@ -14,16 +14,20 @@ export function RegisterForm()  {
     const jumpTo = useNavigate();
     const registerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 700px)');
-    const [imageURL, setURL] = useState('');
+    const defaultAvatar = 'https://images.unsplash.com/vector-1748280445815-10a4bb2ba7e3?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    const [imageURL, setURL] = useState(defaultAvatar);
     
     const { reset, register, handleSubmit, formState: {errors, isValid, isDirty} } = useForm<TUsers>({
         mode: 'all',
-        resolver: joiResolver(registrationSchema)
+        resolver: joiResolver(registrationSchema),
     });
 
     const onSubmit = async (data:FieldValues) => {
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
+        if (!data.image?.url?.trim()) {data.image.url = defaultAvatar};
+        if (!data.image?.alt?.trim()) {data.image.alt = 'default fox avatar'};
+
         try {
             const response = await axios.post(
                 'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users', 
@@ -96,10 +100,13 @@ export function RegisterForm()  {
                     <Fieldset legend="Avatar">
                         <Image
                             src={imageURL} 
+                            h={150}
+                            w={150}
+                            mx='auto'
                         />
                         <TextInput
                             label="URL"
-                            value={imageURL}
+                            defaultValue={imageURL}
                             {...register('image.url', {
                                 onChange: (e) => {
                                     setURL(e.target.value);
@@ -110,6 +117,7 @@ export function RegisterForm()  {
                             />
                         <TextInput
                             label="Image Alt"
+                            defaultValue='default fox avatar'
                             {...register('image.alt')}
                             error={errors.image?.alt?.message}
                             />

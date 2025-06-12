@@ -88,7 +88,8 @@ export function HomePage() {
         : 
         (
         <Flex direction="column" align="center" gap={20}>
-          <Flex wrap="wrap" gap={30} justify="center" w={isMobile ? "100%" : "80%"}>
+          
+          <Flex wrap="wrap" gap='lg' justify="center" w={isMobile ? "100%" : "80%"}>
             {paginatedCards.map((id: string) => (
               <ListingCard cardID={id} key={id} />
             ))}

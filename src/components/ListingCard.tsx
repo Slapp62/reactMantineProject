@@ -1,5 +1,5 @@
 import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal, Skeleton} from '@mantine/core';
-import {IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconArrowBackUp, IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Link, useLocation } from 'react-router-dom';
@@ -34,7 +34,7 @@ function ListingCard({ cardID} : { cardID: string}) {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true, amount: 0.2 }}
-        style={{width: isMobile ? '90%' : '350px'}}
+        style={{width: isMobile ? '90%' : '320px'}}
         >
             
         <Card shadow="sm" radius="md" withBorder>
@@ -64,7 +64,7 @@ function ListingCard({ cardID} : { cardID: string}) {
                     <ListItem>{card.email}</ListItem>
                     
                 </List>
-                {card.createdAt && <Text size='sm' mt={5}>Date Posted: {new Date(card.createdAt).toLocaleDateString()}</Text>}
+                {card.createdAt && <Text fw={500} size='sm' mt={10}>Posted On: {new Date(card.createdAt).toLocaleDateString()}</Text>}
             </Box>
 
             <Flex mx="auto"  my={10} gap={5} direction='column'>
@@ -78,11 +78,11 @@ function ListingCard({ cardID} : { cardID: string}) {
                             h={40}
                             style={{flex: 1}}
                             loading={translationLoading} 
-                            rightSection={<BsTranslate/>} 
+                            leftSection={currentLang === 'he' ? <BsTranslate/> : <IconArrowBackUp/>} 
                             variant='outline' fz={12} 
                             onClick={() => handleTranslate(cardString)}
                             >
-                            <Text fw='bold'>{currentLang === 'he' ? 'Translate' : 'Show Original'}</Text>
+                            <Text fw='bold'>{currentLang === 'he' ? 'Translate' : "Original"}</Text>
                         </Button>}
 
                 </Group>
