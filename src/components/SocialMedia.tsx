@@ -2,7 +2,7 @@ import { ActionIcon } from "@mantine/core"
 import { IconBrandLinkedin, IconBrandWhatsapp, IconBrandTwitter } from "@tabler/icons-react"
 
 const SocialIcons = (cardID : {cardID : string}) => {
-    const cardUrl = `${window.location.origin}/card-details/${cardID}`;
+    const cardUrl = `window.location.origin}/card-details/${cardID}`;
     const shareText = `Check out this listing: ${cardUrl}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?`+`url=${encodeURIComponent(shareText)}`;
