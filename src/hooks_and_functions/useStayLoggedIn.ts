@@ -6,12 +6,13 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 const useStayLoggedIn = () => {
+    const dispatch = useDispatch();
     useEffect(() => {
-        const dispatch = useDispatch();
+        
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
         if (token === null) {return;}
-        
+
         axios.defaults.headers.common['x-auth-token'] = token;
 
         const { _id } = jwtDecode<TdecodedToken>(token);
