@@ -91,11 +91,9 @@ export function LoginPage() {
           password: data.password,
         });
 
-      if (rememberMe) {
-        localStorage.setItem('token', token);
-      } else {
-        sessionStorage.setItem('token', token);
-      }
+      
+      localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
+      localStorage.setItem('token', token);
 
       axios.defaults.headers.common['x-auth-token'] = token;
 
