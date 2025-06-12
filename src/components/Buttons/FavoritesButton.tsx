@@ -1,5 +1,5 @@
 import { ActionIcon } from "@mantine/core";
-import { useLikeUnlike } from '@/hooks_and_functions/UseLikeUnlike';
+import { useLikeUnlike } from '@/hooks/UseLikeUnlike';
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { TCards } from "@/Types";
 import { RootState } from "@/store/store";

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/FavoritesButton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import useTranslateHEtoEN from "@/hooks_and_functions/UseTranslateHEtoEN";
+import useTranslateHEtoEN from "@/hooks/UseTranslateHEtoEN";
 import { BsTranslate } from "react-icons/bs";
 import SocialIcons from "@/components/SocialMedia";
 

@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useMediaQuery } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { editCard } from "@/store/cardSlice";
-import { cleanedCardData } from "@/hooks_and_functions/getCleanedData";
+import { cleanedCardData } from "@/utils/getCleanedData";
 import { RootState } from "@/store/store";
 
 export function EditCard() {
