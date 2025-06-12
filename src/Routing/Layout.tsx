@@ -16,7 +16,7 @@ export function Layout() {
     const fetchedRef = useRef(false);
 
     useEffect(() => {
-        if (location.pathname === '/'){
+        if (location.pathname === '/' || location.pathname.startsWith('/card-details')) {
             if (!fetchedRef.current) {
                 dispatch(fetchCardsThunk() as any);
                 fetchedRef.current = true;
