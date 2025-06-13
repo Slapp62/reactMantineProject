@@ -97,7 +97,7 @@ import { AvatarIcon } from './Avatar';
           onClose={closeDrawer}
           size="60%"
           padding="md"
-          title="Business Cards"
+          title="IsraJobs"
           hiddenFrom="md"
           zIndex={1000000}
         >
@@ -105,23 +105,23 @@ import { AvatarIcon } from './Avatar';
             <Divider/>
                 <Flex direction="column" >
                     <Link to="/" className={classes.link} onClick={closeDrawer}>
-                        <Text c='indigo' fw={700}>HOME</Text>
+                        <Text fz={20} c='indigo' fw={700}>HOME</Text>
                     </Link>
 
                     <Link to="/about" className={classes.link} onClick={closeDrawer}>
-                        <Text c='indigo' fw={700}>ABOUT</Text>
+                        <Text fz={20}  c='indigo' fw={700}>ABOUT</Text>
                     </Link>
 
                     {loggedIn &&  <Link to="/favorites" className={classes.link} onClick={closeDrawer}>
-                        <Text c='indigo'  fw={700}>FAVORITES</Text>
+                        <Text fz={20}  c='indigo'  fw={700}>FAVORITES</Text>
                     </Link>}
 
                     {user?.isBusiness && <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
-                        <Text c='indigo'  fw={700}>MY LISTINGS</Text>
+                        <Text fz={20}  c='indigo'  fw={700}>MY LISTINGS</Text>
                     </Link>}
                     
                     {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
-                        <Text c='indigo'  fw={700}>ADMIN CONTROLS</Text>
+                        <Text fz={20}  c='indigo'  fw={700}>ADMIN CONTROLS</Text>
                     </Link>}
                 </Flex>
             <Divider my="md" />
