@@ -1,12 +1,10 @@
 .custom-toast {
-    position: bottom-right;
     margin-inline: 5px;
     margin-block: 2px;
     border-radius: 5px;
+    
 
-    @media (max-width: 700px){
+    @media (max-width: 600px){
         width: 60%;
-        margin-inline: auto;
-        margin-block: 2px;
     }
 }

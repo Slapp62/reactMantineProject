@@ -1,7 +1,6 @@
 import {
   Box, Burger, Button, Divider, Drawer, Flex, Text, Group, ScrollArea,
   useMantineColorScheme,
-  Center,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from '../ComponentStyles/Navigation.module.css';
@@ -21,7 +20,7 @@ import { AvatarIcon } from './Avatar';
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
     const isBusinessUser = user?.isBusiness;
     const dispatch = useDispatch<AppDispatch>();
-
+    
     const jumpTo = useNavigate();
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const { colorScheme } = useMantineColorScheme();
@@ -103,32 +102,36 @@ import { AvatarIcon } from './Avatar';
         >
         <ScrollArea h="calc(100vh - 80px" mx="-sm" >
             <Divider/>
-                <Flex direction="column" >
+                <Flex direction="column" my={20}>
+                    {loggedIn && 
+                    <Group my="md" pl='md' align='self-end'>
+                        <AvatarIcon closeDrawer={closeDrawer}/>
+                        <Text fz={15}>{user?.name.first} {user?.name.last}</Text>
+                    </Group>}
+
                     <Link to="/" className={classes.link} onClick={closeDrawer}>
-                        <Text fz={20} c='indigo' fw={700}>HOME</Text>
+                        <Text fz={15} c='indigo' fw={700}>HOME</Text>
                     </Link>
 
                     <Link to="/about" className={classes.link} onClick={closeDrawer}>
-                        <Text fz={20}  c='indigo' fw={700}>ABOUT</Text>
+                        <Text fz={15}  c='indigo' fw={700}>ABOUT</Text>
                     </Link>
 
                     {loggedIn &&  <Link to="/favorites" className={classes.link} onClick={closeDrawer}>
-                        <Text fz={20}  c='indigo'  fw={700}>FAVORITES</Text>
+                        <Text fz={15}  c='indigo'  fw={700}>FAVORITES</Text>
                     </Link>}
 
                     {user?.isBusiness && <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
-                        <Text fz={20}  c='indigo'  fw={700}>MY LISTINGS</Text>
+                        <Text fz={15}  c='indigo'  fw={700}>MY LISTINGS</Text>
                     </Link>}
                     
                     {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
-                        <Text fz={20}  c='indigo'  fw={700}>ADMIN CONTROLS</Text>
+                        <Text fz={15}  c='indigo'  fw={700}>ADMIN CONTROLS</Text>
                     </Link>}
                 </Flex>
             <Divider my="md" />
 
-            {loggedIn && <Center my="md">
-              <AvatarIcon closeDrawer={closeDrawer}/>
-            </Center>}
+            
 
             <Flex justify="space-evenly" ta="center" p="sm" gap={5} direction="column">
               {!loggedIn && 

@@ -21,7 +21,7 @@ export function CardDetails() {
     
     
     return ( 
-        <Container style={{width: isMobile ? "90%" : "40%"}}>
+        <Container style={{width: isMobile ? "100%" : "40%"}}>
             <Title ta="center" my={10}>Card Details</Title>
             <Card shadow="sm" padding="lg" radius="md" withBorder mx="auto">
                 <Card.Section>
