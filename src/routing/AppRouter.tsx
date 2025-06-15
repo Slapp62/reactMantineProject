@@ -26,15 +26,11 @@ const router = createBrowserRouter([
       {path: 'register', element: <RegisterForm/>},
       {path: 'card-details/:id', element: <CardDetails/>},
       {path: 'edit-card/:id', element: <EditCard/>},
-
       {path: 'favorites', element: <RouteGuard><FavoriteCards/></RouteGuard>},
       {path: 'create-card', element: <RouteGuard><CreateCard/></RouteGuard>},
       {path: 'edit-profile/:id', element: <RouteGuard><EditProfile/></RouteGuard>},
-
       {path: 'admin', element: <RouteGuard isAdmin><AdminControls/></RouteGuard> },
-      
       {path: 'my-listings', element: <RouteGuard isBusiness><MyCards/></RouteGuard>},
-      
       {path: '*', element: <Error404/>},
     ]
   },
@@ -44,6 +40,6 @@ const router = createBrowserRouter([
     basename: '/',
   });
 
-export function Router() {
+export function AppRouter() {
   return <RouterProvider router={router} />;
 }

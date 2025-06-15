@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css';
 import './App.css'; 
 import { MantineProvider } from '@mantine/core';
-import { Router } from './routing/Router';
+import { AppRouter } from './routing/AppRouter';
 import { theme } from './theme';
 import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
@@ -13,7 +13,7 @@ export default function App() {
     <MantineProvider theme={theme}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <Router/>
+            <AppRouter/>
         </PersistGate>
       </Provider>
     </MantineProvider>
