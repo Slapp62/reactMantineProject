@@ -51,25 +51,28 @@ import { AvatarIcon } from './Avatar';
             <Logo/>
 
             <Group visibleFrom="md" gap={5}>
-              <Link  to="/" className={classes.link}>
-                <Text fw={700}>Home</Text>
-              </Link>
+                <Link  to="/" className={classes.link}>
+                    <Text fw={700}>Home</Text>
+                </Link>
 
-              <Link to="/about" className={classes.link} >
-                <Text fw={700}>About</Text>
-              </Link>
+                <Link to="/about" className={classes.link} >
+                    <Text fw={700}>About</Text>
+                </Link>
 
-              {loggedIn &&  <Link to="/favorites" className={classes.link} >
-                <Text fw={700}>Favorites</Text>
-              </Link>}
+                {loggedIn && ( 
+                <Link to="/favorites" className={classes.link} >
+                    <Text fw={700}>Favorites</Text>
+                </Link>)}
 
-              {loggedIn && isBusinessUser && <Link to="/my-listings" className={classes.link} >
-                <Text fw={700}>My Listings</Text>
-              </Link>}
-              
-              {user?.isAdmin && <Link to='/admin' className={classes.link}>
-                <Text fw={700}>Admin Controls</Text>
-              </Link>}
+                {loggedIn && isBusinessUser && (
+                <Link to="/my-listings" className={classes.link} >
+                    <Text fw={700}>My Listings</Text>
+                </Link>)}
+                
+                {user?.isAdmin && (
+                <Link to='/admin' className={classes.link}>
+                    <Text fw={700}>Admin Controls</Text>
+                </Link>)}
             </Group>
 
             <Group>
