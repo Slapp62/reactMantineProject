@@ -12,30 +12,30 @@ import { toast } from "react-toastify";
 
 export function MyCards()  {
     
-    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
-    const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
-    const user = useSelector((state:RootState) => state.userSlice.user);
-    const [userCards, setUserCards] = useState<TCards[]>([]);
-    const jumpTo = useNavigate();
+	const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+	const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
+	const user = useSelector((state:RootState) => state.userSlice.user);
+	const [userCards, setUserCards] = useState<TCards[]>([]);
+	const jumpTo = useNavigate();
     
     
-    useEffect(() => {
-        const loadUserCards = async () => {
-            try {
-                const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-                const response = await axios.get(
-                    'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/my-cards',
-                    {headers: {'x-auth-token': token}}
-                );
-                setUserCards(response.data);
-            } catch (error : any) {
-                toast.error(error);
-            }  
-        }
+	useEffect(() => {
+	const loadUserCards = async () => {
+			try {
+				const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+				const response = await axios.get(
+						'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/my-cards',
+						{headers: {'x-auth-token': token}}
+				);
+				setUserCards(response.data);
+		} catch (error : any) {
+				toast.error(error);
+			}  
+		}
 
         // check if cards are already available in Redux
         if (allCards && user) {
-            setUserCards(allCards?.filter((card) => card.user_id === user?._id));
+            setUserCards(allCards?.filter((card:TCards) => card.user_id === user?._id));
         } 
         // if they aren't, fetch from API
         else {
