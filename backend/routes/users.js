@@ -20,7 +20,7 @@ const userRouter = Router();
 
 userRouter.post('/register', async (req, res) => {
     try {
-        const {email, password, ethnicity, location, special_onahs, preferences} = req.body;
+        const {email, password} = req.body;
 
         if (!email || !password) {
             return res.status(400).json({error: 'Missing required fields'});
@@ -37,10 +37,6 @@ userRouter.post('/register', async (req, res) => {
         const newUser = new User({
             email,
             password: hashedPassword,
-            ethnicity,
-            special_onahs,
-            location,
-            preferences
         });
 
         const savedUser = await newUser.save();
