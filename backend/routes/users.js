@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import User from '../models/User.js';
+import { Business, User } from '../models/schemas.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -7,59 +7,61 @@ dotenv.config();
 
 const userRouter = Router();
 
-// const userAuth = async (req, res, next) => {
-//     try {
-//         const token = req.headers.authorization.split(' ')[1];
-//         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//         req.userId = decoded.userId;
-//         next();
-//     } catch (error) {
-//         res.status(401).json({error: 'Unauthorized'});
-//     }
-// }
+const createNewUser = async (email, password, userType) => {
+    const existingUser = await User.findOne({email});
+    if (existingUser) {
+        throw new Error ('User already exists');
+    }
 
-userRouter.post('/register', async (req, res) => {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = new User({
+        email,
+        password: hashedPassword,
+        userType: userType
+    });
+
+    return await newUser.save();
+}
+
+userRouter.post('/register/business', async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const {
+            email, password, userType,
+            companyName, industry, city, description, logo, website, socialLinks
+        } = req.body
+        
+        const savedUser = await createNewUser(email, password, userType);
+        
+        const newBusiness = new Business({
+            userId: savedUser._id,
+            companyName, 
+            industry, 
+            city, 
+            description, 
+            logo, 
+            website, 
+            socialLinks
+        })
 
-        if (!email || !password) {
-            return res.status(400).json({error: 'Missing required fields'});
-        }
-
-        const existingUser = await User.findOne({email});
-        if (existingUser) {
-            return res.status(400).json({error: 'User already exists'});
-        }
-
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        const newUser = new User({
-            email,
-            password: hashedPassword,
-        });
-
-        const savedUser = await newUser.save();
+        const savedBusiness = await newBusiness.save();
 
         // eslint-disable-next-line no-unused-vars
         const {password: userPassword, ...userNoPassword} = savedUser.toObject();
 
         res.status(201).json({
-            message: 'User registered successfully',
-            user: userNoPassword
+            message: 'Business registered successfully',
+            user: {
+                userNoPassword,
+                savedBusiness
+            }
         });
 
     } catch (error){
         console.error(error);
-
-        if (error.code === 11000) {
-            return res.status(400).json({
-                error: 'User already exists'
-            });
-        }
-
         res.status(500).json({error: 'Internal server error'});
-    }
+    } 
 })
 
 userRouter.post('/login', async (req, res) => {

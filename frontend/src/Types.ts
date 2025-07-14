@@ -1,74 +1,85 @@
-
-export type TCards = {
+// Base User type (authentication)
+export type TUser = {
   _id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  phone: string;
-  email: string;
-  web: string;
-  image: {
-    url: string;
-    alt: string;
-    _id: string;
-  };
-  address: {
-    state: string;
-    country: string;
-    city: string;
-    street: string;
-    houseNumber: number | string;
-    zip: number | string;
-    _id: string;
-  };
-  bizNumber?: number;
-  likes?: string[];
-  user_id?: string;
-  createdAt?: string; 
-  __v?: number;
-};
-
-export type TCardsArray = TCards[];
-
-export type TPaginationProps = {
-  currentPage: number;
-  onPageChange: (page: number) => void;
-  totalPages: number;
-};
-
-export type TUsers = {
-  _id: string;
-  name: {
-    first: string;
-    middle?: string;
-    last: string;
-    _id: string;
-  };
-  phone: string;
   email: string;
   password: string;
-  image?: {
-    url?: string;
-    alt?: string;
-    _id?: string;
-  };
-  address: {
-    state?: string;
-    country: string;
-    city: string;
-    street: string;
-    houseNumber: string | number;
-    zip: string | number;
-    _id: string;
-  };
-  isAdmin: boolean;
-  isBusiness: boolean;
+  userType: 'jobseeker' | 'business';
+  isVerified: boolean;
   createdAt: string;
 };
 
-export interface TdecodedToken{
-  iat: number;
-  isAdmin: boolean;
-  isBusiness: boolean;
+// Job Seeker Profile
+export type TJobseeker = {
   _id: string;
-}
+  userId: string; // Reference to User._id
+  industry?: string;
+  city?: string;
+  linkedIn?: string;
+  preferredWorkArr?: string;
+  description?: string;
+  createdAt: string;
+};
+
+// Business Profile  
+export type TBusiness = {
+  _id: string;
+  userId: string; // Reference to User._id
+  companyName: string;
+  industry: string;
+  logo?: string | null;
+  city: string;
+  website?: string | null;
+  socialLinks?: {
+    linkedin?: string;
+    twitter?: string;
+    facebook?: string;
+  };
+  description?: string;
+  createdAt: string;
+};
+
+// Job Listing
+export type TJobListing = {
+  _id: string;
+  businessId: string; // Reference to Business._id
+  jobTitle: string;
+  jobDescription: string;
+  requirements: string[];
+  advantages: string[];
+  applicationMethod: {
+    type: 'email' | 'link';
+    value: string;
+  };
+  location?: {
+    city?: string;
+  };
+  workArrangement: string;
+  industry?: string;
+  isActive: boolean;
+  createdAt: string;
+  expiresAt?: string;
+};
+
+// JWT Token payload (for authentication)
+export type TDecodedToken = {
+  userId: string;
+  email: string;
+  userType: 'jobseeker' | 'business';
+  iat: number;
+  exp: number;
+};
+
+// API Response types
+export type TAuthResponse = {
+  message: string;
+  token: string;
+  user: Omit<TUser, 'password'>; // User without password field
+};
+
+export type TJobseekerWithUser = TJobseeker & {
+  user: Omit<TUser, 'password'>;
+};
+
+export type TBusinessWithUser = TBusiness & {
+  user: Omit<TUser, 'password'>;
+};

@@ -7,7 +7,7 @@ export default tseslint.config(
   // Global rules
   {
     rules: {
-      'max-lines': ['error', 200], // This applies to all files
+
     },
   },
 

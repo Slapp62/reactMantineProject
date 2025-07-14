@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { INDUSTRIES } from '../data/industries';
-import { WORK_ARRANGEMENTS } from '../data/workArr';
+import { INDUSTRIES } from '../data/industries.js';
+import { WORK_ARRANGEMENTS } from '../data/workArr.js';
 
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
@@ -14,6 +14,22 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const jobseekerSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  industry: { 
+    type: String, 
+    enum: INDUSTRIES,
+  }, 
+  city: { type: String },
+  linkedIn: { type: String },
+  preferredWorkArr: { 
+    type: String, 
+    enum: WORK_ARRANGEMENTS,
+  },
+  description: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
 const businessSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   companyName: { type: String, required: true },
@@ -22,9 +38,9 @@ const businessSchema = new Schema({
     enum: INDUSTRIES,
     required: true 
   },
-  logo: { type: String }, // URL to logo image
+  logo: { type: String, default: null }, 
   city: { type: String, required: true },
-  website: { type: String },
+  website: { type: String, default: null },
   socialLinks: {
     linkedin: String,
     twitter: String,
@@ -38,31 +54,27 @@ const jobListingSchema = new Schema({
   businessId: { type: Schema.Types.ObjectId, ref: 'Business', required: true },
   jobTitle: { type: String, required: true },
   jobDescription: { type: String, required: true },
-  requirements: [String], // Array of requirement strings
+  requirements: [String],
+  advantages: [String],
   applicationMethod: {
     type: { type: String, enum: ['email', 'link'], required: true },
     value: { type: String, required: true } // email address or URL
   },
   location: {
     city: String, // If different from company location
-    isRemote: Boolean,
-    workArrangement: { 
-      type: String, 
-      enum: WORK_ARRANGEMENTS,
-      required: true 
-    }
+  },
+  workArrangement: { 
+    type: String, 
+    enum: WORK_ARRANGEMENTS,
+    required: true 
   },
   industry: String, // If different from company industry
-  salaryRange: {
-    min: Number,
-    max: Number,
-    currency: { type: String, default: 'ILS' }
-  },
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
   expiresAt: Date
 });
 
 export const User = model('User', userSchema);
+export const Jobseeker = model('Jobseeker', jobseekerSchema);
 export const Business = model('Business', businessSchema);
 export const JobListing = model('JobListing', jobListingSchema);

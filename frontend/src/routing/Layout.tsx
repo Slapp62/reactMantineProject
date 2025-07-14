@@ -44,8 +44,8 @@ export function Layout() {
           
             <Navbar />
             
-            <main style={{flex: 1, margin: 0, }}>
-            <Outlet />
+            <main style={{flex: 1}}>
+                <Outlet />
             </main>
             
             <Footer/>

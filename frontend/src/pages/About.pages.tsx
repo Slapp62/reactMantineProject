@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import {Container,Title,Text,Grid,Image,Paper,Group,ThemeIcon,Button,SimpleGrid,Textarea,TextInput,}from '@mantine/core';
+import {Container,Title,Text,Grid,Image,Paper,Group,ThemeIcon,Button,SimpleGrid,Textarea,TextInput,} from '@mantine/core';
 import {IconBriefcase,IconUsers,IconWorld,} from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import emailjs from '@emailjs/browser';

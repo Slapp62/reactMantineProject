@@ -10,7 +10,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export function RegisterForm()  {
+export function JobSeekerForm()  {
     const jumpTo = useNavigate();
     const registerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 700px)');
