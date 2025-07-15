@@ -13,6 +13,7 @@ export type TJobseeker = {
   _id: string;
   userId: string; // Reference to User._id
   industry?: string;
+  region?: string;
   city?: string;
   linkedIn?: string;
   preferredWorkArr?: string;

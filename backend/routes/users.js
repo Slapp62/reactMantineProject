@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Business, User } from '../models/schemas.js';
+import { Business, User, Jobseeker } from '../models/schemas.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -64,6 +64,44 @@ userRouter.post('/register/business', async (req, res) => {
     } 
 })
 
+userRouter.post('/register/jobseeker', async (req, res) => {
+    try {
+        const {
+            email, password, userType,
+            region, city, industry, preferredWorkArr, description, linkedIn
+        } = req.body
+        
+        const savedUser = await createNewUser(email, password, userType);
+        
+        const newJobseeker = new Jobseeker({
+            userId: savedUser._id,
+            region, 
+            city, 
+            industry, 
+            preferredWorkArr, 
+            description, 
+            linkedIn
+        })
+
+        const savedJobseeker = await newJobseeker.save();
+
+        // eslint-disable-next-line no-unused-vars
+        const {password: userPassword, ...userNoPassword} = savedUser.toObject();
+
+        res.status(201).json({
+            message: 'Jobseeker registered successfully',
+            user: {
+                userNoPassword,
+                savedJobseeker
+            }
+        });
+
+    } catch (error){
+        console.error(error);
+        res.status(500).json({error: 'Internal server error'});
+    } 
+})
+
 userRouter.post('/login', async (req, res) => {
     try {
         const {email, password} = req.body;
@@ -87,13 +125,20 @@ userRouter.post('/login', async (req, res) => {
             { expiresIn: '24h'}
         );
 
-        // eslint-disable-next-line no-unused-vars
-        const {password: userPassword, ...userNoPassword} = user.toObject();
+        let userData;
+
+        if (user.userType === 'business') {
+            userData = await Business.findOne({userId: {$eq: user._id}})
+        }
+
+        if (user.userType === 'jobseeker') {
+            userData = await Jobseeker.findOne({userId: {$eq: user._id}})
+        }
 
         res.json({
             message: 'Login successful',
             token,
-            user: userNoPassword
+            user: userData
         });
 
     } catch (error) {

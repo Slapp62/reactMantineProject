@@ -3,23 +3,19 @@ import {
 import classes from './Login.module.css';
 import  { FieldValues, useForm } from 'react-hook-form';
 import axios from 'axios';
-import { loginSchema } from '@/validationRules/login.joi';
-import { joiResolver } from '@hookform/resolvers/joi';
 import { toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
-import { TdecodedToken } from '@/Types';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store/store';
-import { setUser } from '@/store/userSlice';
 import { useEffect, useReducer, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+//import { setUser } from '@/store/userSlice';
+// import { useDispatch } from 'react-redux';
+// import { AppDispatch } from '@/store/store';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
   const location = useLocation();
   const message = location.state?.message;
 
-  const dispatch = useDispatch<AppDispatch>();
+  //const dispatch = useDispatch<AppDispatch>();
   const [rememberMe, setRemember] = useState(false);
   const [_ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -79,28 +75,27 @@ export function LoginPage() {
     },
     mode: 'onChange',
     criteriaMode: 'firstError',
-    resolver: joiResolver(loginSchema)
+    // resolver: joiResolver(loginSchema)
   });
   
   const onSubmit = async (data: FieldValues) => {
     setIsLoading(true);
     try {
-      const {data: token} = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
-        {
-          email: data.email, 
-          password: data.password,
-        });
+        const response = await axios.post("http://localhost:5000/api/users/login",
+            {
+            email: data.email, 
+            password: data.password,
+            });
 
-      
-      localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
-      localStorage.setItem('token', token);
+        console.log(response);
+        
+        const { token } = response.data;
+        //const {user} = response.data
+        localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
+        localStorage.setItem('token', token);
 
-      axios.defaults.headers.common['x-auth-token'] = token;
+        //dispatch(setUser(user))
 
-      const { _id } = jwtDecode<TdecodedToken>(token);
-      const userResponse = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${_id}`)
-    
-      dispatch(setUser(userResponse.data))
       toast.success('Logged In!', {position: 'bottom-right'});
       setLoginAttempts(0);
       localStorage.removeItem('loginAttempts');

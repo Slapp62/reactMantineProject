@@ -20,6 +20,7 @@ const jobseekerSchema = new Schema({
     type: String, 
     enum: INDUSTRIES,
   }, 
+  region: { type: String },
   city: { type: String },
   linkedIn: { type: String },
   preferredWorkArr: { 

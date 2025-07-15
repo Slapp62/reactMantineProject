@@ -1,41 +1,57 @@
-import { TUsers } from "@/Types";
-import { registrationSchema } from "@/validationRules/register.joi";
-import { joiResolver } from "@hookform/resolvers/joi";
-import { Anchor, Box, Button, Checkbox, Fieldset, Flex, Image, PasswordInput,TextInput, Text } from "@mantine/core";
+import { INDUSTRIES } from "@/data/industries";
+import { ISRAELI_CITIES_BY_REGION } from "@/data/israelCities";
+import { WORK_ARRANGEMENTS } from "@/data/workArr";
+import { Anchor, Box, Button, Fieldset, Flex, PasswordInput,TextInput, Text, Autocomplete, Select, Textarea } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconPhone } from "@tabler/icons-react";
 import axios from "axios";
-import { useRef, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { useRef } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+type JobseekerFormProps = {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    userType: string;
+    industry: string;
+    region: string;
+    city: string;
+    preferredWorkArr: string;
+    description: string;
+    linkedIn: string;
+}
 
 export function JobSeekerForm()  {
     const jumpTo = useNavigate();
     const registerRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 700px)');
-    const defaultAvatar = 'https://images.unsplash.com/vector-1748280445815-10a4bb2ba7e3?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-    const [imageURL, setURL] = useState(defaultAvatar);
     
-    const { reset, register, handleSubmit, formState: {errors, isValid, isDirty} } = useForm<TUsers>({
+    const { reset, register, handleSubmit, control, watch, formState: {errors, isValid, isDirty} } = useForm<JobseekerFormProps>({
         mode: 'all',
-        resolver: joiResolver(registrationSchema),
     });
 
-    const onSubmit = async (data:FieldValues) => {
-        data.address.houseNumber = Number(data.address.houseNumber);
-        data.address.zip = Number(data.address.zip);
-        if (!data.image?.url?.trim()) {data.image.url = defaultAvatar};
-        if (!data.image?.alt?.trim()) {data.image.alt = 'default fox avatar'};
-
+    const onSubmit = async (data : JobseekerFormProps) => {
         try {
             const response = await axios.post(
-                'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users', 
-                data)
+                'http://localhost:5000/api/users/register/jobseeker', 
+                {
+                    email: data.email,
+                    password: data.password,
+                    userType: 'jobseeker',
+                    region: data.region,
+                    city: data.city,
+                    industry: data.industry,
+                    preferredWorkArr: data.preferredWorkArr,
+                    description: data.description,
+                    linkedIn: data.linkedIn
+                })
             if (response.status === 201) {
                 jumpTo('/login');
                 toast.success('Registered!')
+                console.log(response.data);
             }
+
         } catch (error: any) {
             toast.error(`Registration Failed! ${error.message}`);
         }
@@ -47,41 +63,6 @@ export function JobSeekerForm()  {
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Flex mx='auto' direction='column' w={isMobile ? '95%' : "60%"} justify='space-between' gap={5}>
-                    <Fieldset legend="Full Name">
-                        <TextInput 
-                            label="First"
-                            {...register('name.first')}
-                            required
-                            error= {errors.name?.first?.message}
-                            />
-
-                        <TextInput 
-                            label="Middle"
-                            {...register('name.middle')}
-                            error={errors.name?.middle?.message}
-                            />
-                        <TextInput 
-                            label="Last"
-                            {...register('name.last')}
-                            required
-                            error={errors.name?.last?.message}
-                            />
-                    </Fieldset>
-
-                    <Fieldset legend="Contact">
-                        <TextInput  
-                            rightSection={<IconPhone/>} 
-                            label="Phone"
-                            required
-                            {...register('phone', {
-                                onChange: (e) => {
-                                    e.target.value = e.target.value.replace(/[^\d-]/g, '');
-                                },
-                            })}
-                            error={errors.phone?.message}
-                            />
-                    </Fieldset>
-                        
                     <Fieldset legend="Credentials">
                         <TextInput 
                             label="Email"
@@ -95,87 +76,101 @@ export function JobSeekerForm()  {
                             required
                             error={errors.password?.message}
                             />
-                    </Fieldset>
-
-                    <Fieldset legend="Avatar">
-                        <Image
-                            src={imageURL} 
-                            h={150}
-                            w={150}
-                            mx='auto'
-                        />
-                        <TextInput
-                            label="URL"
-                            defaultValue={imageURL}
-                            {...register('image.url', {
-                                onChange: (e) => {
-                                    setURL(e.target.value);
-                                },
-                            }
+                        <PasswordInput 
+                            label="Confirm Password"
+                            {...register('confirmPassword', 
+                                {
+                                    validate: (value) => value === watch('password') || "Passwords do not match",
+                                    required: 'Confirmation is required',
+                                }
                             )}
-                            error={errors.image?.url?.message}
+                            required
+                            error={errors.confirmPassword?.message}
                             />
-                        <TextInput
-                            label="Image Alt"
-                            defaultValue='default fox avatar'
-                            {...register('image.alt')}
-                            error={errors.image?.alt?.message}
-                            />
+                    </Fieldset>
+
+                    <Fieldset legend="Location">
+                        <Controller
+                            control={control}
+                            name="region"
+                            render={({ field }) => (
+                                <Select 
+                                    label="Region"
+                                    data={[
+                                        {value: 'galilee', label: 'Galilee'},
+                                        {value: 'golan', label: 'Golan'},
+                                        {value: 'center', label: 'Center'},
+                                        {value: 'jerusalem-district', label: 'Jerusalem District'},
+                                        {value: 'south', label: 'South'},
+                                    ]}
+                                    {...field}
+                                    error={errors.region?.message}
+                                />
+                            )} 
+                        />
+
+                        <Controller
+                            control={control}
+                            name="city"
+                            render={({ field }) => (
+                                <Autocomplete 
+                                    label="City"
+                                    data={
+                                        watch('region') === 'galilee' ? ISRAELI_CITIES_BY_REGION.GALILEE :
+                                        watch('region') === 'golan' ? ISRAELI_CITIES_BY_REGION.GOLAN :
+                                        watch('region') === 'center' ? ISRAELI_CITIES_BY_REGION.CENTER :
+                                        watch('region') === 'jerusalem-district' ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT :
+                                        watch('region') === 'south' ? ISRAELI_CITIES_BY_REGION.SOUTH :
+                                        []
+                                    }
+                                    {...field}
+                                    error={errors.city?.message}
+                                />
+                            )} 
+                        />
+                    </Fieldset>
+                    
+                    <Fieldset legend="Work Details">
+                        <Controller
+                            control={control}
+                            name="industry"
+                            render={({ field }) => (
+                                <Autocomplete 
+                                    label="Industry"
+                                    data={INDUSTRIES}
+                                    {...field}
+                                    error={errors.industry?.message}
+                                />
+                            )} 
+                        />
+
+                        <Controller
+                            control={control}
+                            name="preferredWorkArr"
+                            render={({ field }) => (
+                                <Select 
+                                    label="Preferred Work Arrangement"
+                                    data={WORK_ARRANGEMENTS.map((workArr) => ({value: workArr, label: workArr}))}
+                                    {...field}
+                                    error={errors.industry?.message}
+                                />
+                            )} 
+                        />
+
+                        <Textarea 
+                            label="About Me"
+                            {...register('description')}
+                            error={errors.description?.message}
+                        />
+
+                        <TextInput 
+                            label="LinkedIn"
+                            {...register('linkedIn')}
+                            error={errors.linkedIn?.message}
+                        />
                     </Fieldset>
                 </Flex>
 
-                <Flex direction='column' style={{width: isMobile ? '95%' : "60%"}} mx="auto" justify='space-between'>
-                    <Fieldset legend="Address">
-                        <TextInput 
-                            label="State"
-                            {...register('address.state')}
-                            error={errors.address?.state?.message}
-                            />
-                        <TextInput 
-                            label="Country"
-                            {...register('address.country')}
-                            required
-                            error={errors.address?.country?.message}
-                            />
-                        <TextInput 
-                            label="City"
-                            {...register('address.city')}
-                            required
-                            error={errors.address?.city?.message}
-                            />
-                        <TextInput 
-                            label="Street"
-                            {...register('address.street')}
-                            required
-                            error={errors.address?.street?.message}
-                            />
-                        <TextInput
-                            label="House Number"
-                            {...register('address.houseNumber', {
-                                onChange: (e) => {
-                                e.target.value = e.target.value.replace(/\D/g, '');
-                                },
-                            })}
-                            required
-                            error={errors.address?.houseNumber?.message}
-                        />
-                        <TextInput
-                            label="Zipcode"
-                            {...register('address.zip', {
-                                onChange: (e) => {
-                                e.target.value = e.target.value.replace(/\D/g, '');
-                                },
-                            })}
-                            required
-                            error={errors.address?.zip?.message}
-                        />
-                    </Fieldset>
-
-                    <Fieldset legend="Account Type">
-                        <Checkbox mx='auto' mt={20} label='Create a Business Account' {...register('isBusiness')}/>
-                    </Fieldset>
-                </Flex>
-                
                 <Flex gap={10} align="center" w="95%" mx='auto' my={20} style={{flexDirection: isMobile ? 'row' : "column"}}>
                     <Button variant="outline" type='reset' w={200} disabled={!isDirty}
                         onClick={() => {

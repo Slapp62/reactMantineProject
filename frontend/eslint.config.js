@@ -7,7 +7,7 @@ export default tseslint.config(
   // Global rules
   {
     rules: {
-
+        'no-console': 'off',
     },
   },
 
