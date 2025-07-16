@@ -6,16 +6,16 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useReducer, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-//import { setUser } from '@/store/userSlice';
-// import { useDispatch } from 'react-redux';
-// import { AppDispatch } from '@/store/store';
+import { setUser } from '@/store/userSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
   const location = useLocation();
   const message = location.state?.message;
 
-  //const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const [rememberMe, setRemember] = useState(false);
   const [_ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -87,14 +87,14 @@ export function LoginPage() {
             password: data.password,
             });
 
-        console.log(response);
+        console.log('response', response);
         
         const { token } = response.data;
-        //const {user} = response.data
+        const {user} = response.data
         localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
         localStorage.setItem('token', token);
 
-        //dispatch(setUser(user))
+        dispatch(setUser(user))
 
       toast.success('Logged In!', {position: 'bottom-right'});
       setLoginAttempts(0);

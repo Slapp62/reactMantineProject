@@ -17,8 +17,10 @@ import { AvatarIcon } from './Avatar';
   
   export function Navbar() {
     const user = useSelector((state: RootState) => state.userSlice.user);
+    console.log(user);
+    
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
-    const isBusinessUser = user?.isBusiness;
+    const isBusiness = user?.user.userType === 'business';
     const dispatch = useDispatch<AppDispatch>();
     
     const jumpTo = useNavigate();
@@ -64,15 +66,15 @@ import { AvatarIcon } from './Avatar';
                     <Text fw={700}>Favorites</Text>
                 </Link>)}
 
-                {loggedIn && isBusinessUser && (
+                {isBusiness && 
                 <Link to="/my-listings" className={classes.link} >
                     <Text fw={700}>My Listings</Text>
-                </Link>)}
+                </Link>}
                 
-                {user?.isAdmin && (
+                {/* {user?.isAdmin &&
                 <Link to='/admin' className={classes.link}>
                     <Text fw={700}>Admin Controls</Text>
-                </Link>)}
+                </Link>} */}
             </Group>
 
             <Group>
@@ -109,7 +111,6 @@ import { AvatarIcon } from './Avatar';
                     {loggedIn && 
                     <Group my="md" pl='md' align='self-end'>
                         <AvatarIcon closeDrawer={closeDrawer}/>
-                        <Text fz={15}>{user?.name.first} {user?.name.last}</Text>
                     </Group>}
 
                     <Link to="/" className={classes.link} onClick={closeDrawer}>
@@ -124,13 +125,15 @@ import { AvatarIcon } from './Avatar';
                         <Text fz={15}  c='indigo'  fw={700}>FAVORITES</Text>
                     </Link>}
 
-                    {user?.isBusiness && <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
+                    {isBusiness && 
+                        <Link to="/my-listings" className={classes.link} onClick={closeDrawer} >
                         <Text fz={15}  c='indigo'  fw={700}>MY LISTINGS</Text>
                     </Link>}
                     
-                    {user?.isAdmin && <Link to='/admin' className={classes.link} onClick={closeDrawer}>
+                    {/* {user?.isAdmin && 
+                        <Link to='/admin' className={classes.link} onClick={closeDrawer}>
                         <Text fz={15}  c='indigo'  fw={700}>ADMIN CONTROLS</Text>
-                    </Link>}
+                    </Link>} */}
                 </Flex>
             <Divider my="md" />
 

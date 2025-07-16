@@ -135,10 +135,15 @@ userRouter.post('/login', async (req, res) => {
             userData = await Jobseeker.findOne({userId: {$eq: user._id}})
         }
 
+        const combinedData = {
+            user: user,
+            userData: userData
+        };
+
         res.json({
             message: 'Login successful',
             token,
-            user: userData
+            user: combinedData
         });
 
     } catch (error) {

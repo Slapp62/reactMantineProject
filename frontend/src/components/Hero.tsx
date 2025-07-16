@@ -12,8 +12,8 @@ export function Hero() {
     const isMobile = useMediaQuery('(max-width: 700px)');
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.userSlice.user);
-    const isBusiness = user?.isBusiness;
-    const isAdmin = user?.isAdmin;
+    const isBusiness = user?.user.userType === 'business';
+    //const isAdmin = user?.isAdmin;
     const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
 
     return (
@@ -36,7 +36,7 @@ export function Hero() {
             >
               {/* Conditional Welcome Message */}
               {!user && <Title ta='center' c='white'>Find your next career!</Title>}
-              {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back, {user.name.first}</Text>}
+              {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back</Text>}
 
               {/* Search & Sort */}
               <Flex gap={10} align='center' w={isMobile ? '100%' : '100%'} direction= {isMobile ? 'column' : 'row'}>
@@ -76,8 +76,7 @@ export function Hero() {
               </Title>}
 
             {/* Conditinally Create Listing */}
-            {(isBusiness || isAdmin) && 
-              <Button 
+            {isBusiness && <Button 
                 component={Link}
                 to='create-card' 
                 fullWidth 
@@ -88,7 +87,7 @@ export function Hero() {
                 rightSection={<IconCards/>}
                 >     
                 Create A Listing
-              </Button>}
+                </Button>}
           </Flex>
         </Center>
       </BackgroundImage>
