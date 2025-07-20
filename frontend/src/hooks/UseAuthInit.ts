@@ -5,6 +5,7 @@ import { setUser } from "@/store/userSlice";
 import { TDecodedToken } from "@/Types";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "@/config/api";
 
 export function useAuthInit() {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export function useAuthInit() {
                     const id = decodedToken.userId;
 
                     axios.defaults.headers.common.Authorization = token;
-                    const userData = await axios.get(`http://localhost:5000/api/users/${id}`)
+                    const userData = await axios.get(`${API_BASE_URL}/api/users/${id}`)
                     
                     dispatch(setUser(userData.data.user))
                 } catch (error : any) {

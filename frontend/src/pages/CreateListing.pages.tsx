@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/config/api';
 import { INDUSTRIES } from '@/data/industries';
 import { ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
@@ -23,7 +24,7 @@ export function CreateCard() {
     });
 
     const onSubmit = async (data:FieldValues) => {
-        const url = 'http://localhost:5000/api/listings/create';
+        const url = `${API_BASE_URL}/api/listings/create`;
         
         try {
             const response = await axios.post(url, {

@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { setUser } from '@/store/userSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
+import { API_BASE_URL } from '@/config/api';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -80,7 +81,7 @@ export function LoginPage() {
   const onSubmit = async (data: FieldValues) => {
     setIsLoading(true);
     try {
-        const response = await axios.post("http://localhost:5000/api/users/login",
+        const response = await axios.post(`${API_BASE_URL}/api/users/login`,
             {
             email: data.email, 
             password: data.password,
