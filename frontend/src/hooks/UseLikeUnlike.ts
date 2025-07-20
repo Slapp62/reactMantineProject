@@ -1,5 +1,5 @@
-import { addLike, removeLike } from "@/store/cardSlice";
-import { TCards } from "@/Types";
+import { addFavorite, removeFavorite } from "@/store/listingSlice";
+import { TJobListing } from "@/Types";
 import axios from "axios";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -9,29 +9,26 @@ export function useLikeUnlike() {
     const dispatch = useDispatch();
 
     
-    const toggleLike = useCallback(async (card:TCards, userID:string, isLiked:boolean) => {
+    const toggleLike = useCallback(async (listing: TJobListing, userID: string, isLiked: boolean) => {
         
         // update Redux slice
             
 
         // update API
             try {
-                const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-                axios.defaults.headers.common["x-auth-token"] = token;
                 const response = await axios.patch(
-                    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${card._id}`,
+                    `https://localhost:5000/listings/${listing._id}/toggleLike`,
                 );
 
                 if (isLiked){ 
-                    dispatch(removeLike({card : response.data, userID}))
-                    toast.warning('Card Unliked!');                
+                    dispatch(removeFavorite({listings : response.data, userID}))
+                    toast.warning('Listing Unliked!');                
                 } else {
-                    dispatch(addLike({card : response.data, userID}));
-                    toast.success('Card Liked!');
+                    dispatch(addFavorite({listings : response.data, userID}));
+                    toast.success('Listing Liked!');
                 }
             } catch (error) {
-                toast.error(`Error liking/unliking card:${  error}`);
+                toast.error(`Error liking/unliking Listing:${  error}`);
             }
             
             return !isLiked;

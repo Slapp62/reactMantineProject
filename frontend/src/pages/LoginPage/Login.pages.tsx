@@ -90,7 +90,11 @@ export function LoginPage() {
         console.log('response', response);
         
         const { token } = response.data;
+        axios.defaults.headers.common.Authorization = token;
+        
         const {user} = response.data
+        console.log('user', user);
+        
         localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
         localStorage.setItem('token', token);
 

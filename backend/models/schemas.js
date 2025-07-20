@@ -57,11 +57,12 @@ const jobListingSchema = new Schema({
   jobDescription: { type: String, required: true },
   requirements: [String],
   advantages: [String],
-  applicationMethod: {
-    type: { type: String, enum: ['email', 'link'], required: true },
-    value: { type: String, required: true } // email address or URL
+  apply: {
+    method: { type: String, enum: ['email', 'link'], required: true },
+    contact: { type: String, required: true } // email address or URL
   },
   location: {
+    region: String,
     city: String, // If different from company location
   },
   workArrangement: { 
@@ -69,7 +70,12 @@ const jobListingSchema = new Schema({
     enum: WORK_ARRANGEMENTS,
     required: true 
   },
-  industry: String, // If different from company industry
+  industry: { 
+    type: String, 
+    enum: INDUSTRIES,
+    required: true 
+  },
+  favorites: [String],
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
   expiresAt: Date

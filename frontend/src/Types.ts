@@ -47,15 +47,17 @@ export type TJobListing = {
   jobDescription: string;
   requirements: string[];
   advantages: string[];
-  applicationMethod: {
-    type: 'email' | 'link';
-    value: string;
-  };
+  apply: {
+    method: 'email' | 'link';
+    contact: string;
+  }
   location?: {
+    region?: string;
     city?: string;
   };
   workArrangement: string;
   industry?: string;
+  favorites: string[];
   isActive: boolean;
   createdAt: string;
   expiresAt?: string;

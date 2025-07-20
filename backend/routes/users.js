@@ -135,9 +135,12 @@ userRouter.post('/login', async (req, res) => {
             userData = await Jobseeker.findOne({userId: {$eq: user._id}})
         }
 
+        // eslint-disable-next-line no-unused-vars
+        const {password: userPassword, ...userNoPassword} = user.toObject();
+
         const combinedData = {
-            user: user,
-            userData: userData
+            userData: userNoPassword,
+            extendedData: userData
         };
 
         res.json({

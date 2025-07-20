@@ -4,7 +4,7 @@ import { Flex } from "@mantine/core";
 import { ToastContainer } from "react-toastify";
 import {Footer} from '../components/Navigation/Footer.tsx';
 import { useAuthInit } from "@/hooks/UseAuthInit.ts";
-import { fetchCardsThunk } from "@/store/cardSlice.tsx";
+import { fetchListingsThunk } from "@/store/listingSlice.tsx";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useScrollToTop } from "@/hooks/useScrollToTop.ts";
@@ -24,7 +24,7 @@ export function Layout() {
     useEffect(() => {
         if (location.pathname === '/' || location.pathname.startsWith('/card-details')) {
             if (!fetchedRef.current) {
-                dispatch(fetchCardsThunk() as any);
+                dispatch(fetchListingsThunk() as any);
                 fetchedRef.current = true;
             }
         } else {

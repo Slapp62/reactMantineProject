@@ -1,4 +1,4 @@
-import { TCards } from "@/Types";
+import { TJobListing } from "@/Types";
 import { cardSchema } from "@/validationRules/card.joi";
 import { Paper, Title, Flex, Fieldset, TextInput, Textarea, Button } from "@mantine/core";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { editCard } from "@/store/cardSlice";
+import { editListing } from "@/store/listingSlice";
 import { cleanedCardData } from "@/utils/getCleanedData";
 import { RootState } from "@/store/store";
 
@@ -19,9 +19,9 @@ export function EditCard() {
     const [isDisabled, setDisabled] = useState(true);
     const dispatch = useDispatch();
     
-    const allCards = useSelector((state: RootState) => state.cardSlice.cards)
+    const allCards = useSelector((state: RootState) => state.listingSlice.listings)
     const cardData = allCards?.find((card) => card._id === id)
-    const { register, handleSubmit, reset, trigger, formState: {errors, isValid, isDirty} } = useForm<TCards> ({
+    const { register, handleSubmit, reset, trigger, formState: {errors, isValid, isDirty} } = useForm<TJobListing> ({
             mode: 'all',
             resolver: joiResolver(cardSchema),
             defaultValues: cardData ? cleanedCardData(cardData) : {}
@@ -38,7 +38,7 @@ export function EditCard() {
         try {
             const response = await axios.put(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`, data);
             if (response.status === 200) {
-                dispatch(editCard({card : response.data as TCards}));
+                dispatch(editListing({listings : response.data as TJobListing}));
                 toast.success('Card Updated Successfully!', {position: `bottom-right`}); 
                 setDisabled(true)         
             }

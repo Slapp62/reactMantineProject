@@ -1,40 +1,33 @@
-import { removeCard } from "@/store/cardSlice";
+import { removeListing } from "@/store/listingSlice";
 import { RootState } from "@/store/store";
-import { TCards } from "@/Types";
+import { TJobListing } from "@/Types";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-export function useDeleteCard() {
+export function useDeleteListing() {
     const dispatch = useDispatch();
-    const globalCards = useSelector((state:RootState) => state.cardSlice.cards)
+    const globalListings = useSelector((state:RootState) => state.listingSlice.listings)
 
-    const deleteCard = async (card:TCards) => {
+    const deletelisting = async (listing : TJobListing) => {
         // update API
         try {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-            const response = await axios.delete(
-                `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${card._id}`, 
-                {
-                    headers: {
-                        'x-auth-token': token
-                    },
-                    data: {
-                        bizNumber: card.bizNumber
-                    }
-                }
-            )
+            axios.defaults.headers.common['x-auth-token'] = token;
+            const response = await axios.delete('https://localhost:5000/listings/delete') 
+            console.log(response.data);
+            
             if (response.status === 200){
                 // update Redux
-                const thisCard = globalCards?.find((globalCard) => globalCard._id === card._id )
-                dispatch(removeCard(thisCard!))
-                toast.success(`Card deleted successfully`, {position: 'bottom-right'});
+                const thislisting = globalListings?.find((globalListing) => globalListing._id === listing._id )
+                dispatch(removeListing(thislisting!))
+                toast.success(`listing deleted successfully`, {position: 'bottom-right'});
             }
 
         } catch (error:any){ 
-            toast.error(`Error deleting card: ${error}`, {position: 'bottom-right'});
+            toast.error(`Error deleting listing: ${error}`, {position: 'bottom-right'});
         }
     }
 
-    return deleteCard;
+    return deletelisting;
 }

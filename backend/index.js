@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import cors from 'cors';
 import { connect } from 'mongoose';
 import userRouter from './routes/users.js';
+import listingRouter from './routes/listings.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(cors({
 app.use(json());
 
 app.use('/api/users', userRouter);
+app.use('/api/listings', listingRouter);
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)

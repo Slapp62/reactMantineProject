@@ -3,7 +3,7 @@ import { IconArrowBackUp, IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Link, useLocation } from 'react-router-dom';
-import { useDeleteCard } from '@/hooks/UseDeleteCard';
+import { useDeleteListing } from '@/hooks/UseDeleteCard';
 import { FavoritesButton } from './Buttons/FavoritesButton';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useTranslateHEtoEN } from '../hooks/UseTranslateHEtoEN';
@@ -12,24 +12,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import SocialIcons from './SocialMedia';
 
-function ListingCard({ cardID} : { cardID: string}) {
-    const card = useSelector((state:RootState) => state.cardSlice.cards?.find((card) => card._id === cardID));
-    const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
-    if (!card) {return null};
+function ListingCard({ listingID} : { listingID: string}) {
+    const listing = useSelector((state:RootState) => state.listingSlice.listings?.find((listing) => listing._id === listingID));
+    const isLoading = useSelector((state:RootState) => state.listingSlice.loading);
+    if (!listing) {return null};
     
     const [opened, { open, close }] = useDisclosure(false);
 
-    const deleteCard = useDeleteCard();
+    const deleteCard = useDeleteListing();
     const location = useLocation();
     const myListingsPage = location.pathname === '/my-listings';
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
     const isMobile = useMediaQuery('(max-width: 500px)');
     const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
-    useTranslateHEtoEN(card.title, card.subtitle, card.description);
+    useTranslateHEtoEN(listing.title, listing.subtitle, listing.description);
 
   return (
     <motion.div
-        key={card._id}
+        key={listing._id}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -41,7 +41,7 @@ function ListingCard({ cardID} : { cardID: string}) {
         <Card.Section>
             <Skeleton visible={isLoading}>
                 <Image
-                src={card.image.url}
+                src={listing.image.url}
                 height={160}
                 alt="picture"
                 fit='cover'
@@ -54,22 +54,22 @@ function ListingCard({ cardID} : { cardID: string}) {
 
         <Card.Section px={15}>
             <Box p={5}>
-                <Text truncate my="xs" fw={500}>{translatedText ? translatedText[0] : card.title} </Text>
-                <Text truncate >{translatedText ? translatedText[1] : card.subtitle}</Text>
+                <Text truncate my="xs" fw={500}>{translatedText ? translatedText[0] : listing.title} </Text>
+                <Text truncate >{translatedText ? translatedText[1] : listing.subtitle}</Text>
                 <hr/>
-                <Text truncate >{translatedText ? translatedText[2] : card.description} </Text>
+                <Text truncate >{translatedText ? translatedText[2] : listing.description} </Text>
             
                 <List>
-                    <ListItem>{card.phone}</ListItem>
-                    <ListItem>{card.email}</ListItem>
+                    <ListItem>{listing.phone}</ListItem>
+                    <ListItem>{listing.email}</ListItem>
                     
                 </List>
-                {card.createdAt && <Text fw={500} size='sm' mt={10}>Posted On: {new Date(card.createdAt).toLocaleDateString()}</Text>}
+                {listing.createdAt && <Text fw={500} size='sm' mt={10}>Posted On: {new Date(listing.createdAt).toLocaleDateString()}</Text>}
             </Box>
 
             <Flex mx="auto"  my={10} gap={5} direction='column'>
                 <Group justify='center'>
-                    <Button  h={40} style={{flex: 1}} fullWidth={!containsHebrew} variant='filled' fz={12} component={Link} to={`/card-details/${card._id}`}>
+                    <Button  h={40} style={{flex: 1}} fullWidth={!containsHebrew} variant='filled' fz={12} component={Link} to={`/listing-details/${listing._id}`}>
                         <Text fw='bold'>More Info</Text>
                     </Button>
 
@@ -90,7 +90,7 @@ function ListingCard({ cardID} : { cardID: string}) {
 
                 <Group justify='center'>
                     {loggedIn && myListingsPage && 
-                    <Button variant='outline' color='green' style={{flex: 1}} component={Link} to={`/edit-card/${card._id}`}>
+                    <Button variant='outline' color='green' style={{flex: 1}} component={Link} to={`/edit-card/${listing._id}`}>
                         <IconEdit/>
                     </Button>}
 
@@ -101,10 +101,10 @@ function ListingCard({ cardID} : { cardID: string}) {
                  </Group>
                 
                 <Group>
-                    {loggedIn && <FavoritesButton card={card}/>}
+                    {loggedIn && <FavoritesButton listing={listing}/>}
 
                     <Group mx='auto'>
-                        <SocialIcons cardID={card._id}/>
+                        <SocialIcons listingID={listing._id}/>
                     </Group>
                 </Group>
             </Flex>
@@ -115,7 +115,7 @@ function ListingCard({ cardID} : { cardID: string}) {
             <Text>Are you sure you want to delete this card?</Text>
             <Group mt={20} justify="center">
                 <Button color="red" onClick={() => {
-                    deleteCard(card);
+                    deleteCard(listing);
                     close();
                 }}>
                 Yes, Delete It</Button>
@@ -126,4 +126,4 @@ function ListingCard({ cardID} : { cardID: string}) {
   );
 }
 
-export default React.memo(ListingCard, (prev, next) => prev.cardID === next.cardID);
+export default React.memo(ListingCard, (prev, next) => prev.listingID === next.listingID);

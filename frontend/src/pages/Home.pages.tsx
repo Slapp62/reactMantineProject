@@ -1,39 +1,39 @@
 import { Hero } from '@/components/Hero';
 import { RootState } from '@/store/store';
-import { TCards } from '@/Types';
+import { TJobListing } from '@/Types';
 import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
-import { fetchCardsThunk } from '@/store/cardSlice';
+import { fetchListingsThunk } from '@/store/listingSlice';
 import ListingCard from '@/components/ListingCard';
 
 export function HomePage() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchCardsThunk() as any);
+        dispatch(fetchListingsThunk() as any);
     }, [dispatch]);
     
-    const allCards = useSelector((state:RootState) => state.cardSlice.cards);
-    const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
+    const allCards = useSelector((state:RootState) => state.listingSlice.listings);
+    const isLoading = useSelector((state:RootState) => state.listingSlice.loading);
 
     const cards = useMemo(() => {
         if (!allCards) {return []};
 
-        return [...allCards].sort((a : TCards, b : TCards) => 
+        return [...allCards].sort((a : TJobListing, b : TJobListing) => 
             (a.createdAt && b.createdAt) ? b.createdAt?.localeCompare(a.createdAt) :  0);
     }, [allCards]);
 
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
-    const sortOption = useSelector((state: RootState) => state.cardSlice.sortOption);
+    const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);
     const isMobile = useMediaQuery('(max-width: 500px)');
 
     const sortedCards = useMemo(() => {
         return [...cards].sort((a, b) => {
-        if (sortOption === 'title-asc') {return a.title.localeCompare(b.title)}; 
-        if (sortOption === 'title-desc') {return b.title.localeCompare(a.title)}; 
+        if (sortOption === 'title-asc') {return a.jobTitle.localeCompare(b.jobTitle)}; 
+        if (sortOption === 'title-desc') {return b.jobTitle.localeCompare(a.jobTitle)}; 
         if (sortOption === 'date-created-old'){
             if (a.createdAt && b.createdAt){
                 return a.createdAt?.localeCompare(b.createdAt)
@@ -49,12 +49,11 @@ export function HomePage() {
     }, [cards, sortOption]);
     
     const searchCards = useMemo(() => {
-        return sortedCards.filter((card:TCards) => {
+        return sortedCards.filter((listing:TJobListing) => {
             const keyWord = searchWord.toLowerCase();
             return (
-                card.title.toLowerCase().includes(keyWord) ||
-                card.subtitle.toLowerCase().includes(keyWord) ||
-                card.description.toLowerCase().includes(keyWord)
+                listing.jobTitle.toLowerCase().includes(keyWord) ||
+                listing.jobDescription.toLowerCase().includes(keyWord)
             )
         });
     }, [sortedCards, searchWord]);
@@ -65,7 +64,7 @@ export function HomePage() {
     const paginatedCards = useMemo(() => {
         return searchCards.slice(
         (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
-    }, [searchCards, currentPage, cardsPerPage]).map((card:TCards) => card._id);
+    }, [searchCards, currentPage, cardsPerPage]).map((card:TJobListing) => card._id);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -91,7 +90,7 @@ export function HomePage() {
           
           <Flex wrap="wrap" gap='lg' justify="center" w={isMobile ? "100%" : "80%"}>
             {paginatedCards.map((id: string) => (
-              <ListingCard cardID={id} key={id} />
+              <ListingCard listingID={id} key={id} />
             ))}
           </Flex>
 
