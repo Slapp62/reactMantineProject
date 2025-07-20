@@ -16,15 +16,15 @@ export function HomePage() {
         dispatch(fetchListingsThunk() as any);
     }, [dispatch]);
     
-    const allCards = useSelector((state:RootState) => state.listingSlice.listings);
+    const allListings = useSelector((state:RootState) => state.listingSlice.listings);
     const isLoading = useSelector((state:RootState) => state.listingSlice.loading);
 
     const cards = useMemo(() => {
-        if (!allCards) {return []};
+        if (!allListings) {return []};
 
-        return [...allCards].sort((a : TJobListing, b : TJobListing) => 
+        return [...allListings].sort((a : TJobListing, b : TJobListing) => 
             (a.createdAt && b.createdAt) ? b.createdAt?.localeCompare(a.createdAt) :  0);
-    }, [allCards]);
+    }, [allListings]);
 
     const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
     const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);
@@ -78,7 +78,7 @@ export function HomePage() {
   return (
     <>
       <Hero />
-      {isLoading || !allCards ? 
+      {isLoading || !allListings ? 
         (
             <Center>
                 <Loader color="cyan" size="xl" mt={30} />

@@ -154,6 +154,43 @@ userRouter.post('/login', async (req, res) => {
     }
 })
 
+userRouter.get('/:id', async (req, res) => {
+    try {
+        // const token = req.headers.authorization.split(' ')[1];
+        // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+
+        let userData;
+
+        if (user.userType === 'business') {
+            userData = await Business.findOne({userId: {$eq: user._id}})
+        }
+
+        if (user.userType === 'jobseeker') {
+            userData = await Jobseeker.findOne({userId: {$eq: user._id}})
+        }
+
+        // eslint-disable-next-line no-unused-vars
+        const {password: userPassword, ...userNoPassword} = user.toObject();
+
+        const combinedData = {
+            userData: userNoPassword,
+            extendedData: userData
+        };
+
+        res.json({
+            message: 'Persisted Login Successful',
+            user: combinedData
+        });
+
+        console.log('user by id', user);
+        
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+})
+
 userRouter.get('/', async (_req, res) => {
     try {
         const users = await User.find();

@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 
 const HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
 
-export const useTranslateHEtoEN = (title: string | undefined, subtitle: string | undefined, description: string | undefined) => {
+export const useTranslateHEtoEN = (title: string | undefined, description: string | undefined) => {
     const [translatedText, setTranslatedText] = useState<string[] | null>(null);
-    const cardString = `${title} \n ${subtitle} \n ${description}`
+    const cardString = `${title} \n ${description}`
     const containsHebrew = RegExp(/[\u0590-\u05FF]/).test(cardString);
     const [translationLoading, setTranslationLoading] = useState(false);
     const [currentLang, setCurrentLang] = useState<'he' | 'en'>('he');
-    const originalText = [title || "", subtitle || "", description || ""];
+    const originalText = [title || "", description || ""];
         
     const handleTranslate = async (cardString: string) => {
         if (currentLang === 'en') {

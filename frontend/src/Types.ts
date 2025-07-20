@@ -79,10 +79,12 @@ export type TAuthResponse = {
   user: Omit<TUser, 'password'>; // User without password field
 };
 
-export type TJobseekerWithUser = TJobseeker & {
-  user: Omit<TUser, 'password'>;
+export type TJobseekerWithUser = {
+  userData: Omit<TUser, 'password'>;
+  extendedData: TJobseeker;
 };
 
-export type TBusinessWithUser = TBusiness & {
-  user: Omit<TUser, 'password'>;
+export type TBusinessWithUser = {
+  userData: Omit<TUser, 'password'>;
+  extendedData: TBusiness;
 };

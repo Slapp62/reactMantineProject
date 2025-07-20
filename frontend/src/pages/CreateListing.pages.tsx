@@ -23,19 +23,16 @@ export function CreateCard() {
     });
 
     const onSubmit = async (data:FieldValues) => {
-        console.log('data', data);
-        console.log('id', user?._id);
-        
         const url = 'http://localhost:5000/api/listings/create';
         
         try {
             const response = await axios.post(url, {
-                businessId: user?.user._id,
+                businessId: user?.extendedData._id,
                 ...data
             })
 
             if (response.status === 201) {
-                dispatch(addListing(response.data));
+                dispatch(addListing(response.data.listing));
                 toast.success('Card Submitted!', {position: "bottom-right"})
                 jumpTo('/');
             }

@@ -16,11 +16,8 @@ import { useEffect, useState } from 'react';
 import { AvatarIcon } from './Avatar';
   
   export function Navbar() {
-    const user = useSelector((state: RootState) => state.userSlice.user);
-    console.log(user);
-    
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn)
-    const isBusiness = user?.user.userType === 'business';
+    const isBusiness = useSelector((state: RootState) => state.userSlice.user?.userData.userType) === 'business';
     const dispatch = useDispatch<AppDispatch>();
     
     const jumpTo = useNavigate();

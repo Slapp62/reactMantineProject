@@ -1,4 +1,4 @@
-import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal, Skeleton} from '@mantine/core';
+import { Card, Text, Button, Flex, ListItem, List, Box, Group, Modal, Title} from '@mantine/core';
 import { IconArrowBackUp, IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -14,7 +14,6 @@ import SocialIcons from './SocialMedia';
 
 function ListingCard({ listingID} : { listingID: string}) {
     const listing = useSelector((state:RootState) => state.listingSlice.listings?.find((listing) => listing._id === listingID));
-    const isLoading = useSelector((state:RootState) => state.listingSlice.loading);
     if (!listing) {return null};
     
     const [opened, { open, close }] = useDisclosure(false);
@@ -25,7 +24,7 @@ function ListingCard({ listingID} : { listingID: string}) {
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
     const isMobile = useMediaQuery('(max-width: 500px)');
     const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
-    useTranslateHEtoEN(listing.title, listing.subtitle, listing.description);
+    useTranslateHEtoEN(listing.jobTitle, listing.jobDescription);
 
   return (
     <motion.div
@@ -38,31 +37,18 @@ function ListingCard({ listingID} : { listingID: string}) {
         >
             
         <Card shadow="sm" radius="md" withBorder>
-        <Card.Section>
-            <Skeleton visible={isLoading}>
-                <Image
-                src={listing.image.url}
-                height={160}
-                alt="picture"
-                fit='cover'
-                loading='lazy'
-                fallbackSrc='https://images.pexels.com/photos/5598328/pexels-photo-5598328.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-                />
-            </Skeleton>
         
-        </Card.Section> 
-
         <Card.Section px={15}>
             <Box p={5}>
-                <Text truncate my="xs" fw={500}>{translatedText ? translatedText[0] : listing.title} </Text>
-                <Text truncate >{translatedText ? translatedText[1] : listing.subtitle}</Text>
+                <Title order={2} ta='center' my="xs" fw={500}>{translatedText ? translatedText[0] : listing.jobTitle} </Title>
                 <hr/>
-                <Text truncate >{translatedText ? translatedText[2] : listing.description} </Text>
-            
+                <Text truncate >{translatedText ? translatedText[2] : listing.jobDescription} </Text>
+                
                 <List>
-                    <ListItem>{listing.phone}</ListItem>
-                    <ListItem>{listing.email}</ListItem>
-                    
+                    <ListItem><strong>Region:</strong> {listing.location?.region}</ListItem>
+                    <ListItem><strong>City:</strong> {listing.location?.city}</ListItem>
+                    <ListItem><strong>Industry:</strong> {listing.industry}</ListItem>
+                    <ListItem><strong>Work Type:</strong> {listing.workArrangement}</ListItem>
                 </List>
                 {listing.createdAt && <Text fw={500} size='sm' mt={10}>Posted On: {new Date(listing.createdAt).toLocaleDateString()}</Text>}
             </Box>

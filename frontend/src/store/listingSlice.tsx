@@ -2,7 +2,7 @@ import { TJobListing } from "@/Types";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchListingsThunk = createAsyncThunk('listings/fetchlistingss', async () => {
+export const fetchListingsThunk = createAsyncThunk('listings/fetchListings', async () => {
     const response = await axios.get("http://localhost:5000/api/listings");
     return response.data
 })

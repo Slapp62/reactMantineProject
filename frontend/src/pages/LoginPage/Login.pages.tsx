@@ -19,7 +19,6 @@ export function LoginPage() {
   const [rememberMe, setRemember] = useState(false);
   const [_ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
-  
   const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0
   const [loginAttempts, setLoginAttempts] = useState(storedAttempts);
   const attemptsLeft = 3 - loginAttempts;
@@ -86,17 +85,12 @@ export function LoginPage() {
             email: data.email, 
             password: data.password,
             });
-
-        console.log('response', response);
         
         const { token } = response.data;
-        axios.defaults.headers.common.Authorization = token;
-        
         const {user} = response.data
-        console.log('user', user);
         
         localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
-        localStorage.setItem('token', token);
+        rememberMe ? localStorage.setItem('token', token) : sessionStorage.setItem('token', token);
 
         dispatch(setUser(user))
 
