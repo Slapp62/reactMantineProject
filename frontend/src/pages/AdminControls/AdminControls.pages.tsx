@@ -9,7 +9,7 @@ import { useMediaQuery } from "@mantine/hooks";
 const AdminControls = () => {
     const [id, setId] = useState('');
     const isMobile = useMediaQuery('(max-width: 700px)');
-
+    
     const {opened, open, close, dispatch, allUsers, isLoading, deleteUser, paginatedUsers, currentPage, setCurrentPage, usersPerPage, sortOption, setSortOption, searchTerm, setSearchTerm, jumpTo} = useAdminControls();
 
     // loader
@@ -69,7 +69,7 @@ const AdminControls = () => {
             </Table.Thead>
 
             <Table.Tbody>{paginatedUsers.map((user) => (
-            <Table.Tr key={user._id}>
+            <Table.Tr key={user.userData._id}>
                 <Table.Td styles={{td: {borderLeft: '1px solid #eee', borderRight: '1px solid #eee' }}}>
                 <Text fz="sm" fw="bold" c="dimmed" ta='center'>
                     {paginatedUsers.indexOf(user) + 1}
@@ -78,47 +78,47 @@ const AdminControls = () => {
 
                 <Table.Td>
                 <Text fz="sm" fw={500}>
-                    {user.name.first}
+                    {user.userData.email}
                 </Text>
                 </Table.Td>
         
                 <Table.Td>
                 <Text fz="sm" fw={500}>
-                    {user.name.last}
+                    {user.userData.isVerified}
                 </Text>
                 </Table.Td>
 
                 <Table.Td>
                 <Anchor component="button" size="sm">
-                    {user.email}
+                    {user.userData.userType}
                 </Anchor>
                 </Table.Td>
 
                 <Table.Td>
-                <Text fz="sm">{user.isAdmin ? 'Admin' : user.isBusiness ? 'Business' : 'Regular'}</Text>
+                <Text fz="sm">{user.userData.userType === 'business' ? 'Business' : 'Jobseeker'}</Text>
                 </Table.Td>
 
                 <Table.Td>
-                <Text fz="sm">{new Date(user.createdAt).toLocaleString()}</Text>
+                <Text fz="sm">{new Date(user.userData.createdAt).toLocaleString()}</Text>
                 </Table.Td>
 
                 <Table.Td>
                     <ActionIcon size={30} variant="outline" color="yellow" onClick={() => {
                     dispatch(toggleAdminView(true));
-                    jumpTo(`/edit-profile/${user?._id}`)
+                    jumpTo(`/edit-profile/${user?.userData._id}`);
                     }}>
                     <IconPencil size={25} stroke={1.5}/>
                     </ActionIcon>              
                 </Table.Td>
 
-            {!user.isAdmin && <Table.Td styles={{td: {borderRight: '1px solid #eee' }}}>
+            <Table.Td styles={{td: {borderRight: '1px solid #eee' }}}>
                     <ActionIcon size={30} variant="outline" color="red" onClick={() => {
                         open();
-                        setId(user._id);
+                        setId(user.userData._id);
                     }}>
                     <IconTrash size={25} stroke={1.5}/>
                     </ActionIcon>              
-                </Table.Td>}
+                </Table.Td>
 
             </Table.Tr>))}
             </Table.Tbody>

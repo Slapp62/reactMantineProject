@@ -1,5 +1,5 @@
 import { Hero } from "@/components/Hero";
-import MappedCards from "@/components/MappedCards";
+import MappedCards from "@/components/MappedListings";
 import { RootState } from "@/store/store"
 import { TCards } from "@/Types";
 import { Box, Button, Center, Flex, Loader, Title } from "@mantine/core";

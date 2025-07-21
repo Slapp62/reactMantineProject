@@ -1,9 +1,9 @@
-import { TCards } from "@/Types";
+import { TJobListing } from "@/Types";
 import { Flex } from "@mantine/core"
 import ListingCard from "./ListingCard";
 import { useMediaQuery } from "@mantine/hooks";
 
-function MappedCards(props: {cardsArr : TCards[]})  {
+function MappedListings(props: {listingsArr : TJobListing[]})  {
     const isMobile = useMediaQuery('(max-width: 500px)');
     
     return (
@@ -15,11 +15,11 @@ function MappedCards(props: {cardsArr : TCards[]})  {
             w={isMobile ? "100%" : "80%"} 
             >
 
-            {props.cardsArr.map((card:TCards) => (
-                <ListingCard key={card._id} cardID={card._id} />
+            {props.listingsArr.map((card:TJobListing) => (
+                <ListingCard key={card._id} listingID={card._id} />
             ))}
         </Flex>
     )
 }
 
-export default MappedCards
+export default MappedListings
