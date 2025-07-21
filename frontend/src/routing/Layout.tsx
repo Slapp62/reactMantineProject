@@ -44,7 +44,7 @@ export function Layout() {
       <Flex direction="column" mih="100vh">
         <Navbar />
 
-        <main style={{ flex: 1 }}>
+        <main style={{ flex: 1, paddingBlock: '1rem' }}>
           <Outlet />
         </main>
 

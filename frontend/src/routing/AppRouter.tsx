@@ -5,9 +5,9 @@ import Error404 from '../pages/404.pages';
 import About from '../pages/About.pages';
 import AdminControls from '../pages/AdminControls/AdminControls.pages';
 import { BusinessForm } from '../pages/BusinessForm.pages';
-import { CardDetails } from '../pages/CardDetails.pages';
+import { ListingDetails } from '../pages/ListingDetails.pages';
 import { CreateCard } from '../pages/CreateListing.pages';
-import { EditCard } from '../pages/EditCard.pages';
+import { EditListing } from '../pages/EditListing.pages';
 import { EditProfile } from '../pages/EditProfilePage/EditProfile.pages';
 import { FavoriteListings } from '../pages/Favorites.pages';
 import { HomePage } from '../pages/Home.pages';
@@ -28,8 +28,8 @@ const router = createBrowserRouter(
         { path: 'register', element: <ChooseAccountType /> },
         { path: 'register/jobseeker/', element: <JobSeekerForm /> },
         { path: 'register/business/', element: <BusinessForm /> },
-        { path: 'card-details/:id', element: <CardDetails /> },
-        { path: 'edit-card/:id', element: <EditCard /> },
+        { path: 'listing-details/:id', element: <ListingDetails /> },
+        { path: 'edit-card/:id', element: <EditListing /> },
         {
           path: 'favorites',
           element: (

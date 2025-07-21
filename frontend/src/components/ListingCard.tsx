@@ -111,7 +111,7 @@ function ListingCard({ listingID }: { listingID: string }) {
                   color="green"
                   style={{ flex: 1 }}
                   component={Link}
-                  to={`/edit-card/${listing._id}`}
+                  to={`/edit-listing/${listing._id}`}
                 >
                   <IconEdit />
                 </Button>

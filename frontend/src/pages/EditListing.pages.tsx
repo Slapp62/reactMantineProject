@@ -1,33 +1,24 @@
 import axios from 'axios';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Autocomplete,
-  Button,
-  Fieldset,
-  Flex,
-  Paper,
-  Select,
-  Textarea,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Autocomplete, Button, Fieldset, Flex, Paper, Select, Textarea, TextInput, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { API_BASE_URL } from '@/config/api';
-import { INDUSTRIES } from '@/data/industries';
-import { ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
-import { WORK_ARRANGEMENTS } from '@/data/workArr';
-import { addListing } from '@/store/listingSlice';
-import { RootState } from '@/store/store';
+import { editListing } from '@/store/listingSlice';
 import { TJobListing } from '@/Types';
+import { INDUSTRIES } from '@/data/industries';
+import { allRegionArr, ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
+import { WORK_ARRANGEMENTS } from '@/data/workArr';
 
-export function CreateCard() {
-  const jumpTo = useNavigate();
+export function EditListing() {
+  const { id } = useParams();
   const isMobile = useMediaQuery('(max-width: 700px)');
+  //const [isDisabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.userSlice.user);
+  
+  //const allListings = useSelector((state: RootState) => state.listingSlice.listings);
+  //const listingsData = allListings?.find((listings) => listings._id === id);
 
   const {
     register,
@@ -37,34 +28,36 @@ export function CreateCard() {
     formState: { errors, isValid },
   } = useForm<TJobListing>({
     mode: 'all',
+    // defaultValues: ListingsData ? cleanedListingsData(ListingsData) : {},
   });
 
+  // useEffect(() => {
+  //   const defaultUserValues = ListingsData ? cleanedListingsData(ListingsData) : {};
+  //   reset(defaultUserValues);
+  // }, [reset, ListingsData]);
+
   const onSubmit = async (data: FieldValues) => {
-    const url = `${API_BASE_URL}/api/listings/create`;
-
     try {
-      const response = await axios.post(url, {
-        businessId: user?.extendedData._id,
-        ...data,
-      });
-
-      if (response.status === 201) {
-        dispatch(addListing(response.data.listing));
-        toast.success('Card Submitted!', { position: 'bottom-right' });
-        jumpTo('/');
+      const response = await axios.put(
+        `http://localhost:5000/api/listings/edit/${id}`,
+        data
+      );
+      if (response.status === 200) {
+        dispatch(editListing({ listings: response.data as TJobListing }));
+        toast.success('Listings Updated Successfully!', { position: `bottom-right` });
+        //setDisabled(true);
       }
     } catch (error: any) {
-      toast.error(`Card creation failed! ${error.response.data}`, {
-        position: 'bottom-right',
-      });
+      toast.error(`Update Failed! ${error.response.data}`, { position: `bottom-right` });
     }
   };
 
   return (
     <Paper>
       <Title ta="center" my={10}>
-        Create A Listing
+        Edit Listing
       </Title>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex
           direction="column"
@@ -137,12 +130,10 @@ export function CreateCard() {
               render={({ field }) => (
                 <Select
                   label="Region"
-                  data={[
-                    { value: 'north', label: 'North' },
-                    { value: 'center', label: 'Center' },
-                    { value: 'jerusalem-district', label: 'Jerusalem District' },
-                    { value: 'south', label: 'South' },
-                  ]}
+                  data={allRegionArr.map((region) => ({
+                    value: region,
+                    label: region,
+                  }))}
                   {...field}
                   error={errors.location?.region?.message}
                 />
@@ -156,14 +147,16 @@ export function CreateCard() {
                 <Autocomplete
                   label="City"
                   data={
-                    watch('location.region') === 'north'
-                      ? ISRAELI_CITIES_BY_REGION.NORTH
+                    watch('location.region') === 'galilee'
+                      ? ISRAELI_CITIES_BY_REGION.GALILEE.sort()
+                      : watch('location.region') === 'golan'
+                        ? ISRAELI_CITIES_BY_REGION.GOLAN.sort()
                         : watch('location.region') === 'center'
-                          ? ISRAELI_CITIES_BY_REGION.CENTER
+                          ? ISRAELI_CITIES_BY_REGION.CENTER.sort()
                           : watch('location.region') === 'jerusalem-district'
-                            ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT
+                            ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT.sort()
                             : watch('location.region') === 'south'
-                              ? ISRAELI_CITIES_BY_REGION.SOUTH
+                              ? ISRAELI_CITIES_BY_REGION.SOUTH.sort()
                               : []
                   }
                   {...field}
@@ -207,3 +200,5 @@ export function CreateCard() {
     </Paper>
   );
 }
+
+export default EditListing;

@@ -7,7 +7,7 @@ const listingRouter = Router();
 
 listingRouter.get('/', async (_req, res) => {
     try {
-        const response = await JobListing.find();
+        const response = await JobListing.find();        
         res.json(response);
     } catch (error) {
         res.status(500).json({ error: error.message });

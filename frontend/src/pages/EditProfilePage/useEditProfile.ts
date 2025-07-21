@@ -9,7 +9,6 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
 import { clearUser, setUser, updateUser } from '@/store/userSlice';
 import { TUsers } from '@/Types';
-import { cleanedUserData } from '@/utils/getCleanedData';
 import { editProfileSchema } from '@/validationRules/editProfile.joi';
 
 export const useEditProfile = () => {
