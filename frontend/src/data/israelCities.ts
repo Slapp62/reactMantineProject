@@ -191,6 +191,8 @@ export const getAllCities = () => {
   return [... new Set(Object.values(ISRAELI_CITIES_BY_REGION).flat())];
 };
 
+export const allSortedCities = getAllCities().sort();
+
 // Helper function to get cities by specific region
 export const getCitiesByRegion = (region: keyof typeof ISRAELI_CITIES_BY_REGION) => {
   return ISRAELI_CITIES_BY_REGION[region] || [];

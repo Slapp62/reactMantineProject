@@ -176,3 +176,5 @@ export const INDUSTRIES = [
   // Other
   'Other'
 ];
+
+export const sortedIndustries = INDUSTRIES.sort();

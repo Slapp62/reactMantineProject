@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '@/config/api';
 import { INDUSTRIES } from '@/data/industries';
-import { ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
+import { getRegions, ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
 import { addListing } from '@/store/listingSlice';
 import { RootState } from '@/store/store';
@@ -18,6 +18,8 @@ export function CreateCard() {
     const isMobile = useMediaQuery('(max-width: 700px)');
     const dispatch = useDispatch();
     const user = useSelector((state:RootState) => state.userSlice.user)
+
+    const allRegionArr = getRegions();
 
     const { register, handleSubmit, control, watch, formState: {errors, isValid} } = useForm<TJobListing>({
         mode: 'all',
@@ -104,13 +106,7 @@ export function CreateCard() {
                             render={({ field }) => (
                                 <Select 
                                     label="Region"
-                                    data={[
-                                        {value: 'galilee', label: 'Galilee'},
-                                        {value: 'golan', label: 'Golan'},
-                                        {value: 'center', label: 'Center'},
-                                        {value: 'jerusalem-district', label: 'Jerusalem District'},
-                                        {value: 'south', label: 'South'},
-                                    ]}
+                                    data={allRegionArr.map((region) => ({value: region, label: region}))}
                                     {...field}
                                     error={errors.location?.region?.message}
                                 />
@@ -124,11 +120,11 @@ export function CreateCard() {
                                 <Autocomplete 
                                     label="City"
                                     data={
-                                        watch('location.region') === 'galilee' ? ISRAELI_CITIES_BY_REGION.GALILEE :
-                                        watch('location.region') === 'golan' ? ISRAELI_CITIES_BY_REGION.GOLAN :
-                                        watch('location.region') === 'center' ? ISRAELI_CITIES_BY_REGION.CENTER :
-                                        watch('location.region') === 'jerusalem-district' ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT :
-                                        watch('location.region') === 'south' ? ISRAELI_CITIES_BY_REGION.SOUTH :
+                                        watch('location.region') === 'galilee' ? ISRAELI_CITIES_BY_REGION.GALILEE.sort() :
+                                        watch('location.region') === 'golan' ? ISRAELI_CITIES_BY_REGION.GOLAN.sort() :
+                                        watch('location.region') === 'center' ? ISRAELI_CITIES_BY_REGION.CENTER.sort() :
+                                        watch('location.region') === 'jerusalem-district' ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT.sort() :
+                                        watch('location.region') === 'south' ? ISRAELI_CITIES_BY_REGION.SOUTH.sort() :
                                         []
                                     }
                                     {...field}

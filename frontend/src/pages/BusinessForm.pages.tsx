@@ -1,11 +1,12 @@
 import { Anchor, Box, Button, Fieldset, Flex, Image, PasswordInput,TextInput, Text, Textarea, Autocomplete } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import {INDUSTRIES} from "../data/industries.js";
+import {INDUSTRIES, sortedIndustries} from "../data/industries.js";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { allSortedCities, getAllCities } from "@/data/israelCities.js";
 
 type TRegisterBusiness ={
     email: string;
@@ -29,7 +30,7 @@ export function BusinessForm()  {
     const isMobile = useMediaQuery('(max-width: 700px)');
     const defaultAvatar = 'https://images.unsplash.com/vector-1748280445815-10a4bb2ba7e3?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
     const [imageURL, setURL] = useState(defaultAvatar);
-    
+        
     const { reset, register, handleSubmit, control, formState: {errors, isValid, isDirty} } = useForm<TRegisterBusiness>({
         mode: 'all',
     });
@@ -96,19 +97,26 @@ export function BusinessForm()  {
                                 <Autocomplete
                                 label="Industry"
                                 required
-                                data={INDUSTRIES}
+                                data={sortedIndustries}
                                 {...field}
                                 error={errors.industry?.message}
                                 />
                             )}
                         />
 
-                        <TextInput 
-                            label="City"
-                            {...register('city')}
-                            required
-                            error={errors.city?.message}
-                            />
+                        <Controller
+                            control={control}
+                            name="city"
+                            render={({ field }) => (
+                                <Autocomplete
+                                label="City"
+                                required
+                                data={allSortedCities}
+                                {...field}
+                                error={errors.city?.message}
+                                />
+                            )}
+                        />
                     </Fieldset>
 
                     <Fieldset legend="About">

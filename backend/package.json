@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "israjobs-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "node/express backend for israjobs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
