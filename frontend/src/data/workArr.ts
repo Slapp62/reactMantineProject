@@ -18,5 +18,5 @@ export const WORK_ARRANGEMENTS = [
   'Travel Required',
   'Relocation Required',
   'Field Work',
-  'Mobile/On-the-go'
+  'Mobile/On-the-go',
 ];

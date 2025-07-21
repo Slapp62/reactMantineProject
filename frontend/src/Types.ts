@@ -21,7 +21,7 @@ export type TJobseeker = {
   createdAt: string;
 };
 
-// Business Profile  
+// Business Profile
 export type TBusiness = {
   _id: string;
   userId: string; // Reference to User._id
@@ -50,7 +50,7 @@ export type TJobListing = {
   apply: {
     method: 'email' | 'link';
     contact: string;
-  }
+  };
   location?: {
     region?: string;
     city?: string;

@@ -1,94 +1,96 @@
+import { useEffect, useMemo, useState } from 'react';
+import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { Hero } from '@/components/Hero';
+import ListingCard from '@/components/ListingCard';
+import { fetchListingsThunk } from '@/store/listingSlice';
 import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
-import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
-import { fetchListingsThunk } from '@/store/listingSlice';
-import ListingCard from '@/components/ListingCard';
 
 export function HomePage() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchListingsThunk() as any);
-    }, [dispatch]);
-    
-    const allListings = useSelector((state:RootState) => state.listingSlice.listings);
-    const isLoading = useSelector((state:RootState) => state.listingSlice.loading);
+  useEffect(() => {
+    dispatch(fetchListingsThunk() as any);
+  }, [dispatch]);
 
-    const cards = useMemo(() => {
-        if (!allListings) {return []};
+  const allListings = useSelector((state: RootState) => state.listingSlice.listings);
+  const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
 
-        return [...allListings].sort((a : TJobListing, b : TJobListing) => 
-            (a.createdAt && b.createdAt) ? b.createdAt?.localeCompare(a.createdAt) :  0);
-    }, [allListings]);
+  const cards = useMemo(() => {
+    if (!allListings) {
+      return [];
+    }
 
-    const searchWord = useSelector((state: RootState)=> state.searchSlice.searchWord)
-    const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);
-    const isMobile = useMediaQuery('(max-width: 500px)');
+    return [...allListings].sort((a: TJobListing, b: TJobListing) =>
+      a.createdAt && b.createdAt ? b.createdAt?.localeCompare(a.createdAt) : 0
+    );
+  }, [allListings]);
 
-    const sortedCards = useMemo(() => {
-        return [...cards].sort((a, b) => {
-        if (sortOption === 'title-asc') {return a.jobTitle.localeCompare(b.jobTitle)}; 
-        if (sortOption === 'title-desc') {return b.jobTitle.localeCompare(a.jobTitle)}; 
-        if (sortOption === 'date-created-old'){
-            if (a.createdAt && b.createdAt){
-                return a.createdAt?.localeCompare(b.createdAt)
-            }
-        } 
-        if (sortOption === 'date-created-new'){
-            if (a.createdAt && b.createdAt){
-                return b.createdAt?.localeCompare(a.createdAt)
-            }
+  const searchWord = useSelector((state: RootState) => state.searchSlice.searchWord);
+  const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);
+  const isMobile = useMediaQuery('(max-width: 500px)');
+
+  const sortedCards = useMemo(() => {
+    return [...cards].sort((a, b) => {
+      if (sortOption === 'title-asc') {
+        return a.jobTitle.localeCompare(b.jobTitle);
+      }
+      if (sortOption === 'title-desc') {
+        return b.jobTitle.localeCompare(a.jobTitle);
+      }
+      if (sortOption === 'date-created-old') {
+        if (a.createdAt && b.createdAt) {
+          return a.createdAt?.localeCompare(b.createdAt);
         }
-        return 0
+      }
+      if (sortOption === 'date-created-new') {
+        if (a.createdAt && b.createdAt) {
+          return b.createdAt?.localeCompare(a.createdAt);
+        }
+      }
+      return 0;
     });
-    }, [cards, sortOption]);
-    
-    const searchCards = useMemo(() => {
-        return sortedCards.filter((listing:TJobListing) => {
-            const keyWord = searchWord.toLowerCase();
-            return (
-                listing.jobTitle.toLowerCase().includes(keyWord) ||
-                listing.jobDescription.toLowerCase().includes(keyWord)
-            )
-        });
-    }, [sortedCards, searchWord]);
-  
-    const [currentPage, setCurrentPage] = useState(1);
-    const cardsPerPage = 12;
-    
-    const paginatedCards = useMemo(() => {
-        return searchCards.slice(
-        (currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
-    }, [searchCards, currentPage, cardsPerPage]).map((card:TJobListing) => card._id);
+  }, [cards, sortOption]);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchCards]);
+  const searchCards = useMemo(() => {
+    return sortedCards.filter((listing: TJobListing) => {
+      const keyWord = searchWord.toLowerCase();
+      return (
+        listing.jobTitle.toLowerCase().includes(keyWord) ||
+        listing.jobDescription.toLowerCase().includes(keyWord)
+      );
+    });
+  }, [sortedCards, searchWord]);
 
-    const startCurrentCards = (currentPage - 1) * cardsPerPage + 1;
-    const endCurrentCards = Math.min(currentPage * cardsPerPage, searchCards.length);
-    const totalCurrentCards = searchCards.length;
-    const noCards = searchCards.length === 0;
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 12;
+
+  const paginatedCards = useMemo(() => {
+    return searchCards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
+  }, [searchCards, currentPage, cardsPerPage]).map((card: TJobListing) => card._id);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchCards]);
+
+  const startCurrentCards = (currentPage - 1) * cardsPerPage + 1;
+  const endCurrentCards = Math.min(currentPage * cardsPerPage, searchCards.length);
+  const totalCurrentCards = searchCards.length;
+  const noCards = searchCards.length === 0;
 
   return (
     <>
       <Hero />
-      {isLoading || !allListings ? 
-        (
-            <Center>
-                <Loader color="cyan" size="xl" mt={30} />
-            </Center>
-        ) 
-        : 
-        (
+      {isLoading || !allListings ? (
+        <Center>
+          <Loader color="cyan" size="xl" mt={30} />
+        </Center>
+      ) : (
         <Flex direction="column" align="center" gap={20}>
-          
-          <Flex wrap="wrap" gap='lg' justify="center" w={isMobile ? "100%" : "80%"}>
+          <Flex wrap="wrap" gap="lg" justify="center" w={isMobile ? '100%' : '80%'}>
             {paginatedCards.map((id: string) => (
               <ListingCard listingID={id} key={id} />
             ))}
@@ -103,9 +105,9 @@ export function HomePage() {
                 mt="md"
                 total={Math.ceil(searchCards.length / cardsPerPage)}
                 value={currentPage}
-                onChange={page => {
+                onChange={(page) => {
                   setCurrentPage(page);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               />
             </>
@@ -121,7 +123,7 @@ export function HomePage() {
           )}
 
           <Button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             mt={20}
             c="green"
             variant="light"

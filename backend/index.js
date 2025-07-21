@@ -33,6 +33,6 @@ app.use('/api/users', userRouter);
 app.use('/api/listings', listingRouter);
 
 app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
+    console.log(chalk.magenta.bold(`server running on port ${PORT}`));
 })
 

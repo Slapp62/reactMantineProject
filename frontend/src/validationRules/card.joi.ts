@@ -1,83 +1,89 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const cardSchema = Joi.object({
-    title: Joi.string().min(2).max(256).required().messages({
-        'string.min':'Title is too short',
-        'string.empty':'This field is required',
-        'any.required': 'Field is required',
+  title: Joi.string().min(2).max(256).required().messages({
+    'string.min': 'Title is too short',
+    'string.empty': 'This field is required',
+    'any.required': 'Field is required',
+  }),
+
+  subtitle: Joi.string().min(2).max(256).required().messages({
+    'string.min': 'Subtitle is too short',
+    'string.empty': 'This field is required',
+    'any.required': 'Field is required',
+  }),
+
+  description: Joi.string().min(2).max(1024).required().messages({
+    'string.min': 'Description is too short',
+    'string.empty': 'This field is required',
+    'any.required': 'Field is required',
+  }),
+
+  phone: Joi.string()
+    .required()
+    .pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/)
+    .messages({
+      'string.empty': 'This field is required',
+      'string.pattern.base': 'Phone must be a valid Israeli phone number.',
     }),
 
-    subtitle: Joi.string().min(2).max(256).required().messages({
-        'string.min':'Subtitle is too short',
-        'string.empty':'This field is required',
-        'any.required': 'Field is required',
+  email: Joi.string()
+    .email({ tlds: { allow: false } })
+    .pattern(/\.[a-zA-Z]{2,}$/)
+    .required()
+    .messages({
+      'string.email': 'Please enter a valid email',
+      'string.empty': 'This field is required',
+      'any.required': 'Email is required',
+      'string.pattern.base': 'Email must end with at least two letters after the dot',
     }),
 
-    description: Joi.string().min(2).max(1024).required().messages({
-        'string.min':'Description is too short',
-        'string.empty':'This field is required',
-        'any.required': 'Field is required',
-    }),
-    
-    phone: Joi.string().required().pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/).messages({
-            'string.empty':'This field is required',
-            'string.pattern.base':'Phone must be a valid Israeli phone number.',
-    }),
+  web: Joi.string().uri().allow('').optional().messages({
+    'string.uri': 'Please enter a valid URL',
+  }),
 
-    email: Joi.string().email({tlds: {allow:false}}).pattern(/\.[a-zA-Z]{2,}$/).required().messages({
-        'string.email':'Please enter a valid email',
-        'string.empty':'This field is required',
-        'any.required': 'Email is required',
-        'string.pattern.base': 'Email must end with at least two letters after the dot',
+  image: Joi.object({
+    url: Joi.string().uri().allow('').messages({
+      'string.uri': 'Please enter a valid URL',
     }),
-
-    web: Joi.string().uri().allow('').optional().messages({
-        'string.uri':'Please enter a valid URL',
+    alt: Joi.string().min(2).max(256).allow('').messages({
+      'string.min': 'Alt text is too short',
     }),
+  }).optional(),
 
-    image: Joi.object({
-        url: Joi.string().uri().allow('').messages({
-            'string.uri':'Please enter a valid URL',
-        }),
-        alt: Joi.string().min(2).max(256).allow('').messages({
-            'string.min':'Alt text is too short',
-        }),
-    }).optional(),
-
-    address: Joi.object({
-        state: Joi.string().min(2).max(256).allow('').optional().messages({
-            'string.min':'State is too short',
-        }),
-        country: Joi.string().min(2).max(256).required().messages({
-            'string.min':'Country is too short',
-            'string.empty':'This field is required',
-            'any.required':'Country is required',
-        }),
-        city: Joi.string().min(2).max(256).required().messages({
-            'string.min':'City is too short',
-            'string.empty': 'This field is required',
-            'any.required':'City is required',
-        }),
-        street: Joi.string().min(2).max(256).required().messages({
-            'string.min':'Street is too short',
-            'string.empty': 'This field is required',
-            'any.required':'Street is required',
-        }),
-        houseNumber: Joi.string().pattern(/^\d+$/).min(1).max(15).required().messages({
-            'string.pattern.base':'House Number must be a number',
-            'string.min':'House Number is too short',
-           'string.empty': 'This field is required',
-            'any.required':'House Number is required',
-        }),
-        zip: Joi.string().pattern(/^\d+$/).min(1).max(15).required().messages({
-            'string.pattern.base':'Zipcode must be a number',
-            'string.min':'Zipcode is too short',
-            'string.max':'Zipcode is too long',
-            'string.empty': 'This field is required',
-            'any.required':'Zipcode is required',
-        }),        
+  address: Joi.object({
+    state: Joi.string().min(2).max(256).allow('').optional().messages({
+      'string.min': 'State is too short',
     }),
-    
-})
+    country: Joi.string().min(2).max(256).required().messages({
+      'string.min': 'Country is too short',
+      'string.empty': 'This field is required',
+      'any.required': 'Country is required',
+    }),
+    city: Joi.string().min(2).max(256).required().messages({
+      'string.min': 'City is too short',
+      'string.empty': 'This field is required',
+      'any.required': 'City is required',
+    }),
+    street: Joi.string().min(2).max(256).required().messages({
+      'string.min': 'Street is too short',
+      'string.empty': 'This field is required',
+      'any.required': 'Street is required',
+    }),
+    houseNumber: Joi.string().pattern(/^\d+$/).min(1).max(15).required().messages({
+      'string.pattern.base': 'House Number must be a number',
+      'string.min': 'House Number is too short',
+      'string.empty': 'This field is required',
+      'any.required': 'House Number is required',
+    }),
+    zip: Joi.string().pattern(/^\d+$/).min(1).max(15).required().messages({
+      'string.pattern.base': 'Zipcode must be a number',
+      'string.min': 'Zipcode is too short',
+      'string.max': 'Zipcode is too long',
+      'string.empty': 'This field is required',
+      'any.required': 'Zipcode is required',
+    }),
+  }),
+});
 
-export {cardSchema}
+export { cardSchema };

@@ -7,11 +7,11 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Safed (Tzfat)',
     'Tiberias',
     'Carmiel',
-    'Ma\'alot-Tarshiha',
+    "Ma'alot-Tarshiha",
     'Kiryat Shmona',
     'Migdal HaEmek',
     'Afula',
-    'Beit She\'an',
+    "Beit She'an",
     'Yokneam',
     'Nesher',
     'Qiryat Bialik',
@@ -21,13 +21,13 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Tirat Carmel',
     'Kiryat Tivon',
     'Or Akiva',
-    'Zikhron Ya\'akov',
-    'Binyamina-Giv\'at Ada',
+    "Zikhron Ya'akov",
+    "Binyamina-Giv'at Ada",
     'Pardes Hanna-Karkur',
     'Caesarea',
     'Rosh Pina',
     'Metula',
-    'Katzrin'
+    'Katzrin',
   ],
 
   // Golan Heights
@@ -40,7 +40,7 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Keshet',
     'Odem',
     'Alonei HaBashan',
-    'Ramat Trump'
+    'Ramat Trump',
   ],
 
   // Central Israel - Tel Aviv Metro & Sharon
@@ -56,7 +56,7 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Kfar Saba',
     'Herzliya',
     'Hadera',
-    'Ra\'anana',
+    "Ra'anana",
     'Ramat HaSharon',
     'Givatayim',
     'Rehovot',
@@ -81,9 +81,9 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Kiryat Malakhi',
     'Lod',
     'Ramla',
-    'Modi\'in-Maccabim-Re\'ut',
+    "Modi'in-Maccabim-Re'ut",
     'Shoham',
-    'Mazkeret Batya'
+    'Mazkeret Batya',
   ],
 
   // Jerusalem District & Surroundings
@@ -93,25 +93,25 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Mevasseret Zion',
     'Abu Ghosh',
     'Zur Hadassah',
-    'Kiryat Ye\'arim',
+    "Kiryat Ye'arim",
     'Tzur Hadassah',
     'Neve Ilan',
-    'Ma\'ale HaHamisha'
+    "Ma'ale HaHamisha",
   ],
 
   // West Bank - Judea & Samaria
   WEST_BANK: [
-    'Ma\'ale Adumim',
+    "Ma'ale Adumim",
     'Ariel',
     'Modiin Illit',
     'Beitar Illit',
     'Efrat',
     'Gush Etzion',
-    'Giv\'at Ze\'ev',
+    "Giv'at Ze'ev",
     'Har Adar',
     'Alfei Menashe',
     'Oranit',
-    'Sha\'arei Tikva',
+    "Sha'arei Tikva",
     'Elkana',
     'Kedumim',
     'Karnei Shomron',
@@ -130,7 +130,7 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Neve Tzuf',
     'Halamish',
     'Nili',
-    'Na\'ale',
+    "Na'ale",
     'Hashmonaim',
     'Kiryat Sefer',
     'Mattityahu',
@@ -139,13 +139,13 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Kokhav HaShahar',
     'Rimonim',
     'Shilo',
-    'Ma\'ale Levona',
+    "Ma'ale Levona",
     'Eli',
     'Shvut Rachel',
     'Dolev',
     'Talmon',
     'Bet Horon',
-    'Givon HaHadasha'
+    'Givon HaHadasha',
   ],
 
   // Southern Israel - Negev
@@ -170,7 +170,7 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Hura',
     'Lakiya',
     'Shaqib al-Salam',
-    'Kuseife'
+    'Kuseife',
   ],
 
   // Ultra-Orthodox Cities (across regions)
@@ -182,13 +182,13 @@ export const ISRAELI_CITIES_BY_REGION = {
     'Kiryat Sefer',
     'Emmanuel',
     'Rechasim',
-    'Kochav Ya\'akov'
-  ]
+    "Kochav Ya'akov",
+  ],
 };
 
 // Helper function to get all cities as a flat array
 export const getAllCities = () => {
-  return [... new Set(Object.values(ISRAELI_CITIES_BY_REGION).flat())];
+  return [...new Set(Object.values(ISRAELI_CITIES_BY_REGION).flat())];
 };
 
 export const allSortedCities = getAllCities().sort();

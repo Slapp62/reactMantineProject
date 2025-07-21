@@ -14,7 +14,7 @@ export const INDUSTRIES = [
   'Internet of Things (IoT)',
   'Robotics & Automation',
   'Blockchain & Cryptocurrency',
-  
+
   // Healthcare & Life Sciences
   'Healthcare & Medical Services',
   'Pharmaceuticals',
@@ -26,7 +26,7 @@ export const INDUSTRIES = [
   'Veterinary Services',
   'Health Insurance',
   'Medical Research',
-  
+
   // Finance & Insurance
   'Banking',
   'Investment & Securities',
@@ -36,7 +36,7 @@ export const INDUSTRIES = [
   'Mortgage & Lending',
   'Financial Planning',
   'Credit Services',
-  
+
   // Manufacturing & Industrial
   'Automotive',
   'Aerospace & Defense',
@@ -48,7 +48,7 @@ export const INDUSTRIES = [
   'Mining & Extraction',
   'Steel & Metals',
   'Plastics & Packaging',
-  
+
   // Energy & Environment
   'Renewable Energy',
   'Oil & Gas',
@@ -59,7 +59,7 @@ export const INDUSTRIES = [
   'Water Treatment',
   'Solar Energy',
   'Wind Energy',
-  
+
   // Retail & E-commerce
   'Retail',
   'E-commerce',
@@ -71,7 +71,7 @@ export const INDUSTRIES = [
   'Electronics Retail',
   'Furniture',
   'Toys & Games',
-  
+
   // Food & Beverage
   'Food & Beverage Manufacturing',
   'Restaurants & Food Service',
@@ -81,7 +81,7 @@ export const INDUSTRIES = [
   'Food Delivery',
   'Brewing & Distilling',
   'Organic Food',
-  
+
   // Transportation & Logistics
   'Logistics & Supply Chain',
   'Shipping & Maritime',
@@ -91,7 +91,7 @@ export const INDUSTRIES = [
   'Rideshare & Mobility',
   'Warehousing',
   'Courier Services',
-  
+
   // Media & Entertainment
   'Media & Broadcasting',
   'Entertainment',
@@ -102,7 +102,7 @@ export const INDUSTRIES = [
   'Social Media',
   'Podcasting',
   'Streaming Services',
-  
+
   // Education & Training
   'Education',
   'Higher Education',
@@ -112,7 +112,7 @@ export const INDUSTRIES = [
   'Early Childhood Education',
   'Special Education',
   'Vocational Training',
-  
+
   // Professional Services
   'Consulting',
   'Legal Services',
@@ -123,7 +123,7 @@ export const INDUSTRIES = [
   'Engineering Services',
   'Translation Services',
   'Event Planning',
-  
+
   // Hospitality & Tourism
   'Hospitality',
   'Tourism & Travel',
@@ -132,7 +132,7 @@ export const INDUSTRIES = [
   'Travel Agencies',
   'Vacation Rentals',
   'Casino & Gaming',
-  
+
   // Government & Public Sector
   'Government',
   'Defense & Military',
@@ -140,20 +140,20 @@ export const INDUSTRIES = [
   'Non-Profit Organizations',
   'International Organizations',
   'Emergency Services',
-  
+
   // Telecommunications
   'Telecommunications',
   'Internet Services',
   'Cable & Satellite',
   'Wireless Communications',
-  
+
   // Sports & Fitness
   'Sports & Recreation',
   'Fitness & Wellness',
   'Professional Sports',
   'Sports Equipment',
   'Outdoor Recreation',
-  
+
   // Personal Services
   'Personal Care Services',
   'Cleaning Services',
@@ -162,7 +162,7 @@ export const INDUSTRIES = [
   'Home Services',
   'Photography',
   'Beauty Salons & Spas',
-  
+
   // Emerging Industries
   'Space Technology',
   'Drone Technology',
@@ -172,9 +172,9 @@ export const INDUSTRIES = [
   'Electric Vehicles',
   'Smart Cities',
   'Quantum Computing',
-  
+
   // Other
-  'Other'
+  'Other',
 ];
 
 export const sortedIndustries = INDUSTRIES.sort();

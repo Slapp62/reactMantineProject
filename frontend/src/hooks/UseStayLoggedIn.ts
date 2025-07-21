@@ -1,30 +1,33 @@
-import { setUser } from "@/store/userSlice";
-import { TdecodedToken} from "@/Types";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect } from 'react';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/userSlice';
+import { TdecodedToken } from '@/Types';
 
 const useStayLoggedIn = () => {
-    const dispatch = useDispatch();
-    
-    useEffect(() => {
-        
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  const dispatch = useDispatch();
 
-        if (!token) {return;}
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-        axios.defaults.headers.common['x-auth-token'] = token;
+    if (!token) {
+      return;
+    }
 
-        const { _id } = jwtDecode<TdecodedToken>(token);
+    axios.defaults.headers.common['x-auth-token'] = token;
 
-        const dispatchUser = async () => {
-            const response = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${_id}`)
-            const userData = await response.data;
-            dispatch(setUser(userData.data)); 
-        }
-        dispatchUser();
-    }, [])
-}
+    const { _id } = jwtDecode<TdecodedToken>(token);
 
-export default useStayLoggedIn
+    const dispatchUser = async () => {
+      const response = await axios.get(
+        `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${_id}`
+      );
+      const userData = await response.data;
+      dispatch(setUser(userData.data));
+    };
+    dispatchUser();
+  }, []);
+};
+
+export default useStayLoggedIn;
