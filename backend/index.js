@@ -4,6 +4,7 @@ import { connect } from 'mongoose';
 import userRouter from './routes/users.js';
 import listingRouter from './routes/listings.js';
 import dotenv from 'dotenv';
+import chalk from 'chalk';
 dotenv.config();
 
 const app = express();
@@ -12,8 +13,8 @@ const PORT = process.env.PORT || 5000;
 const connectDB = async () => {
     try {
         await connect(process.env.MONGO_URI);
-        console.log('MongoDB URI', process.env.MONGO_URI);
-        console.log('MongoDB connected');
+        console.log(chalk.green('MongoDB URI:'), chalk.blue(process.env.MONGO_URI));
+        console.log(chalk.green.bold('MongoDB connected'));
     } catch (error) {
         console.error('MongoDB connection error', error);
         process.exit(1);

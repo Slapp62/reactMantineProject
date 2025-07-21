@@ -1,12 +1,12 @@
 import { Anchor, Box, Button, Fieldset, Flex, Image, PasswordInput,TextInput, Text, Textarea, Autocomplete } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import {INDUSTRIES, sortedIndustries} from "../data/industries.js";
+import {sortedIndustries} from "../data/industries.js";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { allSortedCities, getAllCities } from "@/data/israelCities.js";
+import { allSortedCities } from "@/data/israelCities.js";
 
 type TRegisterBusiness ={
     email: string;
