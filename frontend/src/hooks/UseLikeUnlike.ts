@@ -15,7 +15,7 @@ export function useLikeUnlike() {
       // update API
       try {
         const response = await axios.patch(
-          `https://localhost:5000/listings/${listing._id}/toggleLike`
+          `https://localhost:5000/users/favorites/toggle/${listing._id}`
         );
 
         if (isLiked) {

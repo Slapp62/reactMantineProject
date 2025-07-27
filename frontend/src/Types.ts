@@ -18,6 +18,7 @@ export type TJobseeker = {
   linkedIn?: string;
   preferredWorkArr?: string;
   description?: string;
+  favorites?: string[];
   createdAt: string;
 };
 
@@ -57,7 +58,6 @@ export type TJobListing = {
   };
   workArrangement: string;
   industry?: string;
-  favorites: string[];
   isActive: boolean;
   createdAt: string;
   expiresAt?: string;
@@ -81,10 +81,10 @@ export type TAuthResponse = {
 
 export type TJobseekerWithUser = {
   userData: Omit<TUser, 'password'>;
-  extendedData: TJobseeker;
+  profileData: TJobseeker;
 };
 
 export type TBusinessWithUser = {
   userData: Omit<TUser, 'password'>;
-  extendedData: TBusiness;
+  profileData: TBusiness;
 };

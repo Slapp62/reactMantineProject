@@ -28,7 +28,7 @@ const userSlice = createSlice({
     },
     updateUser(state, action: PayloadAction<TJobseekerWithUser | TBusinessWithUser>) {
       if (state.allUsers) {
-        const index = state.allUsers.findIndex((user) => user._id === action.payload._id);
+        const index = state.allUsers.findIndex((user) => user.profileData._id === action.payload.userData._id);
         if (index !== -1) {
           state.allUsers[index] = action.payload;
         }
@@ -40,7 +40,7 @@ const userSlice = createSlice({
     },
     removeUser(state, action: PayloadAction<string>) {
       if (state.allUsers) {
-        state.allUsers = state.allUsers?.filter((user) => user._id !== action.payload);
+        state.allUsers = state.allUsers.filter((user) => user.userData._id !== action.payload);
       }
     },
     toggleAdminView(state, action: PayloadAction<boolean>) {

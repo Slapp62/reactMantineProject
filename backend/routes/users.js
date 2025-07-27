@@ -7,6 +7,8 @@ dotenv.config();
 
 const userRouter = Router();
 
+
+
 const createNewUser = async (email, password, userType) => {
     const existingUser = await User.findOne({email});
     if (existingUser) {
@@ -140,7 +142,7 @@ userRouter.post('/login', async (req, res) => {
 
         const combinedData = {
             userData: userNoPassword,
-            extendedData: userData
+            profileData: userData
         };
 
         res.json({
@@ -176,7 +178,7 @@ userRouter.get('/:id', async (req, res) => {
 
         const combinedData = {
             userData: userNoPassword,
-            extendedData: userData
+            profileData: userData
         };
 
         res.json({
@@ -195,6 +197,41 @@ userRouter.get('/', async (_req, res) => {
     try {
         const users = await User.find();
         res.json(users);
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+});
+
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      req.user = decoded;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+}
+
+userRouter.put('/favorites/toggle/:id', verifyToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const listingId = req.params.id;
+        const user = await Jobseeker.findOne({userId: {$eq: userId}});
+
+        if (user.favorites.includes(listingId)) {
+          user.favorites = user.favorites.filter(id => id !== listingId);
+        } else {
+          user.favorites.push(listingId);
+        }
+
+        const updatedUser = await user.save();
+        res.json(updatedUser);
     } catch (error) {
         res.status(500).json({error: error.message})
     }

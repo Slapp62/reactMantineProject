@@ -27,6 +27,7 @@ const jobseekerSchema = new Schema({
     type: String, 
     enum: WORK_ARRANGEMENTS,
   },
+  favorites: [String],
   description: String,
   createdAt: { type: Date, default: Date.now }
 });
@@ -75,7 +76,6 @@ const jobListingSchema = new Schema({
     enum: INDUSTRIES,
     required: true 
   },
-  favorites: [String],
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
   expiresAt: Date
