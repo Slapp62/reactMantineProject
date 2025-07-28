@@ -5,8 +5,8 @@ export default [
   {
     files: ["**/*.js"],
     languageOptions: {
-      globals: globals.node
+      globals: globals.node,
     },
-    rules: js.configs.recommended.rules
-  }
+    rules: js.configs.recommended.rules,
+  },
 ];
