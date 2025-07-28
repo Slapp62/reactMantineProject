@@ -46,46 +46,6 @@ const listingSlice = createSlice({
         state.listings = state.listings?.filter((listings) => listings._id !== action.payload._id);
       }
     },
-    addFavorite: (state, action: PayloadAction<{ listings: TJobListing; userID: string }>) => {
-      const { listings, userID } = action.payload;
-      if (!state.listings) {
-        return;
-      }
-
-      const listingsIndex = state.listings.findIndex(
-        (reduxlistings) => reduxlistings._id === listings._id
-      );
-      if (listingsIndex !== -1) {
-        const currentListings = state.listings[listingsIndex];
-
-        if (!currentListings.favorites?.includes(userID)) {
-          state.listings[listingsIndex] = {
-            ...currentListings,
-            favorites: [...(currentListings.favorites || []), userID],
-          };
-        }
-      }
-    },
-    removeFavorite: (state, action: PayloadAction<{ listings: TJobListing; userID: string }>) => {
-      const { listings, userID } = action.payload;
-      if (!state.listings) {
-        return;
-      }
-
-      const listingsIndex = state.listings.findIndex(
-        (reduxListings) => reduxListings._id === listings._id
-      );
-      if (listingsIndex !== -1) {
-        const currentListings = state.listings[listingsIndex];
-        const currentfavorites = currentListings.favorites || [];
-        if (currentListings.favorites?.includes(userID)) {
-          state.listings[listingsIndex] = {
-            ...currentListings!,
-            favorites: currentfavorites.filter((favorite) => favorite !== userID),
-          };
-        }
-      }
-    },
     setSortOption: (state, action: PayloadAction<string>) => {
       state.sortOption = action.payload;
     },
@@ -111,8 +71,6 @@ export const {
   addListing,
   editListing,
   removeListing,
-  addFavorite,
-  removeFavorite,
   setSortOption,
 } = listingSlice.actions;
 export default listingSlice.reducer;

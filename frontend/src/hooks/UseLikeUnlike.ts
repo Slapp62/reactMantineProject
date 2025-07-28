@@ -2,34 +2,38 @@ import { useCallback } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { addFavorite, removeFavorite } from '@/store/listingSlice';
-import { TJobListing } from '@/Types';
+import { } from '@/store/listingSlice';
+import { toggleFavorites } from '@/store/userSlice';
 
 export function useLikeUnlike() {
   const dispatch = useDispatch();
-
+    
   const toggleLike = useCallback(
-    async (listing: TJobListing, userID: string, isLiked: boolean) => {
-      // update Redux slice
-
-      // update API
+    async (listingId: string, isLiked: boolean) => {
       try {
-        const response = await axios.patch(
-          `https://localhost:5000/users/favorites/toggle/${listing._id}`
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        await axios.put(
+          `http://localhost:5000/api/users/favorites/toggle/${listingId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          }
         );
 
-        if (isLiked) {
-          dispatch(removeFavorite({ listings: response.data, userID }));
-          toast.warning('Listing Unliked!');
-        } else {
-          dispatch(addFavorite({ listings: response.data, userID }));
-          toast.success('Listing Liked!');
-        }
-      } catch (error) {
-        toast.error(`Error liking/unliking Listing:${error}`);
-      }
+        dispatch(toggleFavorites(listingId));
 
-      return !isLiked;
+        if (isLiked){
+          // now unliked 
+          toast.warning('Listing Unliked')
+        } else {
+          // if it was unliked, now liked
+          toast.success('Listing Liked')
+        } 
+      } catch (error : any) {
+        toast.error(`Error liking/unliking Listing`);
+        console.error('Error:', error.response.data);
+      }
     },
     [dispatch]
   );

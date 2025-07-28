@@ -34,15 +34,11 @@ app.use(
 
 app.use(json());
 
-// route middleware
-app.use("/", (req, res, next) => {
-  throw new Error("Error with this thang");
-});
-
 // api router
 app.use("/api/users", userRouter);
 app.use("/api/listings", listingRouter);
 
+// error handler
 app.use((error, req, res, next) => {
   handleError(res, error.status || 500, error.message);
 });

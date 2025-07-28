@@ -212,9 +212,8 @@ userRouter.get("/", async (_req, res) => {
 });
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
+  const token = req.headers.authorization;
+  if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.status(403).send({ error: "Invalid token" });
@@ -223,7 +222,7 @@ const verifyToken = (req, res, next) => {
       next();
     });
   } else {
-    res.status(401).send({ error: "No token provided" });
+    res.status(401).send("No token provided");
   }
 };
 
@@ -231,6 +230,7 @@ userRouter.put("/favorites/toggle/:id", verifyToken, async (req, res) => {
   try {
     const userId = req.user.userId;
     const listingId = req.params.id;
+    
     const user = await Jobseeker.findOne({ userId: { $eq: userId } });
 
     if (user.favorites.includes(listingId)) {
@@ -241,6 +241,7 @@ userRouter.put("/favorites/toggle/:id", verifyToken, async (req, res) => {
 
     const updatedUser = await user.save();
     res.json(updatedUser);
+  
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

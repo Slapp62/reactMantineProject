@@ -46,9 +46,21 @@ const userSlice = createSlice({
     toggleAdminView(state, action: PayloadAction<boolean>) {
       state.isAdminView = action.payload;
     },
+    toggleFavorites(state, action: PayloadAction<string>){
+      const jobseeker = state.user as TJobseekerWithUser;
+      const favorites = jobseeker.profileData.favorites;
+      const listingId = action.payload;
+
+      if (favorites?.includes(listingId)){        
+        jobseeker.profileData.favorites = favorites.filter((id) => id !== listingId)
+      } else {
+        favorites?.push(listingId);
+      }
+      
+    }
   },
 });
 
-export const { setUser, setAllUsers, updateUser, clearUser, removeUser, toggleAdminView } =
+export const { setUser, setAllUsers, updateUser, clearUser, removeUser, toggleAdminView, toggleFavorites } =
   userSlice.actions;
 export default userSlice.reducer;
