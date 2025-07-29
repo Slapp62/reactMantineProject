@@ -19,8 +19,7 @@ export function Layout() {
   const fetchedRef = useRef(false);
   const isMobile = useMediaQuery('(max-width: 700px)');
   const isBusiness = useSelector(
-    (state: RootState) => state.userSlice.user?.userData.userType === 'business'
-  );
+    (state: RootState) => state.businessSlice.profile);
 
   useEffect(() => {
     if (location.pathname === '/' || location.pathname.startsWith('/card-details')) {

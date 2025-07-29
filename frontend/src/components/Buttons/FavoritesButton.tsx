@@ -3,16 +3,16 @@ import { useSelector } from 'react-redux';
 import { ActionIcon } from '@mantine/core';
 import { useLikeUnlike } from '@/hooks/UseLikeUnlike';
 import { RootState } from '@/store/store';
-import { TJobListing, TJobseekerWithUser } from '@/Types';
+import { TJobListing } from '@/Types';
 
 
 export function FavoritesButton({ listing }: { listing: TJobListing }) {
   const toggleLike = useLikeUnlike();
 
   const listingId = listing._id;
-  const user = useSelector((state: RootState) => state.userSlice.user) as TJobseekerWithUser;
-  const isLiked = user.profileData.favorites?.includes(listingId) ?? false;
-
+  const user = useSelector((state: RootState) => state.jobseekerSlice.profile);
+  const isLiked = user?.favorites?.includes(listingId) ?? false;
+  
   return (
     <ActionIcon
       style={{ flex: 1 }}

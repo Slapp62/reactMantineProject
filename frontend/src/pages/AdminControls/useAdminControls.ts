@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDisclosure } from '@mantine/hooks';
 import { useGetAllUsers } from '@/hooks/UseGetAllUser';
-import { removeUser } from '@/store/userSlice';
+import { removeUser } from '@/store/authSlice';
 import { TUsers } from '@/Types';
 
 export const useAdminControls = () => {

@@ -1,14 +1,14 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ChooseAccountType } from '@/pages/ChooseAccountType';
-import { JobSeekerForm } from '@/pages/JobSeekerForm.pages';
+import { JobSeekerForm } from '@/pages/RegisterPages/JobSeekerForm.pages';
 import Error404 from '../pages/404.pages';
 import About from '../pages/About.pages';
-import AdminControls from '../pages/AdminControls/AdminControls.pages';
-import { BusinessForm } from '../pages/BusinessForm.pages';
+//import AdminControls from '../pages/AdminControls/AdminControls.pages';
+import { BusinessForm } from '@/pages/RegisterPages/BusinessForm.pages';
 import { ListingDetails } from '../pages/ListingDetails.pages';
 import { CreateCard } from '../pages/CreateListing.pages';
-import { EditListing } from '../pages/EditListing.pages';
-import { EditProfile } from '../pages/EditProfilePage/EditProfile.pages';
+// import { EditListing } from '../pages/EditListing.pages';
+// import { EditProfile } from '../pages/EditProfilePage/EditProfile.pages';
 import { FavoriteListings } from '../pages/Favorites.pages';
 import { HomePage } from '../pages/Home.pages';
 import { LoginPage } from '../pages/LoginPage/Login.pages';
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
         { path: 'register/jobseeker/', element: <JobSeekerForm /> },
         { path: 'register/business/', element: <BusinessForm /> },
         { path: 'listing-details/:id', element: <ListingDetails /> },
-        { path: 'edit-card/:id', element: <EditListing /> },
+        //{ path: 'edit-card/:id', element: <EditListing /> },
         {
           path: 'favorites',
           element: (
@@ -46,22 +46,22 @@ const router = createBrowserRouter(
             </RouteGuard>
           ),
         },
-        {
-          path: 'edit-profile/:id',
-          element: (
-            <RouteGuard>
-              <EditProfile />
-            </RouteGuard>
-          ),
-        },
-        {
-          path: 'admin',
-          element: (
-            <RouteGuard isAdmin>
-              <AdminControls />
-            </RouteGuard>
-          ),
-        },
+        // {
+        //   path: 'edit-profile/:id',
+        //   element: (
+        //     <RouteGuard>
+        //       <EditProfile />
+        //     </RouteGuard>
+        //   ),
+        // },
+        // {
+        //   path: 'admin',
+        //   element: (
+        //     <RouteGuard isAdmin>
+        //       <AdminControls />
+        //     </RouteGuard>
+        //   ),
+        // },
         {
           path: 'my-listings',
           element: (

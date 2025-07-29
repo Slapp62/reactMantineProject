@@ -17,16 +17,16 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { AppDispatch, RootState } from '@/store/store';
-import { clearUser } from '@/store/userSlice';
+import { clearUser } from '@/store/authSlice';
 import { AvatarIcon } from './Avatar';
 import { LightDarkToggle } from './LightDarkToggle';
 import { Logo } from './Logo';
 import classes from '../ComponentStyles/Navigation.module.css';
 
 export function Navbar() {
-  const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
+  const loggedIn = useSelector((state: RootState) => state.authSlice.isLoggedIn);
   const isBusiness =
-    useSelector((state: RootState) => state.userSlice.user?.userData.userType) === 'business';
+    useSelector((state: RootState) => state.authSlice.currentUser?.userType) === 'business';
   const dispatch = useDispatch<AppDispatch>();
 
   const jumpTo = useNavigate();

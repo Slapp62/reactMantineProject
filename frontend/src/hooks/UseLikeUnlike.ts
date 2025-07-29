@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { } from '@/store/listingSlice';
-import { toggleFavorites } from '@/store/userSlice';
+import { toggleFavorites } from '@/store/jobseekerSlice';
 
 export function useLikeUnlike() {
   const dispatch = useDispatch();
@@ -12,11 +12,13 @@ export function useLikeUnlike() {
     async (listingId: string, isLiked: boolean) => {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
         await axios.put(
           `http://localhost:5000/api/users/favorites/toggle/${listingId}`,
+          {},
           {
             headers: {
-              'Authorization': `Bearer ${token}`,
+              'authorization': token,
             },
           }
         );

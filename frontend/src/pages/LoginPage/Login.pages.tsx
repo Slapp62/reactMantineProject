@@ -17,8 +17,10 @@ import {
 } from '@mantine/core';
 import { API_BASE_URL } from '@/config/api';
 import { AppDispatch } from '@/store/store';
-import { setUser } from '@/store/userSlice';
+import { setUser } from '@/store/authSlice';
 import classes from './Login.module.css';
+import { setBusinessProfile } from '@/store/businessSlice';
+import { setJobseekerProfile } from '@/store/jobseekerSlice';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -26,6 +28,7 @@ export function LoginPage() {
   const message = location.state?.message;
 
   const dispatch = useDispatch<AppDispatch>();
+
   const [rememberMe, setRemember] = useState(false);
   const [_ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -94,18 +97,24 @@ export function LoginPage() {
   const onSubmit = async (data: FieldValues) => {
     setIsLoading(true);
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email: data.email,
         password: data.password,
       });
 
       const { token } = response.data;
       const { user } = response.data;
-
+      
       localStorage.setItem('rememberMe', rememberMe ? 'true ' : 'false');
       rememberMe ? localStorage.setItem('token', token) : sessionStorage.setItem('token', token);
 
-      dispatch(setUser(user));
+      dispatch(setUser(user.userData));
+      
+      if (user.userData.userType === 'business') {
+        dispatch(setBusinessProfile(user.profileData));
+      } else {
+        dispatch(setJobseekerProfile(user.profileData));
+      }
 
       toast.success('Logged In!', { position: 'bottom-right' });
       setLoginAttempts(0);

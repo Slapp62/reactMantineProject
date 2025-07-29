@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { DeleteUserModal } from '@/components/Modals/DeleteUserModal';
-import { toggleAdminView } from '@/store/userSlice';
+import { toggleAdminView } from '@/store/authSlice';
 import { useAdminControls } from './useAdminControls';
 
 const AdminControls = () => {

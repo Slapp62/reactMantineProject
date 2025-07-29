@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { RootState } from '@/store/store';
-import { clearUser, setUser, updateUser } from '@/store/userSlice';
+import { clearUser, setUser, updateUser } from '@/store/authSlice';
 import { TUsers } from '@/Types';
 import { editProfileSchema } from '@/validationRules/editProfile.joi';
 

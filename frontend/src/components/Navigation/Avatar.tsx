@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ActionIcon, Avatar } from '@mantine/core';
 import { RootState } from '@/store/store';
-import { toggleAdminView } from '@/store/userSlice';
+//import { toggleAdminView } from '@/store/authSlice';
 
 export function AvatarIcon(props: { closeDrawer?: () => void }) {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const jumpTo = useNavigate();
-  const user = useSelector((state: RootState) => state.userSlice.user);
+  const user = useSelector((state: RootState) => state.authSlice.currentUser);
 
   return (
     <ActionIcon
@@ -16,14 +16,14 @@ export function AvatarIcon(props: { closeDrawer?: () => void }) {
       radius={100}
       size={40}
       onClick={() => {
-        dispatch(toggleAdminView(false));
+        //dispatch(toggleAdminView(false));
         jumpTo(`/edit-profile/${user?._id}`);
         if (props.closeDrawer) {
           props.closeDrawer();
         }
       }}
     >
-      <Avatar src={user?.image?.url} style={{ cursor: 'pointer' }} size={30} />
+      <Avatar style={{ cursor: 'pointer' }} size={30} />
     </ActionIcon>
   );
 }

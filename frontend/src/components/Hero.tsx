@@ -25,9 +25,9 @@ import { RootState } from '@/store/store';
 export function Hero() {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.userSlice.user);
+  const user = useSelector((state: RootState) => state.authSlice.currentUser);
 
-  const isBusiness = user?.userData.userType === 'business';
+  const isBusiness = user?.userType === 'business';
   //const isAdmin = user?.isAdmin;
   const allCitiesArr = getAllCities();
   const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);

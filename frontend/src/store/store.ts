@@ -3,10 +3,14 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 import listingSlice from './listingSlice';
 import searchSlice from './searchSlice';
-import userSlice from './userSlice';
+import authSlice from './authSlice';
+import jobseekerSlice from './jobseekerSlice';
+import businessSlice from './businessSlice';
 
 export const rootReducer = combineReducers({
-  userSlice,
+  authSlice,
+  jobseekerSlice,
+  businessSlice,
   searchSlice,
   listingSlice,
 });
@@ -14,7 +18,7 @@ export const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ['userSlice', 'listingSlice'],
+  whitelist: ['authSlice', 'jobseekerSlice', 'businessSlice', 'listingSlice'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

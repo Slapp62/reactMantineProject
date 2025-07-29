@@ -4,6 +4,7 @@ import cors from "cors";
 import { connect } from "mongoose";
 import userRouter from "./routes/users.js";
 import listingRouter from "./routes/listings.js";
+import authRouter from "./routes/auth.js";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import { handleError } from "./utils/errorHandler.js";
@@ -35,6 +36,7 @@ app.use(
 app.use(json());
 
 // api router
+app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/listings", listingRouter);
 

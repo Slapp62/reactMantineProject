@@ -25,7 +25,7 @@ function ListingCard({ listingID }: { listingID: string }) {
   const deleteCard = useDeleteListing();
   const location = useLocation();
   const myListingsPage = location.pathname === '/my-listings';
-  const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
+  const loggedIn = useSelector((state: RootState) => state.authSlice.isLoggedIn);
   const isMobile = useMediaQuery('(max-width: 500px)');
   const {
     currentLang,

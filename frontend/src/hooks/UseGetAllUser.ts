@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { RootState } from '@/store/store';
-import { setAllUsers } from '@/store/userSlice';
+import { setAllUsers } from '@/store/authSlice';
 
 export function useGetAllUsers() {
   const dispatch = useDispatch();

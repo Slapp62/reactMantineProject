@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { API_BASE_URL } from '@/config/api';
-import { setUser } from '@/store/userSlice';
+import { setUser } from '@/store/authSlice';
 import { TDecodedToken } from '@/Types';
 
 export function useAuthInit() {

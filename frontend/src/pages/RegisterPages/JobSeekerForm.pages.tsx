@@ -52,7 +52,7 @@ export function JobSeekerForm() {
 
   const onSubmit = async (data: JobseekerFormProps) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/users/register/jobseeker', {
+      const response = await axios.post('http://localhost:5000/api/auth/register/jobseeker', {
         email: data.email,
         password: data.password,
         userType: 'jobseeker',
@@ -119,8 +119,7 @@ export function JobSeekerForm() {
                 <Select
                   label="Region"
                   data={[
-                    { value: 'galilee', label: 'Galilee' },
-                    { value: 'golan', label: 'Golan' },
+                    { value: 'north', label: 'North' },
                     { value: 'center', label: 'Center' },
                     {
                       value: 'jerusalem-district',
@@ -141,10 +140,8 @@ export function JobSeekerForm() {
                 <Autocomplete
                   label="City"
                   data={
-                    watch('region') === 'galilee'
-                      ? ISRAELI_CITIES_BY_REGION.GALILEE
-                      : watch('region') === 'golan'
-                        ? ISRAELI_CITIES_BY_REGION.GOLAN
+                    watch('region') === 'north'
+                      ? ISRAELI_CITIES_BY_REGION.NORTH
                         : watch('region') === 'center'
                           ? ISRAELI_CITIES_BY_REGION.CENTER
                           : watch('region') === 'jerusalem-district'

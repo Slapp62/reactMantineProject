@@ -18,7 +18,7 @@ import {
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { allSortedCities } from '@/data/israelCities.js';
-import { sortedIndustries } from '../data/industries.js';
+import { sortedIndustries } from '../../data/industries.js';
 
 type TRegisterBusiness = {
   email: string;
@@ -57,7 +57,7 @@ export function BusinessForm() {
   const onSubmit = async (data: FieldValues) => {
     try {
       const businessResponse = await axios.post(
-        'http://localhost:5000/api/users/register/business',
+        'http://localhost:5000/api/auth/register/business',
         {
           email: data.email,
           password: data.password,

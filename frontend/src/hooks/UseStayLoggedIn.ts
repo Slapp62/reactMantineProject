@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/userSlice';
+import { setUser } from '@/store/authSlice';
 import { TdecodedToken } from '@/Types';
 
 const useStayLoggedIn = () => {
