@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
@@ -20,14 +20,14 @@ import { INDUSTRIES } from '@/data/industries';
 import { ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
 import { addListing } from '@/store/listingSlice';
-import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
+import { useCurrentUser } from '@/utils/reduxHelperHooks';
 
 export function CreateCard() {
   const jumpTo = useNavigate();
   const isMobile = useMediaQuery('(max-width: 700px)');
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.userSlice.user);
+  const user = useCurrentUser();
 
   const {
     register,
@@ -44,7 +44,7 @@ export function CreateCard() {
 
     try {
       const response = await axios.post(url, {
-        businessId: user?.extendedData._id,
+        businessId: user?._id,
         ...data,
       });
 

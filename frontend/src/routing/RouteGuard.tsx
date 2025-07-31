@@ -1,6 +1,5 @@
-import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { RootState } from '../store/store';
+import { useCurrentUser, useIsLoggedIn } from '@/utils/reduxHelperHooks';
 
 type RouteGuardProps = {
   children: React.ReactNode;
@@ -11,19 +10,19 @@ type RouteGuardProps = {
 const RouteGuard = (props: RouteGuardProps) => {
   const { children, isBusiness, isAdmin } = props;
 
-  const user = useSelector((state: RootState) => state.userSlice.user);
-  const userLoggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
+  const user = useCurrentUser();
+  const userLoggedIn = useIsLoggedIn();
   const accessMessage = 'You do not have access to this page.';
 
   if (!userLoggedIn) {
     return <Navigate to="/" replace state={{ message: accessMessage }} />;
   }
 
-  if (isBusiness && !user?.isBusiness) {
+  if (isBusiness && user?.userType !== 'business') {
     return <Navigate to="/login" replace state={{ message: accessMessage }} />;
   }
 
-  if (isAdmin && !user?.isAdmin) {
+  if (isAdmin && user?.userType !== 'admin') {
     return <Navigate to="/login" replace state={{ message: accessMessage }} />;
   }
 

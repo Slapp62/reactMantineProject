@@ -21,7 +21,7 @@ import { RootState } from '@/store/store';
 export function ListingDetails() {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const { id } = useParams();
-  const user = useSelector((state: RootState) => state.userSlice.user);
+  const user = useSelector((state: RootState) => state.authSlice.currentUser);
   const allListings = useSelector((state: RootState) => state.listingSlice.listings);
   const currListing = allListings.find((listing) => listing._id === id);
 

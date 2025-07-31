@@ -1,11 +1,10 @@
 import { IconCards, IconHeart, IconPlus, IconUserSearch } from '@tabler/icons-react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ActionIcon, Group } from '@mantine/core';
-import { RootState } from '@/store/store';
+import { useIsAdmin } from '@/utils/reduxHelperHooks';
 
 export const MobileBottomNav = () => {
-  const isAdmin = useSelector((state: RootState) => state.userSlice.user?.isAdmin);
+  const isAdmin = useIsAdmin();
 
   return (
     <Group

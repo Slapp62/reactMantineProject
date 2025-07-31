@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Flex } from '@mantine/core';
@@ -8,9 +8,9 @@ import { MobileBottomNav } from '@/components/Navigation/MobileNav.tsx';
 import { useAuthInit } from '@/hooks/UseAuthInit.ts';
 import { useScrollToTop } from '@/hooks/useScrollToTop.ts';
 import { fetchListingsThunk } from '@/store/listingSlice.tsx';
-import { RootState } from '@/store/store.ts';
 import { Footer } from '../components/Navigation/Footer.tsx';
 import { Navbar } from '../components/Navigation/Header.tsx';
+import { useIsBusiness } from '@/utils/reduxHelperHooks.ts';
 
 export function Layout() {
   // refresh all cards in redux when visitin hompage
@@ -18,8 +18,7 @@ export function Layout() {
   const location = useLocation();
   const fetchedRef = useRef(false);
   const isMobile = useMediaQuery('(max-width: 700px)');
-  const isBusiness = useSelector(
-    (state: RootState) => state.businessSlice.profile);
+  const isBusiness = useIsBusiness();
 
   useEffect(() => {
     if (location.pathname === '/' || location.pathname.startsWith('/card-details')) {

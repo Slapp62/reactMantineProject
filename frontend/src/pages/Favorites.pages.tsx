@@ -10,7 +10,7 @@ export function FavoriteListings() {
   const jumpTo = useNavigate();
   const allListings = useSelector((state: RootState) => state.listingSlice.listings);
   const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
-  const user = useSelector((state: RootState) => state.userSlice.user);
+  const user = useSelector((state: RootState) => state.authSlice.currentUser);
 
   const likedListings = allListings?.filter((listing) =>
     listing.favorites?.includes(`${user?.userData._id}`)

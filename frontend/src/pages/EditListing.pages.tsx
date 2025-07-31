@@ -147,11 +147,9 @@ export function EditListing() {
                 <Autocomplete
                   label="City"
                   data={
-                    watch('location.region') === 'galilee'
-                      ? ISRAELI_CITIES_BY_REGION.GALILEE.sort()
-                      : watch('location.region') === 'golan'
-                        ? ISRAELI_CITIES_BY_REGION.GOLAN.sort()
-                        : watch('location.region') === 'center'
+                    watch('location.region') === 'north'
+                      ? ISRAELI_CITIES_BY_REGION.NORTH.sort()
+                      : watch('location.region') === 'center'
                           ? ISRAELI_CITIES_BY_REGION.CENTER.sort()
                           : watch('location.region') === 'jerusalem-district'
                             ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT.sort()

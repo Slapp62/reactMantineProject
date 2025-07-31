@@ -3,7 +3,7 @@ export type TUser = {
   _id: string;
   email: string;
   password: string;
-  userType: 'jobseeker' | 'business';
+  userType: 'jobseeker' | 'business' | 'admin';
   isVerified: boolean;
   createdAt: string;
 };
