@@ -5,15 +5,16 @@ import { Box, Button, Center, Flex, Loader, Title } from '@mantine/core';
 import { Hero } from '@/components/Hero';
 import MappedListings from '@/components/MappedListings';
 import { RootState } from '@/store/store';
+import { useJobseekerProfile } from '@/utils/reduxHelperHooks';
 
 export function FavoriteListings() {
   const jumpTo = useNavigate();
   const allListings = useSelector((state: RootState) => state.listingSlice.listings);
   const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
-  const user = useSelector((state: RootState) => state.authSlice.currentUser);
-
+  const jobseeker = useJobseekerProfile();
+  
   const likedListings = allListings?.filter((listing) =>
-    listing.favorites?.includes(`${user?.userData._id}`)
+    listing._id === jobseeker?.favorites?.find((id) => id === listing._id)
   );
 
   if (isLoading) {
