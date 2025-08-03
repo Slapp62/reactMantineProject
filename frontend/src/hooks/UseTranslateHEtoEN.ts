@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { InferenceClient } from '@huggingface/inference';
 import { toast } from 'react-toastify';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 const HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
 
@@ -25,8 +26,18 @@ export const useTranslateHEtoEN = (title: string | undefined, description: strin
       const aiOutput = await translateCard(cardStringArr);
       setTranslatedText(aiOutput);
       setCurrentLang('en');
-    } catch (error: any) {
-      toast.error('Translation error:', error);
+    } catch (error: unknown) {
+      const transformedError = transformAxiosError(error);
+      
+      if ('status' in transformedError) {
+        const apiError = transformedError as ApiError;
+        toast.error(`Translation failed: ${apiError.message}`);
+      } else {
+        const networkError = transformedError as NetworkError;
+        toast.error('Translation failed - please check your connection');
+      }
+      
+      console.error('Translation error:', transformedError);
     } finally {
       setTranslationLoading(false);
     }

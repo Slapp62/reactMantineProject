@@ -21,6 +21,7 @@ import { setUser } from '@/store/authSlice';
 import classes from './Login.module.css';
 import { setBusinessProfile } from '@/store/businessSlice';
 import { setJobseekerProfile } from '@/store/jobseekerSlice';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -125,11 +126,25 @@ export function LoginPage() {
       }
 
       jumpTo('/');
-    } catch (error: any) {
-      if (error.response?.status === 400) {
-        toast.error('Login Failed. Error 400', { position: 'bottom-right' });
-        setLoginAttempts((prev) => prev + 1);
+    } catch (error: unknown) {
+      const transformedError = transformAxiosError(error);
+      
+      if ('status' in transformedError) {
+        const apiError = transformedError as ApiError;
+        if (apiError.status === 400 || apiError.status === 401) {
+          toast.error('Invalid email or password', { position: 'bottom-right' });
+          setLoginAttempts((prev) => prev + 1);
+        } else if (apiError.status === 429) {
+          toast.error('Too many login attempts. Please try again later.', { position: 'bottom-right' });
+        } else {
+          toast.error(`Login failed: ${apiError.message}`, { position: 'bottom-right' });
+        }
+      } else {
+        const networkError = transformedError as NetworkError;
+        toast.error('Network error - please check your connection', { position: 'bottom-right' });
       }
+      
+      console.error('Login error:', transformedError);
     } finally {
       setIsLoading(false);
     }

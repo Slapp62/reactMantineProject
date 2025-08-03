@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { JobListing } from "../models/schemas.js";
+import { JobListing, Business } from "../models/schemas.js";
+import { verifyToken, validateObjectIdParam } from "../middleware/auth.js";
+import { validateRequest, createListingSchema, updateListingSchema, sanitizeInput } from "../middleware/validation.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -14,19 +16,36 @@ listingRouter.get("/", async (_req, res) => {
   }
 });
 
-listingRouter.post("/create", async (req, res) => {
-  console.log(req.body);
-
+listingRouter.post("/create", 
+  verifyToken,
+  sanitizeInput,
+  validateRequest(createListingSchema),
+  async (req, res) => {
   try {
-    const newListing = new JobListing(req.body);
+    const userId = req.user.userId;
+    
+    // Verify user is a business
+    const business = await Business.findOne({ userId });
+    if (!business) {
+      return res.status(403).json({ error: "Only businesses can create job listings" });
+    }
+    
+    // Add business ID to the listing
+    const listingData = {
+      ...req.body,
+      businessId: business._id
+    };
+    
+    const newListing = new JobListing(listingData);
     await newListing.save();
 
     res.status(201).json({
-      message: "Listing Created Successfully",
+      message: "Listing created successfully",
       listing: newListing,
     });
   } catch (error) {
-    console.error("listing creation error", error);
+    console.error("Listing creation error:", error);
+    res.status(500).json({ error: "Failed to create listing" });
   }
 });
 

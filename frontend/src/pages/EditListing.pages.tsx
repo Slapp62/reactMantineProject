@@ -10,6 +10,8 @@ import { TJobListing } from '@/Types';
 import { INDUSTRIES } from '@/data/industries';
 import { allRegionArr, ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
+import { API_BASE_URL } from '@/config/api';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 export function EditListing() {
   const { id } = useParams();
@@ -39,7 +41,7 @@ export function EditListing() {
   const onSubmit = async (data: FieldValues) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/listings/edit/${id}`,
+        `${API_BASE_URL}/api/listings/edit/${id}`,
         data
       );
       if (response.status === 200) {
@@ -47,8 +49,26 @@ export function EditListing() {
         toast.success('Listings Updated Successfully!', { position: `bottom-right` });
         //setDisabled(true);
       }
-    } catch (error: any) {
-      toast.error(`Update Failed! ${error.response.data}`, { position: `bottom-right` });
+    } catch (error: unknown) {
+      const transformedError = transformAxiosError(error);
+      
+      if ('status' in transformedError) {
+        const apiError = transformedError as ApiError;
+        if (apiError.status === 401) {
+          toast.error('Please log in to update listings', { position: 'bottom-right' });
+        } else if (apiError.status === 403) {
+          toast.error('You do not have permission to update this listing', { position: 'bottom-right' });
+        } else if (apiError.status === 404) {
+          toast.error('Listing not found', { position: 'bottom-right' });
+        } else {
+          toast.error(`Update failed: ${apiError.message}`, { position: 'bottom-right' });
+        }
+      } else {
+        const networkError = transformedError as NetworkError;
+        toast.error('Network error - please check your connection', { position: 'bottom-right' });
+      }
+      
+      console.error('Error updating listing:', transformedError);
     }
   };
 

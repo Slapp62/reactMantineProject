@@ -4,11 +4,21 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { createNewUser } from "../utils/createUserHelper.js";
+import { 
+  validateRequest, 
+  businessRegistrationSchema, 
+  jobseekerRegistrationSchema, 
+  loginSchema,
+  sanitizeInput 
+} from "../middleware/validation.js";
 dotenv.config();
 
 const authRouter = Router();
 
-authRouter.post("/register/business", async (req, res) => {
+authRouter.post("/register/business", 
+  sanitizeInput,
+  validateRequest(businessRegistrationSchema),
+  async (req, res) => {
   try {
     const {
       email,
@@ -54,7 +64,10 @@ authRouter.post("/register/business", async (req, res) => {
   }
 });
 
-authRouter.post("/register/jobseeker", async (req, res) => {
+authRouter.post("/register/jobseeker", 
+  sanitizeInput,
+  validateRequest(jobseekerRegistrationSchema),
+  async (req, res) => {
   try {
     const {
       email,
@@ -98,18 +111,21 @@ authRouter.post("/register/jobseeker", async (req, res) => {
   }
 });
 
-authRouter.post("/login", async (req, res) => {
+authRouter.post("/login", 
+  sanitizeInput,
+  validateRequest(loginSchema),
+  async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(401).json({ error: "Invalid email" });
-    }
+    // Always perform password comparison to prevent timing attacks
+    const isPasswordValid = user 
+      ? await bcrypt.compare(password, user.password)
+      : await bcrypt.compare(password, '$2a$10$invalidhashinvalidhashinvalidhashinvalidhash'); // Dummy hash
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid password" });
+    if (!user || !isPasswordValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
 
     const token = jwt.sign(

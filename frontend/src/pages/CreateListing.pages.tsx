@@ -22,6 +22,7 @@ import { WORK_ARRANGEMENTS } from '@/data/workArr';
 import { addListing } from '@/store/listingSlice';
 import { TJobListing } from '@/Types';
 import { useCurrentUser } from '@/utils/reduxHelperHooks';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 export function CreateCard() {
   const jumpTo = useNavigate();
@@ -53,10 +54,26 @@ export function CreateCard() {
         toast.success('Card Submitted!', { position: 'bottom-right' });
         jumpTo('/');
       }
-    } catch (error: any) {
-      toast.error(`Card creation failed! ${error.response.data}`, {
-        position: 'bottom-right',
-      });
+    } catch (error: unknown) {
+      const transformedError = transformAxiosError(error);
+      
+      if ('status' in transformedError) {
+        const apiError = transformedError as ApiError;
+        if (apiError.status === 401) {
+          toast.error('Please log in to create listings', { position: 'bottom-right' });
+        } else if (apiError.status === 403) {
+          toast.error('You do not have permission to create listings', { position: 'bottom-right' });
+        } else if (apiError.status === 400) {
+          toast.error(`Invalid listing data: ${apiError.message}`, { position: 'bottom-right' });
+        } else {
+          toast.error(`Failed to create listing: ${apiError.message}`, { position: 'bottom-right' });
+        }
+      } else {
+        const networkError = transformedError as NetworkError;
+        toast.error('Network error - please check your connection', { position: 'bottom-right' });
+      }
+      
+      console.error('Error creating listing:', transformedError);
     }
   };
 

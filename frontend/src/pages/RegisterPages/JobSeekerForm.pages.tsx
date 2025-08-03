@@ -20,6 +20,8 @@ import { useMediaQuery } from '@mantine/hooks';
 import { INDUSTRIES } from '@/data/industries';
 import { ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
+import { API_BASE_URL } from '@/config/api';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 type JobseekerFormProps = {
   email: string;
@@ -52,7 +54,7 @@ export function JobSeekerForm() {
 
   const onSubmit = async (data: JobseekerFormProps) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register/jobseeker', {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register/jobseeker`, {
         email: data.email,
         password: data.password,
         userType: 'jobseeker',
@@ -68,8 +70,24 @@ export function JobSeekerForm() {
         toast.success('Registered!');
         console.log(response.data);
       }
-    } catch (error: any) {
-      toast.error(`Registration Failed! ${error.message}`);
+    } catch (error: unknown) {
+      const transformedError = transformAxiosError(error);
+      
+      if ('status' in transformedError) {
+        const apiError = transformedError as ApiError;
+        if (apiError.status === 400) {
+          toast.error(`Registration failed: ${apiError.message}`);
+        } else if (apiError.status === 409) {
+          toast.error('An account with this email already exists');
+        } else {
+          toast.error(`Registration failed: ${apiError.message}`);
+        }
+      } else {
+        const networkError = transformedError as NetworkError;
+        toast.error('Network error - please check your connection');
+      }
+      
+      console.error('Job seeker registration error:', transformedError);
     }
   };
 

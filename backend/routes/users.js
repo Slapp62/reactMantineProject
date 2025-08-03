@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Business, User, Jobseeker } from "../models/schemas.js";
-import { verifyToken } from "../middleware/auth.js";
+import { verifyToken, validateObjectIdParam } from "../middleware/auth.js";
+import { sanitizeInput } from "../middleware/validation.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -16,12 +17,24 @@ userRouter.get("/", async (_req, res) => {
   }
 });
 
-userRouter.get("/:id", async (req, res) => {
+userRouter.get("/:id", 
+  validateObjectIdParam('id'),
+  verifyToken,
+  async (req, res) => {
   try {
-    // const token = req.headers.authorization.split(' ')[1];
-    // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = req.params.id;
-    const user = await User.findById(userId);
+    const requestedUserId = req.params.id;
+    const requestingUserId = req.user.userId;
+    
+    // Authorization check: users can only access their own data
+    if (requestedUserId !== requestingUserId) {
+      return res.status(403).json({ error: "Access denied. You can only access your own profile." });
+    }
+    
+    const user = await User.findById(requestedUserId);
+    
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     let userData;
 
@@ -52,21 +65,32 @@ userRouter.get("/:id", async (req, res) => {
   }
 });
 
-userRouter.put("/favorites/toggle/:id", verifyToken, async (req, res) => {
+userRouter.put("/favorites/toggle/:id", 
+  validateObjectIdParam('id'),
+  verifyToken, 
+  sanitizeInput,
+  async (req, res) => {
   try {
     const userId = req.user.userId;
     const listingId = req.params.id;
     
-    const user = await Jobseeker.findOne({ userId: { $eq: userId } });
-
-    if (user.favorites.includes(listingId)) {
-      user.favorites = user.favorites.filter((id) => id !== listingId);
-    } else {
-      user.favorites.push(listingId);
+    const jobseeker = await Jobseeker.findOne({ userId: { $eq: userId } });
+    
+    if (!jobseeker) {
+      return res.status(404).json({ error: "Jobseeker profile not found" });
     }
 
-    const updatedUser = await user.save();
-    res.json(updatedUser);
+    if (jobseeker.favorites.includes(listingId)) {
+      jobseeker.favorites = jobseeker.favorites.filter((id) => id !== listingId);
+    } else {
+      jobseeker.favorites.push(listingId);
+    }
+
+    const updatedJobseeker = await jobseeker.save();
+    res.json({
+      message: "Favorites updated successfully",
+      favorites: updatedJobseeker.favorites
+    });
   
   } catch (error) {
     res.status(500).json({ error: error.message });

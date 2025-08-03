@@ -7,15 +7,20 @@ import { MantineProvider } from '@mantine/core';
 import { AppRouter } from './routing/AppRouter';
 import { persistor, store } from './store/store';
 import { theme } from './theme';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 export default function App() {
   return (
-    <MantineProvider theme={theme}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <AppRouter />
-        </PersistGate>
-      </Provider>
-    </MantineProvider>
+    <ErrorBoundary>
+      <MantineProvider theme={theme}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <ErrorBoundary>
+              <AppRouter />
+            </ErrorBoundary>
+          </PersistGate>
+        </Provider>
+      </MantineProvider>
+    </ErrorBoundary>
   );
 }

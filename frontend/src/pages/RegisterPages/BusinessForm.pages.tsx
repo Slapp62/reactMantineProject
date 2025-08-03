@@ -19,6 +19,8 @@ import {
 import { useMediaQuery } from '@mantine/hooks';
 import { allSortedCities } from '@/data/israelCities.js';
 import { sortedIndustries } from '../../data/industries.js';
+import { API_BASE_URL } from '@/config/api';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 type TRegisterBusiness = {
   email: string;
@@ -57,7 +59,7 @@ export function BusinessForm() {
   const onSubmit = async (data: FieldValues) => {
     try {
       const businessResponse = await axios.post(
-        'http://localhost:5000/api/auth/register/business',
+        `${API_BASE_URL}/api/auth/register/business`,
         {
           email: data.email,
           password: data.password,
@@ -75,8 +77,24 @@ export function BusinessForm() {
         toast.success('Registration successful');
         jumpTo('/login');
       }
-    } catch (error: any) {
-      toast.error(`Business Registration Failed! ${error.message}`);
+    } catch (error: unknown) {
+      const transformedError = transformAxiosError(error);
+      
+      if ('status' in transformedError) {
+        const apiError = transformedError as ApiError;
+        if (apiError.status === 400) {
+          toast.error(`Registration failed: ${apiError.message}`);
+        } else if (apiError.status === 409) {
+          toast.error('An account with this email already exists');
+        } else {
+          toast.error(`Registration failed: ${apiError.message}`);
+        }
+      } else {
+        const networkError = transformedError as NetworkError;
+        toast.error('Network error - please check your connection');
+      }
+      
+      console.error('Business registration error:', transformedError);
     }
   };
 

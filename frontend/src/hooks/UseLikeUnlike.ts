@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { } from '@/store/listingSlice';
 import { toggleFavorites } from '@/store/jobseekerSlice';
+import { API_BASE_URL } from '@/config/api';
+import { transformAxiosError, isApiError, isNetworkError } from '@/types/errors';
 
 export function useLikeUnlike() {
   const dispatch = useDispatch();
@@ -14,11 +16,11 @@ export function useLikeUnlike() {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
         await axios.put(
-          `http://localhost:5000/api/users/favorites/toggle/${listingId}`,
+          `${API_BASE_URL}/api/users/favorites/toggle/${listingId}`,
           {},
           {
             headers: {
-              'authorization': token,
+              'Authorization': `Bearer ${token}`,
             },
           }
         );
@@ -32,9 +34,23 @@ export function useLikeUnlike() {
           // if it was unliked, now liked
           toast.success('Listing Liked')
         } 
-      } catch (error : any) {
-        toast.error(`Error liking/unliking Listing`);
-        console.error('Error:', error.response.data);
+      } catch (error: unknown) {
+        const transformedError = transformAxiosError(error);
+        
+        if (isNetworkError(transformedError)) {
+          toast.error('Network error - please check your connection');
+        } else if (isApiError(transformedError)) {
+          if (transformedError.status === 401) {
+            toast.error('Please log in to like/unlike listings');
+          } else if (transformedError.status === 404) {
+            toast.error('Listing not found');
+          } else {
+            toast.error(transformedError.message || 'Error updating favorites');
+          }
+        } else {
+          toast.error('Error liking/unliking listing');
+        }
+        console.error('Favorite toggle error:', transformedError);
       }
     },
     [dispatch]

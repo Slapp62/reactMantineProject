@@ -11,6 +11,8 @@ import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
 import { useCurrentUser } from '@/utils/reduxHelperHooks';
 import { useListings } from '../utils/reduxHelperHooks';
+import { API_BASE_URL } from '@/config/api';
+import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
 
 export function MyCards() {
   const allListings = useListings();
@@ -24,12 +26,26 @@ export function MyCards() {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         const response = await axios.get(
-          '',
-          { headers: { 'x-auth-token': token } }
+          `${API_BASE_URL}/api/listings`,
+          { headers: { 'Authorization': `Bearer ${token}` } }
         );
         setUserCards(response.data);
-      } catch (error: any) {
-        toast.error(error);
+      } catch (error: unknown) {
+        const transformedError = transformAxiosError(error);
+        
+        if ('status' in transformedError) {
+          const apiError = transformedError as ApiError;
+          if (apiError.status === 401) {
+            toast.error('Please log in to view your listings');
+          } else {
+            toast.error(`Failed to load listings: ${apiError.message}`);
+          }
+        } else {
+          const networkError = transformedError as NetworkError;
+          toast.error('Network error - please check your connection');
+        }
+        
+        console.error('Error loading user listings:', transformedError);
       }
     };
 
