@@ -81,7 +81,7 @@ export class TokenManager {
     // Basic base64 validation for each part
     try {
       parts.forEach(part => {
-        if (!part) throw new Error('Empty part');
+        if (!part) {throw new Error('Empty part');}
         atob(part.replace(/-/g, '+').replace(/_/g, '/'));
       });
       return true;
@@ -101,7 +101,7 @@ export class TokenManager {
   }
 
   // Setup automatic token cleanup on browser close (if not remembered)
-  static setupTokenCleanup(): void {
+  static setupTokenCleanup(): () => void {
     const handleBeforeUnload = () => {
       if (!this.isRememberMeEnabled()) {
         this.removeToken();
@@ -144,7 +144,7 @@ export class TokenManager {
   // Get token with expiry check
   static getTokenIfValid(): string | null {
     const token = this.getValidToken();
-    if (!token) return null;
+    if (!token) {return null;}
 
     if (this.isTokenExpired(token)) {
       this.removeToken();
@@ -162,7 +162,7 @@ export class TokenManager {
       const oldRememberMe = localStorage.getItem('rememberMe');
 
       if (oldToken) {
-        const rememberMe = oldRememberMe === 'true' || oldRememberMe === true;
+        const rememberMe = oldRememberMe === 'true';
         this.setToken(oldToken, rememberMe);
         
         // Clean up old storage
