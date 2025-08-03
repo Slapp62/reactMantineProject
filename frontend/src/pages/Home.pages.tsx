@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import { Center, Flex, Loader } from '@mantine/core';
 import { Hero } from '@/components/Hero';
-import ListingCard from '@/components/ListingCard';
+import { JobListingsGrid } from '@/components/JobListings/JobListingsGrid';
+import { JobListingsPagination } from '@/components/JobListings/JobListingsPagination';
+import { EmptyJobListings } from '@/components/JobListings/EmptyJobListings';
+import { BackToTopButton } from '@/components/JobListings/BackToTopButton';
 import { fetchListingsThunk } from '@/store/listingSlice';
 import { RootState, AppDispatch } from '@/store/store';
 import { TJobListing } from '@/Types';
@@ -22,7 +23,6 @@ export function HomePage() {
 
   const searchWord = useSelector((state: RootState) => state.searchSlice.searchWord);
   const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);
-  const isMobile = useMediaQuery('(max-width: 500px)');
 
   // Combine all filtering and sorting into a single optimized useMemo
   const processedCards = useMemo(() => {
@@ -95,10 +95,7 @@ export function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const startCurrentCards = (currentPage - 1) * cardsPerPage + 1;
-  const endCurrentCards = Math.min(currentPage * cardsPerPage, processedCards.length);
   const totalPages = Math.ceil(processedCards.length / cardsPerPage);
-  const totalCurrentCards = processedCards.length;
   const noCards = processedCards.length === 0;
 
   return (
@@ -110,44 +107,21 @@ export function HomePage() {
         </Center>
       ) : (
         <Flex direction="column" align="center" gap={20}>
-          <Flex wrap="wrap" gap="lg" justify="center" w={isMobile ? '100%' : '80%'}>
-            {paginatedCards.map((listing: TJobListing) => (
-              <ListingCard listingID={listing._id} key={listing._id} />
-            ))}
-          </Flex>
+          <JobListingsGrid listings={paginatedCards} />
 
           {!noCards && (
-            <>
-              <Text fw={500}>
-                Showing {startCurrentCards} to {endCurrentCards} of {totalCurrentCards} results
-              </Text>
-              <Pagination
-                mt="md"
-                total={totalPages}
-                value={currentPage}
-                onChange={handlePageChange}
-              />
-            </>
+            <JobListingsPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalResults={processedCards.length}
+              resultsPerPage={cardsPerPage}
+              onPageChange={handlePageChange}
+            />
           )}
 
-          {noCards && (
-            <Box ta="center">
-              <IconMoodSad2 color="red" size={80} />
-              <Title order={2} fw={700} c="red">
-                No Cards Found
-              </Title>
-            </Box>
-          )}
+          {noCards && <EmptyJobListings />}
 
-          <Button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            mt={20}
-            c="green"
-            variant="light"
-            rightSection={<IconArrowUp />}
-          >
-            Back to Top
-          </Button>
+          <BackToTopButton />
         </Flex>
       )}
     </>

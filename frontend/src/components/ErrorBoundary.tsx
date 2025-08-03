@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { Alert, Button, Container, Group, Text, Title } from '@mantine/core';
+import { Alert, Button, Container, Group, Text } from '@mantine/core';
 import { IconAlertTriangle, IconRefresh } from '@tabler/icons-react';
 
 interface Props {

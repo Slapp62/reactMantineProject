@@ -1,27 +1,16 @@
 import { useRef } from 'react';
 import axios from 'axios';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Anchor,
-  Autocomplete,
-  Box,
-  Button,
-  Fieldset,
-  Flex,
-  PasswordInput,
-  Select,
-  Text,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
+import { Anchor, Box, Button, Flex, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { INDUSTRIES } from '@/data/industries';
-import { ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
-import { WORK_ARRANGEMENTS } from '@/data/workArr';
 import { API_BASE_URL } from '@/config/api';
 import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
+import { jobseekerRegistrationSchema, validateData } from '@/validation/schemas';
+import { CredentialsSection } from '@/components/Forms/CredentialsSection';
+import { LocationSection } from '@/components/Forms/LocationSection';
+import { WorkDetailsSection } from '@/components/Forms/WorkDetailsSection';
 
 type JobseekerFormProps = {
   email: string;
@@ -47,12 +36,34 @@ export function JobSeekerForm() {
     handleSubmit,
     control,
     watch,
+    setError,
+    clearErrors,
     formState: { errors, isValid, isDirty },
   } = useForm<JobseekerFormProps>({
-    mode: 'all',
+    mode: 'onBlur',
   });
 
+  const validateForm = (data: JobseekerFormProps) => {
+    const validation = validateData(jobseekerRegistrationSchema, data);
+    
+    clearErrors();
+    
+    if (!validation.isValid) {
+      Object.entries(validation.errors).forEach(([field, message]) => {
+        setError(field as keyof JobseekerFormProps, { type: 'validation', message });
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
   const onSubmit = async (data: JobseekerFormProps) => {
+    if (!validateForm(data)) {
+      toast.error('Please fix the validation errors');
+      return;
+    }
+
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/register/jobseeker`, {
         email: data.email,
@@ -84,7 +95,7 @@ export function JobSeekerForm() {
         }
       } else {
         const networkError = transformedError as NetworkError;
-        toast.error('Network error - please check your connection');
+        toast.error(`Network error - please check your connection ${networkError.message}`);
       }
       
       console.error('Job seeker registration error:', transformedError);
@@ -105,118 +116,24 @@ export function JobSeekerForm() {
           justify="space-between"
           gap={5}
         >
-          <Fieldset legend="Credentials">
-            <TextInput
-              label="Email"
-              {...register('email')}
-              required
-              error={errors.email?.message}
-            />
-            <PasswordInput
-              label="Password"
-              {...register('password')}
-              required
-              error={errors.password?.message}
-            />
-            <PasswordInput
-              label="Confirm Password"
-              {...register('confirmPassword', {
-                validate: (value) => value === watch('password') || 'Passwords do not match',
-                required: 'Confirmation is required',
-              })}
-              required
-              error={errors.confirmPassword?.message}
-            />
-          </Fieldset>
+          <CredentialsSection 
+            register={register} 
+            errors={errors} 
+            watch={watch}
+            showConfirmPassword
+          />
 
-          <Fieldset legend="Location">
-            <Controller
-              control={control}
-              name="region"
-              render={({ field }) => (
-                <Select
-                  label="Region"
-                  data={[
-                    { value: 'north', label: 'North' },
-                    { value: 'center', label: 'Center' },
-                    {
-                      value: 'jerusalem-district',
-                      label: 'Jerusalem District',
-                    },
-                    { value: 'south', label: 'South' },
-                  ]}
-                  {...field}
-                  error={errors.region?.message}
-                />
-              )}
-            />
+          <LocationSection 
+            control={control} 
+            errors={errors} 
+            watch={watch}
+          />
 
-            <Controller
-              control={control}
-              name="city"
-              render={({ field }) => (
-                <Autocomplete
-                  label="City"
-                  data={
-                    watch('region') === 'north'
-                      ? ISRAELI_CITIES_BY_REGION.NORTH
-                        : watch('region') === 'center'
-                          ? ISRAELI_CITIES_BY_REGION.CENTER
-                          : watch('region') === 'jerusalem-district'
-                            ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT
-                            : watch('region') === 'south'
-                              ? ISRAELI_CITIES_BY_REGION.SOUTH
-                              : []
-                  }
-                  {...field}
-                  error={errors.city?.message}
-                />
-              )}
-            />
-          </Fieldset>
-
-          <Fieldset legend="Work Details">
-            <Controller
-              control={control}
-              name="industry"
-              render={({ field }) => (
-                <Autocomplete
-                  label="Industry"
-                  data={INDUSTRIES}
-                  {...field}
-                  error={errors.industry?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="preferredWorkArr"
-              render={({ field }) => (
-                <Select
-                  label="Preferred Work Arrangement"
-                  data={WORK_ARRANGEMENTS.map((workArr) => ({
-                    value: workArr,
-                    label: workArr,
-                  }))}
-                  {...field}
-                  error={errors.industry?.message}
-                />
-              )}
-            />
-
-            <Textarea
-              label="About Me"
-              {...register('description')}
-              error={errors.description?.message}
-            />
-
-            <TextInput
-              label="LinkedIn"
-              {...register('linkedIn')}
-              error={errors.linkedIn?.message}
-            />
-          </Fieldset>
+          <WorkDetailsSection 
+            control={control} 
+            register={register} 
+            errors={errors}
+          />
         </Flex>
 
         <Flex

@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run vitest:*)",
+      "Bash(npm run build:*)",
+      "Bash(echo $SHELL)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(echo $PATH)",
+      "Bash(ls:*)",
+      "Bash(powershell:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

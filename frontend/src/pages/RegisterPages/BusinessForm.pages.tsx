@@ -1,26 +1,17 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import axios from 'axios';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Anchor,
-  Autocomplete,
-  Box,
-  Button,
-  Fieldset,
-  Flex,
-  Image,
-  PasswordInput,
-  Text,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
+import { Anchor, Box, Button, Flex, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { allSortedCities } from '@/data/israelCities.js';
-import { sortedIndustries } from '../../data/industries.js';
 import { API_BASE_URL } from '@/config/api';
 import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
+import { businessRegistrationSchema, validateData } from '@/validation/schemas';
+import { CredentialsSection } from '@/components/Forms/CredentialsSection';
+import { CompanyInfoSection } from '@/components/Forms/CompanyInfoSection';
+import { ImagePreviewSection } from '@/components/Forms/ImagePreviewSection';
+import { SocialLinksSection } from '@/components/Forms/SocialLinksSection';
 
 type TRegisterBusiness = {
   email: string;
@@ -42,21 +33,40 @@ export function BusinessForm() {
   const jumpTo = useNavigate();
   const registerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 700px)');
-  const defaultAvatar =
-    'https://images.unsplash.com/vector-1748280445815-10a4bb2ba7e3?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-  const [imageURL, setURL] = useState(defaultAvatar);
 
   const {
     reset,
     register,
     handleSubmit,
     control,
+    setError,
+    clearErrors,
     formState: { errors, isValid, isDirty },
   } = useForm<TRegisterBusiness>({
-    mode: 'all',
+    mode: 'onBlur',
   });
 
+  const validateForm = (data: FieldValues) => {
+    const validation = validateData(businessRegistrationSchema, data);
+    
+    clearErrors();
+    
+    if (!validation.isValid) {
+      Object.entries(validation.errors).forEach(([field, message]) => {
+        setError(field as keyof TRegisterBusiness, { type: 'validation', message });
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
   const onSubmit = async (data: FieldValues) => {
+    if (!validateForm(data)) {
+      toast.error('Please fix the validation errors');
+      return;
+    }
+
     try {
       const businessResponse = await axios.post(
         `${API_BASE_URL}/api/auth/register/business`,
@@ -91,7 +101,7 @@ export function BusinessForm() {
         }
       } else {
         const networkError = transformedError as NetworkError;
-        toast.error('Network error - please check your connection');
+        toast.error(`Network error - please check your connection ${networkError.message}`);
       }
       
       console.error('Business registration error:', transformedError);
@@ -112,80 +122,21 @@ export function BusinessForm() {
           justify="space-between"
           gap={5}
         >
-          <Fieldset legend="Credentials">
-            <TextInput
-              label="Email"
-              {...register('email')}
-              required
-              error={errors.email?.message}
-            />
-            <PasswordInput
-              label="Password"
-              {...register('password')}
-              required
-              error={errors.password?.message}
-            />
-          </Fieldset>
+          <CredentialsSection 
+            register={register} 
+            errors={errors}
+          />
 
-          <Fieldset legend="Company Information">
-            <TextInput
-              label="Company Name"
-              {...register('companyName')}
-              required
-              error={errors.companyName?.message}
-            />
+          <CompanyInfoSection 
+            register={register} 
+            control={control} 
+            errors={errors}
+          />
 
-            <Controller
-              control={control}
-              name="industry"
-              render={({ field }) => (
-                <Autocomplete
-                  label="Industry"
-                  required
-                  data={sortedIndustries}
-                  {...field}
-                  error={errors.industry?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="city"
-              render={({ field }) => (
-                <Autocomplete
-                  label="City"
-                  required
-                  data={allSortedCities}
-                  {...field}
-                  error={errors.city?.message}
-                />
-              )}
-            />
-          </Fieldset>
-
-          <Fieldset legend="About">
-            <Textarea
-              label="Description"
-              required
-              {...register('description')}
-              error={errors.description?.message}
-            />
-          </Fieldset>
-
-          <Fieldset legend="Logo">
-            <Image src={imageURL} h={150} w={150} mx="auto" />
-            <TextInput
-              label="URL"
-              defaultValue={imageURL}
-              {...register('logo', {
-                onChange: (e) => {
-                  setURL(e.target.value);
-                },
-              })}
-              error={errors.logo?.message}
-            />
-          </Fieldset>
+          <ImagePreviewSection 
+            register={register} 
+            errors={errors}
+          />
         </Flex>
 
         <Flex
@@ -194,24 +145,10 @@ export function BusinessForm() {
           mx="auto"
           justify="space-between"
         >
-          <Fieldset legend="Links">
-            <TextInput label="Website" {...register('website')} error={errors.website?.message} />
-            <TextInput
-              label="LinkedIn"
-              {...register('socialLinks.linkedin')}
-              error={errors.socialLinks?.linkedin?.message}
-            />
-            <TextInput
-              label="Facebook"
-              {...register('socialLinks.facebook')}
-              error={errors.socialLinks?.facebook?.message}
-            />
-            <TextInput
-              label="Twitter"
-              {...register('socialLinks.twitter')}
-              error={errors.socialLinks?.twitter?.message}
-            />
-          </Fieldset>
+          <SocialLinksSection 
+            register={register} 
+            errors={errors}
+          />
         </Flex>
 
         <Flex

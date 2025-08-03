@@ -2,19 +2,9 @@ import { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  Button,
-  Checkbox,
-  Container,
-  Group,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Container, Paper, Title } from '@mantine/core';
 import { API_BASE_URL } from '@/config/api';
 import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/authSlice';
@@ -22,6 +12,10 @@ import classes from './Login.module.css';
 import { setBusinessProfile } from '@/store/businessSlice';
 import { setJobseekerProfile } from '@/store/jobseekerSlice';
 import { transformAxiosError, ApiError, NetworkError } from '@/types/errors';
+import { loginSchema, validateData } from '@/validation/schemas';
+import { LoginForm } from '@/components/Login/LoginForm';
+import { LoginStatus } from '@/components/Login/LoginStatus';
+import { RememberMeSection } from '@/components/Login/RememberMeSection';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -35,7 +29,6 @@ export function LoginPage() {
 
   const storedAttempts = Number(localStorage.getItem('loginAttempts')) || 0;
   const [loginAttempts, setLoginAttempts] = useState(storedAttempts);
-  const attemptsLeft = 3 - loginAttempts;
   const [momentBlocked, setMomentBlocked] = useState(Number(localStorage.getItem('momentBlocked')));
   const [isBlocked, setIsBlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,18 +77,39 @@ export function LoginPage() {
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
-    mode: 'onChange',
+    mode: 'onBlur',
     criteriaMode: 'firstError',
-    // resolver: joiResolver(loginSchema)
   });
 
+  const validateForm = (data: FieldValues) => {
+    const validation = validateData(loginSchema, data);
+    
+    clearErrors();
+    
+    if (!validation.isValid) {
+      Object.entries(validation.errors).forEach(([field, message]) => {
+        setError(field as 'email' | 'password', { type: 'validation', message });
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
   const onSubmit = async (data: FieldValues) => {
+    if (!validateForm(data)) {
+      toast.error('Please fix the validation errors');
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
@@ -164,56 +178,26 @@ export function LoginPage() {
       )}
 
       <Paper withBorder p={30} mt={30} radius="md" shadow="lg">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <TextInput
-            label="Email"
-            disabled={isBlocked}
-            placeholder="you@email.com"
-            {...register('email')}
-            error={errors.email?.message}
-          />
-          <PasswordInput
-            mt={10}
-            label="Password"
-            disabled={isBlocked}
-            placeholder="Your password"
-            {...register('password')}
-            error={errors.password?.message}
-          />
-          {!isBlocked && loginAttempts > 0 && (
-            <Text c="red" ta="center" mt="sm">
-              You have {attemptsLeft} attempt(s) remaining.
-            </Text>
-          )}
+        <LoginForm
+          register={register}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          errors={errors}
+          isLoading={isLoading}
+          isValid={isValid}
+          isBlocked={isBlocked}
+        />
 
-          {isBlocked && (
-            <Text c="red" ta="center" mt="sm">
-              You must wait {Math.floor(Math.max(0, (60000 - (Date.now() - momentBlocked)) / 1000))}{' '}
-              seconds before you can login in again.
-            </Text>
-          )}
+        <LoginStatus
+          isBlocked={isBlocked}
+          loginAttempts={loginAttempts}
+          momentBlocked={momentBlocked}
+        />
 
-          <Group justify="space-between" mt="lg">
-            <Checkbox
-              label="Remember me"
-              checked={rememberMe}
-              onChange={(event) => setRemember(event.currentTarget.checked)}
-            />
-          </Group>
-
-          <Group justify="center">
-            <Text c="dimmed" size="sm" ta="center" my="lg">
-              Don't have an account yet?
-            </Text>
-            <Button p={0} variant="transparent" component={Link} to="/register">
-              Create account
-            </Button>
-          </Group>
-
-          <Button type="submit" fullWidth loading={isLoading} disabled={!isValid || isBlocked}>
-            Sign in
-          </Button>
-        </form>
+        <RememberMeSection
+          rememberMe={rememberMe}
+          setRememberMe={setRemember}
+        />
       </Paper>
     </Container>
   );

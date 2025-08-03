@@ -40,7 +40,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'http://localhost:5173',
-      'https://israjobs.onrender.com', // Add your production frontend URL
+      'https://israjobs.onrender.com',
       process.env.FRONTEND_URL
     ].filter(Boolean);
     
