@@ -8,6 +8,7 @@ import ListingCard from '@/components/ListingCard';
 import { fetchListingsThunk } from '@/store/listingSlice';
 import { RootState, AppDispatch } from '@/store/store';
 import { TJobListing } from '@/Types';
+import { useListings } from '@/utils/reduxHelperHooks';
 
 export function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,7 +17,7 @@ export function HomePage() {
     dispatch(fetchListingsThunk());
   }, [dispatch]);
 
-  const allListings = useSelector((state: RootState) => state.listingSlice.listings);
+  const allListings = useListings();
   const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
 
   const searchWord = useSelector((state: RootState) => state.searchSlice.searchWord);
