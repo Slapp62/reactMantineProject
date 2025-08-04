@@ -142,13 +142,13 @@ export function JobSeekerForm() {
                   data={
                     watch('region') === 'north'
                       ? ISRAELI_CITIES_BY_REGION.NORTH
-                        : watch('region') === 'center'
-                          ? ISRAELI_CITIES_BY_REGION.CENTER
-                          : watch('region') === 'jerusalem-district'
-                            ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT
-                            : watch('region') === 'south'
-                              ? ISRAELI_CITIES_BY_REGION.SOUTH
-                              : []
+                      : watch('region') === 'center'
+                        ? ISRAELI_CITIES_BY_REGION.CENTER
+                        : watch('region') === 'jerusalem-district'
+                          ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT
+                          : watch('region') === 'south'
+                            ? ISRAELI_CITIES_BY_REGION.SOUTH
+                            : []
                   }
                   {...field}
                   error={errors.city?.message}

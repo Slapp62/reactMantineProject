@@ -1,17 +1,7 @@
 import { BsTranslate } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  Container,
-  Flex,
-  Group,
-  List,
-  ListItem,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Button, Card, Container, Flex, Group, List, ListItem, Text, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { FavoritesButton } from '@/components/Buttons/FavoritesButton';
 import SocialIcons from '@/components/SocialMedia';
@@ -79,22 +69,22 @@ export function ListingDetails() {
               <ListItem>
                 <strong>Requirments:</strong> {currListing?.requirements}
               </ListItem>
-                <ListItem>
-                  <strong>Advantages:</strong> {currListing?.advantages}
-                </ListItem>
-                <ListItem>
-                  <strong>Region:</strong> {currListing?.location?.region}
-                </ListItem>
-                <ListItem>
-                  <strong>City:</strong> {currListing?.location?.city}
-                </ListItem>
-                <ListItem>
-                  <strong>Work Type:</strong> {currListing?.workArrangement}
-                </ListItem>
+              <ListItem>
+                <strong>Advantages:</strong> {currListing?.advantages}
+              </ListItem>
+              <ListItem>
+                <strong>Region:</strong> {currListing?.location?.region}
+              </ListItem>
+              <ListItem>
+                <strong>City:</strong> {currListing?.location?.city}
+              </ListItem>
+              <ListItem>
+                <strong>Work Type:</strong> {currListing?.workArrangement}
+              </ListItem>
             </List>
 
-            <Button component='a' href={currListing?.apply.contact} target="_blank">
-                Apply Now
+            <Button component="a" href={currListing?.apply.contact} target="_blank">
+              Apply Now
             </Button>
           </Flex>
         </Card.Section>

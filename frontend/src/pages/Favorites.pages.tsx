@@ -12,9 +12,9 @@ export function FavoriteListings() {
   const allListings = useSelector((state: RootState) => state.listingSlice.listings);
   const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
   const jobseeker = useJobseekerProfile();
-  
-  const likedListings = allListings?.filter((listing) =>
-    listing._id === jobseeker?.favorites?.find((id) => id === listing._id)
+
+  const likedListings = allListings?.filter(
+    (listing) => listing._id === jobseeker?.favorites?.find((id) => id === listing._id)
   );
 
   if (isLoading) {

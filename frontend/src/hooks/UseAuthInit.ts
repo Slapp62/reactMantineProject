@@ -6,13 +6,14 @@ import { toast } from 'react-toastify';
 import { API_BASE_URL } from '@/config/api';
 import { setUser } from '@/store/authSlice';
 import { TDecodedToken } from '@/Types';
+import { getToken, handleBeforeUnload } from '@/utils/tokenManager';
 
 export function useAuthInit() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const tokenHandler = async () => {
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const token = getToken();
 
       if (token !== null) {
         try {
@@ -30,14 +31,6 @@ export function useAuthInit() {
     };
 
     // clear storage when browser closes if remember me was not chosen.
-    const handleBeforeUnload = () => {
-      const rememberMe = localStorage.getItem('rememberMe');
-      if (!rememberMe) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('rememberMe');
-      }
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
     tokenHandler();
   }, [dispatch]);

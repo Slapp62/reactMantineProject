@@ -67,10 +67,5 @@ const listingSlice = createSlice({
   },
 });
 
-export const {
-  addListing,
-  editListing,
-  removeListing,
-  setSortOption,
-} = listingSlice.actions;
+export const { addListing, editListing, removeListing, setSortOption } = listingSlice.actions;
 export default listingSlice.reducer;

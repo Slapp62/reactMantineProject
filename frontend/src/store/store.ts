@@ -1,11 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
+import authSlice from './authSlice';
+import businessSlice from './businessSlice';
+import jobseekerSlice from './jobseekerSlice';
 import listingSlice from './listingSlice';
 import searchSlice from './searchSlice';
-import authSlice from './authSlice';
-import jobseekerSlice from './jobseekerSlice';
-import businessSlice from './businessSlice';
 
 export const rootReducer = combineReducers({
   authSlice,

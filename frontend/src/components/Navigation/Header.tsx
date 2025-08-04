@@ -16,8 +16,9 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { AppDispatch, RootState } from '@/store/store';
 import { clearUser } from '@/store/authSlice';
+import { AppDispatch, RootState } from '@/store/store';
+import { useIsBusiness, useIsJobseeker } from '@/utils/reduxHelperHooks';
 import { AvatarIcon } from './Avatar';
 import { LightDarkToggle } from './LightDarkToggle';
 import { Logo } from './Logo';
@@ -25,8 +26,8 @@ import classes from '../ComponentStyles/Navigation.module.css';
 
 export function Navbar() {
   const loggedIn = useSelector((state: RootState) => state.authSlice.isLoggedIn);
-  const isBusiness =
-    useSelector((state: RootState) => state.authSlice.currentUser?.userType) === 'business';
+  const isJobseeker = useIsJobseeker();
+  const isBusiness = useIsBusiness();
   const dispatch = useDispatch<AppDispatch>();
 
   const jumpTo = useNavigate();
@@ -72,7 +73,7 @@ export function Navbar() {
               <Text fw={700}>About</Text>
             </Link>
 
-            {loggedIn && (
+            {isJobseeker && (
               <Link to="/favorites" className={classes.link}>
                 <Text fw={700}>Favorites</Text>
               </Link>

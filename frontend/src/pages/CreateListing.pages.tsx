@@ -158,13 +158,13 @@ export function CreateCard() {
                   data={
                     watch('location.region') === 'north'
                       ? ISRAELI_CITIES_BY_REGION.NORTH
-                        : watch('location.region') === 'center'
-                          ? ISRAELI_CITIES_BY_REGION.CENTER
-                          : watch('location.region') === 'jerusalem-district'
-                            ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT
-                            : watch('location.region') === 'south'
-                              ? ISRAELI_CITIES_BY_REGION.SOUTH
-                              : []
+                      : watch('location.region') === 'center'
+                        ? ISRAELI_CITIES_BY_REGION.CENTER
+                        : watch('location.region') === 'jerusalem-district'
+                          ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT
+                          : watch('location.region') === 'south'
+                            ? ISRAELI_CITIES_BY_REGION.SOUTH
+                            : []
                   }
                   {...field}
                   error={errors.location?.city?.message}

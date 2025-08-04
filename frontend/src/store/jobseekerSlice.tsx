@@ -19,16 +19,16 @@ const jobseekerSlice = createSlice({
     clearJobseekerProfile(state) {
       state.profile = null;
     },
-    toggleFavorites(state, action: PayloadAction<string>){
+    toggleFavorites(state, action: PayloadAction<string>) {
       const favorites = state.profile?.favorites;
       const listingId = action.payload;
 
-      if (favorites?.includes(listingId) && state.profile){        
-        state.profile.favorites = favorites.filter((id) => id !== listingId)
+      if (favorites?.includes(listingId) && state.profile) {
+        state.profile.favorites = favorites.filter((id) => id !== listingId);
       } else {
         favorites?.push(listingId);
       }
-    }
+    },
   },
 });
 

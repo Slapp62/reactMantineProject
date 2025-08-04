@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { JobListing } from "../models/schemas.js";
 import dotenv from "dotenv";
+import { verifyToken } from "../middleware/auth.js";
 dotenv.config();
 
 const listingRouter = Router();
@@ -27,6 +28,16 @@ listingRouter.post("/create", async (req, res) => {
     });
   } catch (error) {
     console.error("listing creation error", error);
+  }
+});
+
+listingRouter.get("/:id", verifyToken, async (req, res) => {
+  try {
+    const currentBizId = req.params.id
+    const businessListings = await JobListing.find({businessId: {$eq: currentBizId }})
+    res.status(200).json(businessListings)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 

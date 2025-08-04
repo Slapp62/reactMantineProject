@@ -8,9 +8,9 @@ import { MobileBottomNav } from '@/components/Navigation/MobileNav.tsx';
 import { useAuthInit } from '@/hooks/UseAuthInit.ts';
 import { useScrollToTop } from '@/hooks/useScrollToTop.ts';
 import { fetchListingsThunk } from '@/store/listingSlice.tsx';
+import { useIsBusiness } from '@/utils/reduxHelperHooks.ts';
 import { Footer } from '../components/Navigation/Footer.tsx';
 import { Navbar } from '../components/Navigation/Header.tsx';
-import { useIsBusiness } from '@/utils/reduxHelperHooks.ts';
 
 export function Layout() {
   // refresh all cards in redux when visitin hompage
@@ -42,7 +42,7 @@ export function Layout() {
       <Flex direction="column" mih="100vh">
         <Navbar />
 
-        <main style={{ flex: 1, paddingBlock: '1rem' }}>
+        <main style={{ flex: 1, paddingBottom: '1rem' }}>
           <Outlet />
         </main>
 

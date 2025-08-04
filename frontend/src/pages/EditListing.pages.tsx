@@ -3,20 +3,30 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Autocomplete, Button, Fieldset, Flex, Paper, Select, Textarea, TextInput, Title } from '@mantine/core';
+import {
+  Autocomplete,
+  Button,
+  Fieldset,
+  Flex,
+  Paper,
+  Select,
+  Textarea,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { editListing } from '@/store/listingSlice';
-import { TJobListing } from '@/Types';
 import { INDUSTRIES } from '@/data/industries';
 import { allRegionArr, ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
+import { editListing } from '@/store/listingSlice';
+import { TJobListing } from '@/Types';
 
 export function EditListing() {
   const { id } = useParams();
   const isMobile = useMediaQuery('(max-width: 700px)');
   //const [isDisabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
-  
+
   //const allListings = useSelector((state: RootState) => state.listingSlice.listings);
   //const listingsData = allListings?.find((listings) => listings._id === id);
 
@@ -38,10 +48,7 @@ export function EditListing() {
 
   const onSubmit = async (data: FieldValues) => {
     try {
-      const response = await axios.put(
-        `http://localhost:5000/api/listings/edit/${id}`,
-        data
-      );
+      const response = await axios.put(`http://localhost:5000/api/listings/edit/${id}`, data);
       if (response.status === 200) {
         dispatch(editListing({ listings: response.data as TJobListing }));
         toast.success('Listings Updated Successfully!', { position: `bottom-right` });
@@ -150,12 +157,12 @@ export function EditListing() {
                     watch('location.region') === 'north'
                       ? ISRAELI_CITIES_BY_REGION.NORTH.sort()
                       : watch('location.region') === 'center'
-                          ? ISRAELI_CITIES_BY_REGION.CENTER.sort()
-                          : watch('location.region') === 'jerusalem-district'
-                            ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT.sort()
-                            : watch('location.region') === 'south'
-                              ? ISRAELI_CITIES_BY_REGION.SOUTH.sort()
-                              : []
+                        ? ISRAELI_CITIES_BY_REGION.CENTER.sort()
+                        : watch('location.region') === 'jerusalem-district'
+                          ? ISRAELI_CITIES_BY_REGION.JERUSALEM_DISTRICT.sort()
+                          : watch('location.region') === 'south'
+                            ? ISRAELI_CITIES_BY_REGION.SOUTH.sort()
+                            : []
                   }
                   {...field}
                   error={errors.location?.city?.message}

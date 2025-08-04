@@ -22,6 +22,5 @@ const businessSlice = createSlice({
   },
 });
 
-export const { setBusinessProfile, clearBusinessProfile } =
-  businessSlice.actions;
+export const { setBusinessProfile, clearBusinessProfile } = businessSlice.actions;
 export default businessSlice.reducer;

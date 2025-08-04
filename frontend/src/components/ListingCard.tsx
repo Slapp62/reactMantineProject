@@ -8,6 +8,7 @@ import { Box, Button, Card, Flex, Group, List, ListItem, Modal, Text, Title } fr
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useDeleteListing } from '@/hooks/UseDeleteCard';
 import { RootState } from '@/store/store';
+import { useIsJobseeker } from '@/utils/reduxHelperHooks';
 import { useTranslateHEtoEN } from '../hooks/UseTranslateHEtoEN';
 import { FavoritesButton } from './Buttons/FavoritesButton';
 import SocialIcons from './SocialMedia';
@@ -26,6 +27,7 @@ function ListingCard({ listingID }: { listingID: string }) {
   const location = useLocation();
   const myListingsPage = location.pathname === '/my-listings';
   const loggedIn = useSelector((state: RootState) => state.authSlice.isLoggedIn);
+  const isJobseeker = useIsJobseeker();
   const isMobile = useMediaQuery('(max-width: 500px)');
   const {
     currentLang,
@@ -125,7 +127,7 @@ function ListingCard({ listingID }: { listingID: string }) {
             </Group>
 
             <Group>
-              {loggedIn && <FavoritesButton listing={listing} />}
+              {isJobseeker && <FavoritesButton listing={listing} />}
 
               <Group mx="auto">
                 <SocialIcons listingID={listing._id} />

@@ -16,11 +16,12 @@ import {
   Title,
 } from '@mantine/core';
 import { API_BASE_URL } from '@/config/api';
-import { AppDispatch } from '@/store/store';
 import { setUser } from '@/store/authSlice';
-import classes from './Login.module.css';
 import { setBusinessProfile } from '@/store/businessSlice';
 import { setJobseekerProfile } from '@/store/jobseekerSlice';
+import { AppDispatch } from '@/store/store';
+import { setToken } from '@/utils/tokenManager';
+import classes from './Login.module.css';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -104,12 +105,11 @@ export function LoginPage() {
 
       const { token } = response.data;
       const { user } = response.data;
-      
-      localStorage.setItem('rememberMe', rememberMe ? 'true ' : 'false');
-      rememberMe ? localStorage.setItem('token', token) : sessionStorage.setItem('token', token);
+
+      setToken(token, rememberMe);
 
       dispatch(setUser(user.userData));
-      
+
       if (user.userData.userType === 'business') {
         dispatch(setBusinessProfile(user.profileData));
       } else {
