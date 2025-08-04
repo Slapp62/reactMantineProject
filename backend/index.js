@@ -1,28 +1,17 @@
 /* eslint-disable no-unused-vars */
 import express, { json } from "express";
 import cors from "cors";
-import { connect } from "mongoose";
-import userRouter from "./routes/users.js";
-import listingRouter from "./routes/listings.js";
-import authRouter from "./routes/auth.js";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import { handleError } from "./utils/errorHandler.js";
+import connectDB from "./middleware/mongoConnect.js";
+import router from "./routes/routerController.js";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // connection to database
-const connectDB = async () => {
-  try {
-    await connect(process.env.MONGO_URI);
-    console.log(chalk.green.bold("MongoDB connected"));
-  } catch (error) {
-    console.error("MongoDB connection error", error);
-    process.exit(1);
-  }
-};
 connectDB();
 
 // global middleware
@@ -34,11 +23,7 @@ app.use(
 );
 
 app.use(json());
-
-// api router
-app.use("/api/auth", authRouter);
-app.use("/api/users", userRouter);
-app.use("/api/listings", listingRouter);
+app.use(router)
 
 // error handler
 app.use((error, req, res, next) => {
