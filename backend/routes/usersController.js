@@ -16,11 +16,9 @@ userRouter.get("/", async (_req, res) => {
   }
 });
 
-userRouter.get("/:id", async (req, res) => {
+userRouter.get("/user", verifyToken, async (req, res) => {
   try {
-    // const token = req.headers.authorization.split(' ')[1];
-    // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = req.params.id;
+    const userId = req.user.userId
     const user = await User.findById(userId);
 
     let userData;

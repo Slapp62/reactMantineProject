@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
@@ -8,6 +8,7 @@ import ListingCard from '@/components/ListingCard';
 import { fetchListingsThunk } from '@/store/listingSlice';
 import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
+import { useListingLoading, useListings } from '@/utils/reduxHelperHooks';
 
 export function HomePage() {
   const dispatch = useDispatch();
@@ -16,61 +17,54 @@ export function HomePage() {
     dispatch(fetchListingsThunk() as any);
   }, [dispatch]);
 
-  const allListings = useSelector((state: RootState) => state.listingSlice.listings);
-  const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
+  const allListings = useListings();
+  const isLoading = useListingLoading();
 
-  const cards = useMemo(() => {
-    if (!allListings) {
-      return [];
+  const initSortedCards = [...allListings].sort((a, b) => {
+    if (a.createdAt && b.createdAt) {
+      return b.createdAt?.localeCompare(a.createdAt);
     }
-
-    return [...allListings].sort((a: TJobListing, b: TJobListing) =>
-      a.createdAt && b.createdAt ? b.createdAt?.localeCompare(a.createdAt) : 0
-    );
-  }, [allListings]);
+    return 0;
+  });
 
   const searchWord = useSelector((state: RootState) => state.searchSlice.searchWord);
   const sortOption = useSelector((state: RootState) => state.listingSlice.sortOption);
   const isMobile = useMediaQuery('(max-width: 500px)');
 
-  const sortedCards = useMemo(() => {
-    return [...cards].sort((a, b) => {
-      if (sortOption === 'title-asc') {
-        return a.jobTitle.localeCompare(b.jobTitle);
+  const sortedCards = [...initSortedCards].sort((a, b) => {
+    if (sortOption === 'title-asc') {
+      return a.jobTitle.localeCompare(b.jobTitle);
+    }
+    if (sortOption === 'title-desc') {
+      return b.jobTitle.localeCompare(a.jobTitle);
+    }
+    if (sortOption === 'date-created-old') {
+      if (a.createdAt && b.createdAt) {
+        return a.createdAt?.localeCompare(b.createdAt);
       }
-      if (sortOption === 'title-desc') {
-        return b.jobTitle.localeCompare(a.jobTitle);
+    }
+    if (sortOption === 'date-created-new') {
+      if (a.createdAt && b.createdAt) {
+        return b.createdAt?.localeCompare(a.createdAt);
       }
-      if (sortOption === 'date-created-old') {
-        if (a.createdAt && b.createdAt) {
-          return a.createdAt?.localeCompare(b.createdAt);
-        }
-      }
-      if (sortOption === 'date-created-new') {
-        if (a.createdAt && b.createdAt) {
-          return b.createdAt?.localeCompare(a.createdAt);
-        }
-      }
-      return 0;
-    });
-  }, [cards, sortOption]);
+    }
+    return 0;
+  });
 
-  const searchCards = useMemo(() => {
-    return sortedCards.filter((listing: TJobListing) => {
+  const searchCards = sortedCards.filter((listing: TJobListing) => {
       const keyWord = searchWord.toLowerCase();
       return (
-        listing.jobTitle.toLowerCase().includes(keyWord) ||
-        listing.jobDescription.toLowerCase().includes(keyWord)
+        listing.jobTitle?.toLowerCase().includes(keyWord) ||
+        listing.jobDescription?.toLowerCase().includes(keyWord)
       );
-    });
-  }, [sortedCards, searchWord]);
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 12;
 
-  const paginatedCards = useMemo(() => {
-    return searchCards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage);
-  }, [searchCards, currentPage, cardsPerPage]).map((card: TJobListing) => card._id);
+  const paginatedCards = searchCards
+    .slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
+    .map((card: TJobListing) => card._id);
 
   useEffect(() => {
     setCurrentPage(1);

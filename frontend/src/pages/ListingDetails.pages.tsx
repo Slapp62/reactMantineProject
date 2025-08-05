@@ -1,18 +1,18 @@
 import { BsTranslate } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Card, Container, Flex, Group, List, ListItem, Text, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { FavoritesButton } from '@/components/Buttons/FavoritesButton';
 import SocialIcons from '@/components/SocialMedia';
 import useTranslateHEtoEN from '@/hooks/UseTranslateHEtoEN';
-import { RootState } from '@/store/store';
+import { useCurrentUser, useIsJobseeker, useListings } from '@/utils/reduxHelperHooks';
 
 export function ListingDetails() {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const { id } = useParams();
-  const user = useSelector((state: RootState) => state.authSlice.currentUser);
-  const allListings = useSelector((state: RootState) => state.listingSlice.listings);
+  const user = useCurrentUser();
+  const allListings = useListings();
+  const isJobseeker = useIsJobseeker();
   const currListing = allListings.find((listing) => listing._id === id);
 
   const {
@@ -90,7 +90,7 @@ export function ListingDetails() {
         </Card.Section>
         {user && (
           <Group my={5} justify="space-evenly">
-            {currListing && <FavoritesButton listing={currListing} />}
+            {currListing && isJobseeker && <FavoritesButton listing={currListing} />}
             {currListing && <SocialIcons listingID={currListing._id} />}
           </Group>
         )}

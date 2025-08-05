@@ -15,8 +15,8 @@ import SocialIcons from './SocialMedia';
 
 function ListingCard({ listingID }: { listingID: string }) {
   const listing = useSelector((state: RootState) =>
-    state.listingSlice.listings?.find((listing) => listing._id === listingID)
-  );
+    state.listingSlice.listings?.find((listing) => listing._id === listingID));
+  
   if (!listing) {
     return null;
   }
@@ -29,6 +29,7 @@ function ListingCard({ listingID }: { listingID: string }) {
   const loggedIn = useSelector((state: RootState) => state.authSlice.isLoggedIn);
   const isJobseeker = useIsJobseeker();
   const isMobile = useMediaQuery('(max-width: 500px)');
+
   const {
     currentLang,
     translatedText,
@@ -37,6 +38,8 @@ function ListingCard({ listingID }: { listingID: string }) {
     translationLoading,
     cardString,
   } = useTranslateHEtoEN(listing.jobTitle, listing.jobDescription);
+
+  
 
   return (
     <motion.div

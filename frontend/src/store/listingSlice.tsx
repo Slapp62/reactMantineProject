@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { TJobListing } from '@/Types';
+import { API_BASE_URL } from '@/config/api';
 
-export const fetchListingsThunk = createAsyncThunk('listings/fetchListings', async () => {
-  const response = await axios.get('http://localhost:5000/api/listings');
-  return response.data;
+export const fetchListingsThunk : any = createAsyncThunk('listings/fetchListings', async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/listings`);
+    return response.data;
+  } catch (error: any) {
+    console.error(error);
+  }
 });
 
 type ListingState = {

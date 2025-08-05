@@ -41,4 +41,16 @@ listingRouter.get("/:id", verifyToken, async (req, res) => {
   }
 });
 
+listingRouter.delete("/delete/:id", verifyToken, async (req, res) => {
+  try {
+    const listingID = req.params.id;
+    const deleteListing = await JobListing.findByIdAndDelete(listingID);
+    res.status(204).json(deleteListing)
+    console.log('delete successfull');
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
+
 export default listingRouter;

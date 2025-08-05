@@ -1,45 +1,43 @@
 import { useEffect, useState } from 'react';
 import { IconCards, IconMoodSad } from '@tabler/icons-react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Box, Button, Center, Flex, Loader, Title } from '@mantine/core';
 import { Hero } from '@/components/Hero';
 import MappedCards from '@/components/MappedListings';
 import { API_BASE_URL } from '@/config/api';
-import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
-import { useCurrentUser } from '@/utils/reduxHelperHooks';
+import { useCurrentUser, useListingLoading } from '@/utils/reduxHelperHooks';
 import { getToken } from '@/utils/tokenManager';
 import { useListings } from '../utils/reduxHelperHooks';
 
 export function MyCards() {
   const allListings = useListings();
-  const isLoading = useSelector((state: RootState) => state.listingSlice.loading);
   const user = useCurrentUser();
+  const isLoading = useListingLoading();
   const userID = user?._id;
   const [userCards, setUserCards] = useState<TJobListing[]>([]);
   const jumpTo = useNavigate();
 
-  useEffect(() => {
-    const loadUserCards = async () => {
-      try {
-        const token = getToken();
-        const response = await axios.get(`${API_BASE_URL}/api/listings/${userID}`, {
-          headers: { authorization: token },
-        });
-        console.log(userID);
+  const loadUserCards = async () => {
+    try {
+      const token = getToken();
+      const response = await axios.get(`${API_BASE_URL}/api/listings/${userID}`, {
+        headers: { authorization: token },
+      });
+      console.log(userID);
 
-        setUserCards(response.data);
-      } catch (error: any) {
-        toast.error(error);
-      }
-    };
-    loadUserCards();
+      setUserCards(response.data);
+    } catch (error: any) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
     // check if cards are already available in Redux
     if (allListings && user) {
-      setUserCards(allListings?.filter((listing: TJobListing) => listing._id === user?._id));
+      setUserCards(allListings?.filter((listing: TJobListing) => listing.businessId === user?._id));
     }
     // if they aren't, fetch from API
     else {
