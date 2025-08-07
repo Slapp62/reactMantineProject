@@ -1,57 +1,39 @@
 import { useEffect, useState } from 'react';
 import { IconCards, IconMoodSad } from '@tabler/icons-react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Box, Button, Center, Flex, Loader, Title } from '@mantine/core';
-import { Hero } from '@/components/Hero';
-import MappedCards from '@/components/MappedListings';
-import { API_BASE_URL } from '@/config/api';
+import { useBusinessListings, useCurrentUser } from '@/utils/reduxHelperHooks';
+import fetchBusinessListings from '@/utils/fetchBusinessListings';
+import { useDispatch } from 'react-redux';
+import { setBusinessListings } from '@/store/businessSlice';
+import ListingCard from '@/components/ListingCard';
 import { TJobListing } from '@/Types';
-import { useCurrentUser, useListingLoading } from '@/utils/reduxHelperHooks';
-import { getToken } from '@/utils/tokenManager';
-import { useListings } from '../utils/reduxHelperHooks';
 
 export function MyCards() {
-  const allListings = useListings();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
   const user = useCurrentUser();
-  const isLoading = useListingLoading();
-  const userID = user?._id;
-  const [userCards, setUserCards] = useState<TJobListing[]>([]);
+  const userId = user?._id;
+
   const jumpTo = useNavigate();
-
-  const loadUserCards = async () => {
-    try {
-      const token = getToken();
-      const response = await axios.get(`${API_BASE_URL}/api/listings/${userID}`, {
-        headers: { authorization: token },
-      });
-      console.log(userID);
-
-      setUserCards(response.data);
-    } catch (error: any) {
-      toast.error(error);
-    }
-  };
+  
 
   useEffect(() => {
-    // check if cards are already available in Redux
-    if (allListings && user) {
-      setUserCards(allListings?.filter((listing: TJobListing) => listing.businessId === user?._id));
-    }
-    // if they aren't, fetch from API
-    else {
-      loadUserCards();
-    }
-  }, [allListings, user]);
+    const getBusinessListings = async () => {
+      setIsLoading(true);
+      const fetchedBusinessListings = await fetchBusinessListings(userId);
+      dispatch(setBusinessListings(fetchedBusinessListings));
+      setIsLoading(false);
+    };
+    getBusinessListings();
+  }, []);
 
+  const businessListings = useBusinessListings();
+  // if cards are loading, show loader
   if (isLoading) {
     return (
       <>
-        <Box pos="relative">
-          <Hero />
-        </Box>
-
         <Center>
           <Loader color="cyan" size="xl" mt={30} />
         </Center>
@@ -59,7 +41,8 @@ export function MyCards() {
     );
   }
 
-  if (userCards.length === 0) {
+  // if no cards, show message
+  if (businessListings?.length === 0) {
     return (
       <Flex mt={20} direction="column" align="center" gap={20}>
         <Box mt={20}>
@@ -82,6 +65,7 @@ export function MyCards() {
     );
   }
 
+  // if cards exist, show them
   return (
     <Flex mt={20} direction="column" align="center" gap={20}>
       <Title>My Listings</Title>
@@ -99,7 +83,13 @@ export function MyCards() {
         Create A New Listing
       </Button>
 
-      <MappedCards listingsArr={userCards} />
+      <Flex w="80%" align='center' justify="center" wrap="wrap" gap="lg">
+        {businessListings && (
+          businessListings.map((listing: TJobListing) => 
+            <ListingCard key={listing._id} listingID={listing._id} />
+          )
+        )}
+      </Flex>
     </Flex>
   );
 }

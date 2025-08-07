@@ -14,7 +14,7 @@ export const getToken = () => {
 
 export const handleBeforeUnload = () => {
   const rememberMe = localStorage.getItem('rememberMe');
-  if (rememberMe === null) {
+  if (!rememberMe) {
     sessionStorage.removeItem('token');
   }
 };

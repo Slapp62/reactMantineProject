@@ -46,8 +46,6 @@ listingRouter.delete("/delete/:id", verifyToken, async (req, res) => {
     const listingID = req.params.id;
     const deleteListing = await deleteListingById(listingID);
     res.status(204).json(deleteListing)
-    console.log('delete successfull', deleteListing);
-    
   } catch (error) {
     handleError(res, error.status || 500, "Error deleting listing");
   }

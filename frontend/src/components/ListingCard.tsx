@@ -8,14 +8,13 @@ import { Box, Button, Card, Flex, Group, List, ListItem, Modal, Text, Title } fr
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useDeleteListing } from '@/hooks/UseDeleteCard';
 import { RootState } from '@/store/store';
-import { useIsJobseeker } from '@/utils/reduxHelperHooks';
+import { useIsJobseeker, useListingById } from '@/utils/reduxHelperHooks';
 import { useTranslateHEtoEN } from '../hooks/UseTranslateHEtoEN';
 import { FavoritesButton } from './Buttons/FavoritesButton';
 import SocialIcons from './SocialMedia';
 
 function ListingCard({ listingID }: { listingID: string }) {
-  const listing = useSelector((state: RootState) =>
-    state.listingSlice.listings?.find((listing) => listing._id === listingID));
+  const listing = useListingById(listingID);
   
   if (!listing) {
     return null;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { removeListing } from '@/store/listingSlice';
+import { removeListing } from '@/store/businessSlice';
 import { TJobListing } from '@/Types';
 import { getToken } from '@/utils/tokenManager';
 import { API_BASE_URL } from '@/config/api';

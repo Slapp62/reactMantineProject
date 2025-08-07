@@ -25,4 +25,10 @@ export const useJobseekerProfile = () => useSelector((state: RootState) => state
 
 // listing slice helpers
 export const useListings = () => useSelector((state: RootState) => state.listingSlice.listings);
+export const useListingById = (id: string) => 
+  useSelector((state: RootState) => state.listingSlice.listings?.find((listing) => listing._id === id));
+
 export const useListingLoading = () => useSelector((state: RootState) => state.listingSlice.loading);
+
+// business slice helpers
+export const useBusinessListings = () => useSelector((state: RootState) => state.businessSlice.businessListings);

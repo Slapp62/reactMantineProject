@@ -47,11 +47,7 @@ const listingSlice = createSlice({
         }
       }
     },
-    removeListing: (state, action: PayloadAction<TJobListing>) => {
-      if (state.listings) {
-        state.listings = state.listings?.filter((listings) => listings._id !== action.payload._id);
-      }
-    },
+    
     setSortOption: (state, action: PayloadAction<string>) => {
       state.sortOption = action.payload;
     },
@@ -73,5 +69,5 @@ const listingSlice = createSlice({
   },
 });
 
-export const { addListing, editListing, removeListing, setSortOption } = listingSlice.actions;
+export const { addListing, editListing, setSortOption } = listingSlice.actions;
 export default listingSlice.reducer;

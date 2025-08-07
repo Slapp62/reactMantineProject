@@ -1,4 +1,5 @@
 import { JobListing } from "../models/schemas.js";
+import chalk from "chalk";
 
 export const getAllListings = async () => {
   try {
@@ -18,7 +19,10 @@ export const getListingById = async (currentBizId) => {
 
 export const deleteListingById = async (listingId) => {
   try {
-    return await JobListing.findByIdAndDelete(listingId);
+    const response = await JobListing.findByIdAndDelete(listingId);
+    console.log(chalk.blue('delete successfull'));
+
+    return response
   } catch (error) {
     console.error(error);
   }  
