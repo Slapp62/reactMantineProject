@@ -12,59 +12,6 @@
   <body>
     <div id="root"></div>
     
-    <!-- Fallback error display for critical failures -->
-    <script>
-      // Show fallback error if React fails to load after 3 seconds
-      setTimeout(() => {
-        const root = document.getElementById('root');
-        if (!root.children.length) {
-          root.innerHTML = `
-            <div style="
-              position: fixed;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              background: #fff;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              padding: 2rem;
-              box-sizing: border-box;
-            ">
-              <div style="max-width: 600px; text-align: center;">
-                <h1 style="color: #e03131; margin-bottom: 1rem;">Application Error</h1>
-                <p style="color: #666; margin-bottom: 2rem;">
-                  The application failed to load. This is likely due to a syntax error in the code.
-                </p>
-                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; text-align: left;">
-                  <strong>If you're a developer:</strong>
-                  <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-                    <li>Check the browser console for detailed error messages</li>
-                    <li>Look for syntax errors like missing brackets or quotes</li>
-                    <li>Verify all imports and exports are correct</li>
-                    <li>Check for typos in variable or function names</li>
-                  </ul>
-                </div>
-                <button onclick="window.location.reload()" style="
-                  background: #228be6;
-                  color: white;
-                  border: none;
-                  padding: 0.75rem 1.5rem;
-                  border-radius: 6px;
-                  cursor: pointer;
-                  font-size: 1rem;
-                ">
-                  Reload Page
-                </button>
-              </div>
-            </div>
-          `;
-        }
-      }, 10000);
-    </script>
     
     <script type="module" src="/src/main.tsx"></script>
   </body>

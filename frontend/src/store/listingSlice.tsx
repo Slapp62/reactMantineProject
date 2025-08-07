@@ -9,6 +9,7 @@ export const fetchListingsThunk : any = createAsyncThunk('listings/fetchListings
     return response.data;
   } catch (error: any) {
     console.error(error);
+    throw error;
   }
 });
 

@@ -1,23 +1,17 @@
 import { useEffect, useState } from 'react';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { Hero } from '@/components/Hero';
 import ListingCard from '@/components/ListingCard';
-import { fetchListingsThunk } from '@/store/listingSlice';
 import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
 import { useListingLoading, useListings } from '@/utils/reduxHelperHooks';
 
 export function HomePage() {
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchListingsThunk() as any);
-  }, [dispatch]);
-
-  const allListings = useListings();
+  const allListings = useListings() ?? [];
   const isLoading = useListingLoading();
 
   const initSortedCards = [...allListings].sort((a, b) => {

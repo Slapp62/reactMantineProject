@@ -17,7 +17,7 @@ connectDB();
 // global middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
   }),
 );
@@ -32,5 +32,5 @@ app.use((error, req, res, next) => {
 
 // listen
 app.listen(PORT, () => {
-  console.log(chalk.yellow.bold(`server running on port ${PORT}`));
+  console.log(chalk.green.bold(`server running on port ${PORT}`));
 });
