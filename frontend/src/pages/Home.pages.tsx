@@ -7,12 +7,12 @@ import { Hero } from '@/components/Hero';
 import ListingCard from '@/components/ListingCard';
 import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
-import { useListingLoading, useListings } from '@/utils/reduxHelperHooks';
+import { reduxHelpers } from '@/utils/reduxHelperHooks';
 
 export function HomePage() {
 
-  const allListings = useListings() ?? [];
-  const isLoading = useListingLoading();
+  const allListings = reduxHelpers.useListings() ?? [];
+  const isLoading = reduxHelpers.useListingLoading();
 
   const initSortedCards = [...allListings].sort((a, b) => {
     if (a.createdAt && b.createdAt) {

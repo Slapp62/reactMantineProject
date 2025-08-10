@@ -5,7 +5,7 @@ import { BusinessForm } from '@/pages/RegisterPages/BusinessForm.pages';
 import { JobSeekerForm } from '@/pages/RegisterPages/JobSeekerForm.pages';
 import Error404 from '../pages/404.pages';
 import About from '../pages/About.pages';
-import { CreateCard } from '../pages/CreateListing.pages';
+import { lazy, Suspense } from 'react';
 // import { EditListing } from '../pages/EditListing.pages';
 // import { EditProfile } from '../pages/EditProfilePage/EditProfile.pages';
 import { FavoriteListings } from '../pages/Favorites.pages';
@@ -15,6 +15,9 @@ import { LoginPage } from '../pages/LoginPage/Login.pages';
 import { MyCards } from '../pages/MyListings.pages';
 import { Layout } from './Layout';
 import RouteGuard from './RouteGuard';
+import { Loader } from '@mantine/core';
+
+const CreateCard = lazy(() => import('../pages/CreateListing.pages'));
 
 const router = createBrowserRouter(
   [
@@ -42,7 +45,9 @@ const router = createBrowserRouter(
           path: 'create-card',
           element: (
             <RouteGuard>
-              <CreateCard />
+              <Suspense fallback={<Loader color="cyan" size="xl" mt={30} mx="auto" />}>
+                <CreateCard />
+              </Suspense>
             </RouteGuard>
           ),
         },

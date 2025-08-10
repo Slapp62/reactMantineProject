@@ -1,6 +1,28 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
+export const reduxHelpers = {
+  useCurrentUser: () => useSelector((state: RootState) => state.authSlice.currentUser),
+  useIsLoggedIn: () => useSelector((state: RootState) => state.authSlice.isLoggedIn),
+  useIsJobseeker: () => {
+    return useSelector((state: RootState) => state.authSlice.currentUser?.userType === 'jobseeker');
+  },
+  useIsBusiness: () => {
+    return useSelector((state: RootState) => state.authSlice.currentUser?.userType === 'business');
+  },
+  useIsAdmin: () => {
+    return useSelector((state: RootState) => state.authSlice.currentUser?.userType === 'admin');
+  },
+
+  useJobseekerProfile: () => useSelector((state: RootState) => state.jobseekerSlice.profile),
+  
+  useListings: () => useSelector((state: RootState) => state.listingSlice.listings),
+  useListingById: (id: string) => 
+    useSelector((state: RootState) => state.listingSlice.listings?.find((listing) => listing._id === id)),
+  useBusinessListings: () => useSelector((state: RootState) => state.businessSlice.businessListings),
+  useListingLoading: () => useSelector((state: RootState) => state.listingSlice.loading),
+};
+
 // auth slice helpers
 export const useCurrentUser = () => useSelector((state: RootState) => state.authSlice.currentUser);
 export const useIsLoggedIn = () => useSelector((state: RootState) => state.authSlice.isLoggedIn);

@@ -70,7 +70,7 @@ export type TDecodedToken = {
   userType: 'jobseeker' | 'business';
   iat: number;
   exp: number;
-};
+} | undefined;
 
 // API Response types
 export type TAuthResponse = {

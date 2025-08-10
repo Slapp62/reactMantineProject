@@ -23,7 +23,7 @@ import { addListing } from '@/store/listingSlice';
 import { TJobListing } from '@/Types';
 import { useCurrentUser } from '@/utils/reduxHelperHooks';
 
-export function CreateCard() {
+export default function CreateCard() {
   const jumpTo = useNavigate();
   const isMobile = useMediaQuery('(max-width: 700px)');
   const dispatch = useDispatch();

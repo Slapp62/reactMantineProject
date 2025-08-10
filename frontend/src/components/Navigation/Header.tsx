@@ -23,6 +23,7 @@ import { AvatarIcon } from './Avatar';
 import { LightDarkToggle } from './LightDarkToggle';
 import { Logo } from './Logo';
 import classes from '../ComponentStyles/Navigation.module.css';
+import { clearToken } from '@/utils/tokenManager';
 
 export function Navbar() {
   const loggedIn = useSelector((state: RootState) => state.authSlice.isLoggedIn);
@@ -37,8 +38,7 @@ export function Navbar() {
   const logoutHandler = () => {
     jumpTo('/');
     dispatch(clearUser());
-    sessionStorage.removeItem('token');
-    localStorage.removeItem('token');
+    clearToken();
     toast.success('Logged out successfully!');
   };
 
