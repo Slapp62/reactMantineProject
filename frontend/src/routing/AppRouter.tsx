@@ -6,18 +6,18 @@ import { JobSeekerForm } from '@/pages/RegisterPages/JobSeekerForm.pages';
 import Error404 from '../pages/404.pages';
 import About from '../pages/About.pages';
 import { lazy, Suspense } from 'react';
-// import { EditListing } from '../pages/EditListing.pages';
 // import { EditProfile } from '../pages/EditProfilePage/EditProfile.pages';
 import { FavoriteListings } from '../pages/Favorites.pages';
 import { HomePage } from '../pages/Home.pages';
 import { ListingDetails } from '../pages/ListingDetails.pages';
 import { LoginPage } from '../pages/LoginPage/Login.pages';
-import { MyCards } from '../pages/MyListings.pages';
 import { Layout } from './Layout';
 import RouteGuard from './RouteGuard';
-import { Loader } from '@mantine/core';
+import { CustomLoader } from '@/components/CustomLoader';
 
 const CreateCard = lazy(() => import('../pages/CreateListing.pages'));
+const EditListing = lazy(() => import('../pages/EditListing.pages'));
+const MyListings = lazy(() => import('../pages/MyListings.pages'));
 
 const router = createBrowserRouter(
   [
@@ -32,7 +32,12 @@ const router = createBrowserRouter(
         { path: 'register/jobseeker/', element: <JobSeekerForm /> },
         { path: 'register/business/', element: <BusinessForm /> },
         { path: 'listing-details/:id', element: <ListingDetails /> },
-        //{ path: 'edit-card/:id', element: <EditListing /> },
+        { 
+          path: 'edit-listing/:id', 
+          element: 
+            <Suspense fallback={<CustomLoader />}>
+              <EditListing />
+            </Suspense> },
         {
           path: 'favorites',
           element: (
@@ -42,10 +47,10 @@ const router = createBrowserRouter(
           ),
         },
         {
-          path: 'create-card',
+          path: 'create-listing',
           element: (
             <RouteGuard>
-              <Suspense fallback={<Loader color="cyan" size="xl" mt={30} mx="auto" />}>
+              <Suspense fallback={<CustomLoader />}>
                 <CreateCard />
               </Suspense>
             </RouteGuard>
@@ -71,7 +76,9 @@ const router = createBrowserRouter(
           path: 'my-listings',
           element: (
             <RouteGuard isBusiness>
-              <MyCards />
+              <Suspense fallback={<CustomLoader />}>
+                <MyListings />
+              </Suspense>
             </RouteGuard>
           ),
         },

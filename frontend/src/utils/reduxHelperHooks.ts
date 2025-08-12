@@ -17,7 +17,7 @@ export const reduxHelpers = {
   useJobseekerProfile: () => useSelector((state: RootState) => state.jobseekerSlice.profile),
   
   useListings: () => useSelector((state: RootState) => state.listingSlice.listings),
-  useListingById: (id: string) => 
+  useListingById: (id: string | undefined) => 
     useSelector((state: RootState) => state.listingSlice.listings?.find((listing) => listing._id === id)),
   useBusinessListings: () => useSelector((state: RootState) => state.businessSlice.businessListings),
   useListingLoading: () => useSelector((state: RootState) => state.listingSlice.loading),

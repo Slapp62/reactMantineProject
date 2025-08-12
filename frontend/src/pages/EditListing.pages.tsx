@@ -3,6 +3,8 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { pick } from 'lodash';
+import { cleanedListingData } from '../utils/getCleanedData';
 import {
   Autocomplete,
   Button,
@@ -10,6 +12,7 @@ import {
   Flex,
   Paper,
   Select,
+  Stack,
   Textarea,
   TextInput,
   Title,
@@ -20,39 +23,50 @@ import { allRegionArr, ISRAELI_CITIES_BY_REGION } from '@/data/israelCities';
 import { WORK_ARRANGEMENTS } from '@/data/workArr';
 import { editListing } from '@/store/listingSlice';
 import { TJobListing } from '@/Types';
+import { reduxHelpers } from '@/utils/reduxHelperHooks';
+import { useEffect, useState } from 'react';
+import { getToken } from '@/utils/tokenManager';
 
 export function EditListing() {
   const { id } = useParams();
   const isMobile = useMediaQuery('(max-width: 700px)');
-  //const [isDisabled, setDisabled] = useState(true);
+  const [isDisabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
 
-  //const allListings = useSelector((state: RootState) => state.listingSlice.listings);
-  //const listingsData = allListings?.find((listings) => listings._id === id);
+  const currentListing = reduxHelpers.useListingById(id);
 
   const {
     register,
     handleSubmit,
     control,
     watch,
-    formState: { errors, isValid },
+    reset,
+    formState: { errors, isValid, dirtyFields },
   } = useForm<TJobListing>({
     mode: 'all',
-    // defaultValues: ListingsData ? cleanedListingsData(ListingsData) : {},
+    defaultValues: currentListing ? cleanedListingData(currentListing) : {},
   });
 
-  // useEffect(() => {
-  //   const defaultUserValues = ListingsData ? cleanedListingsData(ListingsData) : {};
-  //   reset(defaultUserValues);
-  // }, [reset, ListingsData]);
-
+  useEffect(() => {
+    const defaultUserValues = currentListing ? cleanedListingData(currentListing) : {};
+    reset(defaultUserValues);
+  }, [reset, currentListing, dispatch]);
+  
+  
   const onSubmit = async (data: FieldValues) => {
+    const changedData = pick(data, Object.keys(dirtyFields));
+    const token = getToken();
     try {
-      const response = await axios.put(`http://localhost:5000/api/listings/edit/${id}`, data);
+      const response = await axios.patch(`http://localhost:5000/api/listings/edit/${id}`, changedData,
+        {
+          headers: { authorization: token },
+        }
+      );
       if (response.status === 200) {
         dispatch(editListing({ listings: response.data as TJobListing }));
         toast.success('Listings Updated Successfully!', { position: `bottom-right` });
-        //setDisabled(true);
+        setDisabled(true);
+        reset();
       }
     } catch (error: any) {
       toast.error(`Update Failed! ${error.response.data}`, { position: `bottom-right` });
@@ -71,7 +85,7 @@ export function EditListing() {
           gap={10}
           py={10}
           mx="auto"
-          style={{ width: isMobile ? '90%' : '50%' }}
+          w= {isMobile ? '90%' : '50%' }
         >
           <Fieldset legend="Job Info">
             <TextInput
@@ -79,12 +93,14 @@ export function EditListing() {
               required
               {...register('jobTitle')}
               error={errors.jobTitle?.message}
+              disabled={isDisabled}
             />
             <Textarea
               label="Description"
               required
               {...register('jobDescription')}
               error={errors.jobDescription?.message}
+              disabled={isDisabled}
             />
 
             <TextInput
@@ -92,12 +108,14 @@ export function EditListing() {
               required
               {...register('requirements')}
               error={errors.requirements?.message}
+              disabled={isDisabled}
             />
             <TextInput
               label="Advantages"
               required
               {...register('advantages')}
               error={errors.advantages?.message}
+              disabled={isDisabled}
             />
 
             <Controller
@@ -109,6 +127,7 @@ export function EditListing() {
                   data={INDUSTRIES}
                   {...field}
                   error={errors.industry?.message}
+                  disabled={isDisabled}
                 />
               )}
             />
@@ -125,6 +144,7 @@ export function EditListing() {
                   }))}
                   {...field}
                   error={errors.industry?.message}
+                  disabled={isDisabled}
                 />
               )}
             />
@@ -143,6 +163,7 @@ export function EditListing() {
                   }))}
                   {...field}
                   error={errors.location?.region?.message}
+                  disabled={isDisabled}
                 />
               )}
             />
@@ -166,6 +187,7 @@ export function EditListing() {
                   }
                   {...field}
                   error={errors.location?.city?.message}
+                  disabled={isDisabled}
                 />
               )}
             />
@@ -184,6 +206,7 @@ export function EditListing() {
                   ]}
                   {...field}
                   error={errors.apply?.method?.message}
+                  disabled={isDisabled}
                 />
               )}
             />
@@ -192,15 +215,19 @@ export function EditListing() {
               label="Apply To"
               {...register('apply.contact')}
               error={errors.apply?.contact?.message}
+              disabled={isDisabled}
             />
           </Fieldset>
         </Flex>
 
-        <Flex justify="center" my={10}>
-          <Button type="submit" size="lg" disabled={!isValid}>
-            Create
+        <Stack justify="center" my={10} mx='auto' w= {isMobile ? '90%' : '50%' }>
+          <Button type="button" size="md" disabled={!isDisabled} onClick={() => setDisabled(!isDisabled)}>
+            Edit
           </Button>
-        </Flex>
+          <Button type="submit" size="md" disabled={!isValid || isDisabled}>
+            Update
+          </Button>
+        </Stack>
       </form>
     </Paper>
   );

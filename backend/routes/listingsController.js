@@ -1,7 +1,7 @@
 import { Router } from "express";
 import dotenv from "dotenv";
 import { verifyToken } from "../middleware/auth.js";
-import { getListingById, deleteListingById, createListing, getAllListings } from "../services/listingService.js";
+import { getListingById, deleteListingById, createListing, getAllListings, editListing } from "../services/listingService.js";
 import { handleError } from "../utils/errorHandler.js";
 dotenv.config();
 
@@ -27,8 +27,6 @@ listingRouter.get("/:id", verifyToken, async (req, res) => {
 });
 
 listingRouter.post("/create", async (req, res) => {
-  console.log(req.body);
-
   try {
     const newListing = await createListing(req.body);
 
@@ -38,6 +36,20 @@ listingRouter.post("/create", async (req, res) => {
     });
   } catch (error) {
     handleError(res, error.status || 500, "Error creating listing");
+  }
+});
+
+listingRouter.patch("/edit/:id", verifyToken, async (req, res) => {
+  try {
+    const listingID = req.params.id;
+    const updatedListing = await editListing(listingID, req.body);
+
+    res.status(200).json({
+      message: "Listing Updated Successfully",
+      listing: updatedListing,
+    });
+  } catch (error) {
+    handleError(res, error.status || 500, "Error updating listing");
   }
 });
 

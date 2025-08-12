@@ -36,3 +36,16 @@ export const createListing = async (listing) => {
   }
 };
 
+export const editListing = async (listingId, listing) => {
+  try {
+  return await JobListing.findByIdAndUpdate(
+    listingId,
+    { $set: listing } ,
+    { new: true }
+  );
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+

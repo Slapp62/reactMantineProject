@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { IconArrowUp, IconMoodSad2 } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
-import { Box, Button, Center, Flex, Loader, Pagination, Text, Title } from '@mantine/core';
+import { Box, Button, Flex, Pagination, Text, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { Hero } from '@/components/Hero';
 import ListingCard from '@/components/ListingCard';
 import { RootState } from '@/store/store';
 import { TJobListing } from '@/Types';
 import { reduxHelpers } from '@/utils/reduxHelperHooks';
+import { CustomLoader } from '@/components/CustomLoader';
 
 export function HomePage() {
 
@@ -73,9 +74,7 @@ export function HomePage() {
     <>
       <Hero />
       {isLoading || !allListings ? (
-        <Center>
-          <Loader color="cyan" size="xl" mt={30} />
-        </Center>
+        <CustomLoader />
       ) : (
         <Flex direction="column" align="center" gap={20}>
           <Flex wrap="wrap" gap="lg" justify="center" w={isMobile ? '100%' : '80%'}>

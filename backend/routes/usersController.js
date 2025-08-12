@@ -19,7 +19,7 @@ userRouter.get("/", async (_req, res) => {
 userRouter.get("/user/:id", verifyToken, async (req, res) => {
   try {
     const userId = req.params.id;
-    const data = getUserDataById(userId);
+    const data = await getUserDataById(userId);
 
     res.json({
       message: "Persisted Login Successful",

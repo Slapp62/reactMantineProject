@@ -9,7 +9,7 @@ import { setBusinessListings } from '@/store/businessSlice';
 import ListingCard from '@/components/ListingCard';
 import { TJobListing } from '@/Types';
 
-export function MyCards() {
+export default function MyListings() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 

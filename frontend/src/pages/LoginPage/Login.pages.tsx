@@ -22,6 +22,8 @@ import { setJobseekerProfile } from '@/store/jobseekerSlice';
 import { AppDispatch } from '@/store/store';
 import { setToken } from '@/utils/tokenManager';
 import classes from './Login.module.css';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from '@/validationRules/login.zod';
 
 export function LoginPage() {
   const jumpTo = useNavigate();
@@ -43,7 +45,7 @@ export function LoginPage() {
     },
     mode: 'onChange',
     criteriaMode: 'firstError',
-    // resolver: joiResolver(loginSchema)
+    resolver: zodResolver(loginSchema)
   });
 
   const onSubmit = async (data: FieldValues) => {
