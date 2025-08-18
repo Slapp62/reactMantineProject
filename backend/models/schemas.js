@@ -63,8 +63,8 @@ const jobListingSchema = new Schema({
     contact: { type: String, required: true }, // email address or URL
   },
   location: {
-    region: String,
-    city: String, // If different from company location
+    region: { type: String, required: true },
+    city: { type: String, required: true }
   },
   workArrangement: {
     type: String,

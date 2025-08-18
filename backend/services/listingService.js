@@ -1,5 +1,6 @@
 import { JobListing } from "../models/schemas.js";
 import chalk from "chalk";
+import { zodListingValidator } from "../validation/listingValidationZod.js";
 
 export const getAllListings = async () => {
   try {
@@ -29,7 +30,9 @@ export const deleteListingById = async (listingId) => {
 };
 
 export const createListing = async (listing) => {
+
   try {
+  zodListingValidator(listing);
   return await JobListing.create(listing); 
   } catch (error) {
     console.error(error);
