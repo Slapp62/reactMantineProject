@@ -1,6 +1,5 @@
-import { JobListing } from "../models/schemas.js";
+import { JobListing } from "../schemas/schemas.js";
 import chalk from "chalk";
-import { zodListingValidator } from "../validation/listingValidationZod.js";
 
 export const getAllListings = async () => {
   try {
@@ -8,11 +7,11 @@ export const getAllListings = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export const getListingById = async (currentBizId) => {
   try {
-    return await JobListing.find({businessId: {$eq: currentBizId }})
+    return await JobListing.find({ businessId: { $eq: currentBizId } });
   } catch (error) {
     console.error(error);
   }
@@ -21,19 +20,17 @@ export const getListingById = async (currentBizId) => {
 export const deleteListingById = async (listingId) => {
   try {
     const response = await JobListing.findByIdAndDelete(listingId);
-    console.log(chalk.blue('delete successfull'));
+    console.log(chalk.blue("delete successfull"));
 
-    return response
+    return response;
   } catch (error) {
     console.error(error);
-  }  
+  }
 };
 
 export const createListing = async (listing) => {
-
   try {
-  zodListingValidator(listing);
-  return await JobListing.create(listing); 
+    return await JobListing.create(listing);
   } catch (error) {
     console.error(error);
   }
@@ -41,14 +38,12 @@ export const createListing = async (listing) => {
 
 export const editListing = async (listingId, listing) => {
   try {
-  return await JobListing.findByIdAndUpdate(
-    listingId,
-    { $set: listing } ,
-    { new: true }
-  );
-
+    return await JobListing.findByIdAndUpdate(
+      listingId,
+      { $set: listing },
+      { new: true },
+    );
   } catch (error) {
     console.error(error);
   }
 };
-

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { User, Business, Jobseeker } from "../models/schemas.js";
+import { User, Business, Jobseeker } from "../schemas/schemas.js";
 
 export const getAllUsers = async () => {
   try {
@@ -12,7 +12,7 @@ export const getAllUsers = async () => {
 export const getUserDataById = async (userId) => {
   try {
     const user = await User.findById(userId);
-    
+
     let userData;
 
     if (user.userType === "business") {
@@ -32,13 +32,12 @@ export const getUserDataById = async (userId) => {
     };
 
     return combinedData;
-
   } catch (error) {
     console.error(error);
   }
 };
 
-export const toggleFavorite = async(listingId, userId) => {
+export const toggleFavorite = async (listingId, userId) => {
   try {
     const user = await Jobseeker.findOne({ userId: { $eq: userId } });
 
@@ -50,9 +49,9 @@ export const toggleFavorite = async(listingId, userId) => {
 
     const updatedUser = await user.save();
     console.log(chalk.blue("Favorites updated"));
-    
+
     return updatedUser;
   } catch (error) {
     console.error(error);
   }
-}
+};

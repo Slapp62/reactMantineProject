@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/schemas.js";
+import { User } from "../schemas/schemas.js";
 import bcrypt from "bcryptjs";
 
-export const verifyToken = (req, res, next) => {  
+export const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -22,7 +22,7 @@ export const verifyUser = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email });
-  
+
     if (!user) {
       return res.status(401).json({ error: "Invalid email" });
     }
@@ -31,11 +31,11 @@ export const verifyUser = async (req, res, next) => {
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid password" });
     }
-    
+
     req.user = user;
     next();
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
+};

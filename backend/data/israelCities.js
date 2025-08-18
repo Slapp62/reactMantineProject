@@ -191,6 +191,8 @@ export const getAllCities = () => {
   return Object.values(ISRAELI_CITIES_BY_REGION).flat();
 };
 
+export const CITIES = getAllCities();
+
 // Helper function to get cities by specific region
 export const getCitiesByRegion = (region) => {
   return ISRAELI_CITIES_BY_REGION[region] || [];
@@ -200,3 +202,5 @@ export const getCitiesByRegion = (region) => {
 export const getRegions = () => {
   return Object.keys(ISRAELI_CITIES_BY_REGION);
 };
+
+export const REGIONS = getRegions();

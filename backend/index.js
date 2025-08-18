@@ -4,15 +4,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import { handleError } from "./utils/errorHandler.js";
-import connectDB from "./middleware/mongoConnect.js";
 import router from "./routes/routerController.js";
+import { connectToDB } from "./database/dbService.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// connection to database
-connectDB();
 
 // global middleware
 app.use(
@@ -23,7 +19,7 @@ app.use(
 );
 
 app.use(json());
-app.use(router)
+app.use(router);
 
 // error handler
 app.use((error, req, res, next) => {
@@ -31,6 +27,8 @@ app.use((error, req, res, next) => {
 });
 
 // listen
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(chalk.green.bold(`server running on port ${PORT}`));
+  connectToDB();
 });

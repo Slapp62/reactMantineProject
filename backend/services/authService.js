@@ -1,4 +1,4 @@
-import { User, Business, Jobseeker } from "../models/schemas.js";
+import { User, Business, Jobseeker } from "../schemas/schemas.js";
 import bcrypt from "bcryptjs";
 import chalk from "chalk";
 import jwt from "jsonwebtoken";
@@ -53,12 +53,12 @@ export const registerBusiness = async (registerData) => {
 
     // eslint-disable-next-line no-unused-vars
     const { password: userPassword, ...userNoPassword } = savedUser.toObject();
-    
+
     console.log(chalk.blue("Business registered"));
 
     return {
       userData: userNoPassword,
-      profileData: savedBusiness
+      profileData: savedBusiness,
     };
   } catch (error) {
     console.error(error);
@@ -95,14 +95,13 @@ export const registerJobseeker = async (registerData) => {
 
     // eslint-disable-next-line no-unused-vars
     const { password: userPassword, ...userNoPassword } = savedUser.toObject();
-    
+
     console.log(chalk.blue("Jobseeker registered"));
 
     return {
       userData: userNoPassword,
-      profileData: savedJobseeker
+      profileData: savedJobseeker,
     };
-
   } catch (error) {
     console.error(error);
   }
