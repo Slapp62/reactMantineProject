@@ -1,14 +1,18 @@
 import { handleError } from "../utils/errorHandler.js";
-import { zodListingValidator } from "../validation/listingValidationZod.js";
+import { listingSchema } from "../validation/listingValidationZod.js";
+import { zodValidator } from "../validation/zodValidator.js";
 
 const resolver = "Zod";
 
 export const validator = (req, res, next) => {
-  const listing = req.body;
-
+  const data = req.body;
+  const path = req.originalUrl;
+  
   if (resolver === "Zod") {
-    req.validation = zodListingValidator(listing);
-
+    if (path === "/api/listings/create"){
+      req.validation = zodValidator(listingSchema, data);
+    }
+    
     if (req.validation.success === true) {
       next();
     } else {
@@ -17,3 +21,4 @@ export const validator = (req, res, next) => {
     }
   }
 };
+

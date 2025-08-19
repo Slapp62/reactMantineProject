@@ -1,9 +1,9 @@
 import * as z from "zod";
 import { INDUSTRIES } from "../data/industries.js";
 import { WORK_ARRANGEMENTS } from "../data/workArr.js";
-import { CITIES, REGIONS } from "../data/israelCities.js";
 
-export const listingSchema = z.object({
+export const zodListingValidator = (profile) => {
+  const profileSchema = z.object({
     jobTitle: z.string().min(5, { message: "Job title is too short" }),
     jobDescription: z
       .string()
@@ -15,11 +15,20 @@ export const listingSchema = z.object({
       contact: z.string(),
     }),
     location: z.object({
-      region: z.enum(REGIONS, "Invalid Region", { required_error: "Region is required" }),
-      city: z.enum(CITIES,"Invalid City", { required_error: "City is required" }),
+      region: z.string("Region is required"),
+      city: z.string("City is required"),
     }),
     workArrangement: z.enum(WORK_ARRANGEMENTS, {
       required_error: "Work Arrangement is required",
     }),
     industry: z.enum(INDUSTRIES, { required_error: "Industry is required" }),
   });
+
+  try {
+    const validatedProfile = profileSchema.parse(profile);
+    return { success: true, data: validatedProfile };
+  } catch (error) {
+    const messages = error.issues.map((iss) => iss.message);
+    return { success: false, error: `Zod Error: ${messages[0]}` };
+  }
+};

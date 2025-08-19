@@ -1,6 +1,6 @@
 export const ISRAELI_CITIES_BY_REGION = {
   // Northern Israel - Galilee Region
-  GALILEE: [
+  NORTH: [
     "Haifa",
     "Nahariya",
     "Acre (Akko)",
@@ -28,11 +28,9 @@ export const ISRAELI_CITIES_BY_REGION = {
     "Rosh Pina",
     "Metula",
     "Katzrin",
-  ],
-
+  
   // Golan Heights
-  GOLAN: [
-    "Katzrin",
+ 
     "Merom Golan",
     "Neve Ativ",
     "Nimrod",
@@ -171,18 +169,6 @@ export const ISRAELI_CITIES_BY_REGION = {
     "Lakiya",
     "Shaqib al-Salam",
     "Kuseife",
-  ],
-
-  // Ultra-Orthodox Cities (across regions)
-  HAREDI_CENTERS: [
-    "Bnei Brak",
-    "Modiin Illit",
-    "Beitar Illit",
-    "Elad",
-    "Kiryat Sefer",
-    "Emmanuel",
-    "Rechasim",
-    "Kochav Ya'akov",
   ],
 };
 

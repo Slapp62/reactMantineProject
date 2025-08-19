@@ -9,7 +9,7 @@ import {
   editListing,
 } from "../services/listingService.js";
 import { handleError } from "../utils/errorHandler.js";
-import { validator } from "../middleware/listingValidationService.js";
+import { validator } from "../middleware/validatorService.js";
 import chalk from "chalk";
 dotenv.config();
 
